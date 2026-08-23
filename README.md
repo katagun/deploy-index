@@ -2,7 +2,7 @@
 
 **Every place to run code.**
 
-DeployIndex is a technical, searchable directory of cloud providers, application platforms, individual cloud products, edge runtimes, self-hosted PaaS projects, BYOC control planes, GPU/AI clouds, backend and database platforms, developer sandboxes, game hosting, managed web hosting, and discontinued platforms worth preserving historically.
+DeployIndex is a technical, searchable directory and transparent hosting recommendation engine covering cloud providers, application platforms, individual cloud products, edge runtimes, self-hosted PaaS projects, BYOC control planes, GPU/AI clouds, backend and database platforms, developer sandboxes, game hosting, managed web hosting, and discontinued platforms worth preserving historically.
 
 ![DeployIndex homepage](homepage.png)
 
@@ -23,16 +23,35 @@ The seed is broad, not infallible. Records marked `confidence: seed` are explici
 The first version is intentionally static-first and provider-neutral:
 
 ```text
-catalog/providers.json
+catalog/providers.json + recommendation-overrides.json
         │
         ├── deterministic validation
         ├── weekly web research → structured proposal → pull request
+        ├── qualitative recommendation profiles
         └── zero-dependency Python build
                          │
-                         └── dist/ (portable static site + public JSON API)
+                         └── dist/ (portable static site + recommender + public JSON API)
 ```
 
-There is no required JavaScript framework, package manager, database, or hosted control plane. The generated site can run on Cloudflare Pages, Vercel, Netlify, GitHub Pages, S3/object storage, nginx, or any ordinary web server.
+There is no required JavaScript framework, package manager, database, or hosted control plane. The generated site can run on Cloudflare Workers Static Assets, Vercel, Netlify, GitHub Pages, S3/object storage, nginx, or any ordinary web server.
+
+
+## Hosting recommendation engine
+
+![DeployIndex recommendation engine](recommender-preview.png)
+
+`/recommend/` is a static, client-side matching tool over the full catalog. It asks about workload, deployment artifact, billing shape, starting-cost band, team expertise, operating model, traffic, protocol, state, geography, and strong requirements such as private networking, previews, scale-to-zero, open source, and GPUs.
+
+The result is not a paid ranking. The engine:
+
+- scores every currently available profile in the browser;
+- exposes positive fit reasons and trade-offs;
+- lets users weight ease, cost, predictability, control, portability, maturity, reach, and enterprise readiness;
+- stores the complete configuration in a shareable URL;
+- uses qualitative bands rather than unstable undated price quotes;
+- publishes its generated profiles at `/catalog/recommendations.json`.
+
+See [`docs/RECOMMENDER.md`](docs/RECOMMENDER.md) for the complete variable backlog, scoring model, and trust rules.
 
 ## Local development
 
@@ -66,6 +85,8 @@ The build publishes:
 - `/catalog/providers.json`
 - `/catalog/schema.json`
 - `/catalog/stats.json`
+- `/catalog/recommendations.json`
+- `/recommend/`
 - `/providers/<slug>/`
 - `/sitemap.xml`
 
@@ -137,11 +158,24 @@ python3 scripts/build.py
 
 Deploy `dist/`.
 
-### Cloudflare Pages
+### Recommended: Cloudflare Workers Static Assets
 
-- Build command: `python3 scripts/build.py`
-- Output directory: `dist`
-- Environment variables: `SITE_URL`, `REPOSITORY_URL`
+The repository includes `wrangler.jsonc`, `_headers`, and `.github/workflows/deploy-cloudflare.yml`.
+
+For a local/manual deployment:
+
+```bash
+export SITE_URL=https://your-domain.com
+python3 scripts/build.py
+npx wrangler@4 deploy
+```
+
+For GitHub Actions, add:
+
+- secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`;
+- repository variable `SITE_URL` with the canonical production origin.
+
+Connect the custom domain in the Cloudflare Workers dashboard after the first deployment. Static assets are uploaded from `dist/`; there is no Worker application code or database requirement.
 
 ### Vercel
 

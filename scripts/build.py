@@ -16,11 +16,12 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
+from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
 DIST = ROOT / "dist"
-SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000").rstrip("/")
-REPOSITORY_URL = os.environ.get("REPOSITORY_URL", "https://github.com/")
+SITE_URL = (os.environ.get("SITE_URL") or "http://localhost:8000").rstrip("/")
+REPOSITORY_URL = os.environ.get("REPOSITORY_URL") or "https://github.com/"
 
 ENTITY_LABELS = {"provider": "Provider", "product": "Product", "project": "Open project"}
 ERA_LABELS = {"established": "Established", "modern": "Modern · 2020–23", "recent": "Recent · 2024+"}
@@ -345,16 +346,26 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
 
+    recommendation_catalog = build_recommendation_catalog(catalog)
+    recommendation_errors = validate_recommendation_catalog(recommendation_catalog, catalog)
+    if recommendation_errors:
+        for error in recommendation_errors:
+            print(f"ERROR: {error}")
+        return 1
+
     if DIST.exists():
         shutil.rmtree(DIST)
     (DIST / "assets").mkdir(parents=True)
     (DIST / "catalog").mkdir(parents=True)
     (DIST / "providers").mkdir(parents=True)
 
-    for asset in ("styles.css", "app.js", "theme.js", "favicon.svg", "og.svg"):
+    for asset in ("styles.css", "app.js", "theme.js", "recommendation-engine.js", "recommend.js", "favicon.svg", "og.svg"):
         shutil.copy2(SITE / asset, DIST / "assets" / asset)
     shutil.copy2(ROOT / "catalog" / "providers.json", DIST / "catalog" / "providers.json")
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")
+    if (SITE / "_headers").exists():
+        shutil.copy2(SITE / "_headers", DIST / "_headers")
+    write(DIST / "catalog" / "recommendations.json", json.dumps(recommendation_catalog, indent=2, ensure_ascii=False) + "\n")
 
     providers = catalog["providers"]
     category_labels = catalog["category_labels"]
@@ -402,6 +413,15 @@ def main() -> int:
     )
     write(DIST / "index.html", index_page)
     write(DIST / "method" / "index.html", method_page(len(providers)))
+    recommend_template = (SITE / "recommend.html").read_text(encoding="utf-8").replace("{{PROFILE_COUNT}}", str(len(recommendation_catalog["profiles"])))
+    write(DIST / "recommend" / "index.html", render_base(
+        title="Hosting recommendation engine — DeployIndex",
+        description="Match workloads, billing preferences, operational expertise, networking, state, and strategic priorities against the complete DeployIndex catalog.",
+        path="/recommend/",
+        main=recommend_template,
+        scripts='<script src="/assets/recommendation-engine.js" defer></script><script src="/assets/recommend.js" defer></script>',
+        body_class="recommend-page",
+    ))
 
     for item in providers:
         write(DIST / "providers" / item["slug"] / "index.html", provider_page(item, providers_by_slug, providers, category_labels))
@@ -419,7 +439,7 @@ def main() -> int:
         title="Catalog API — DeployIndex",
         description="Machine-readable DeployIndex catalog and JSON Schema.",
         path="/catalog/",
-        main='''<section class="page-hero shell"><p class="kicker">Catalog API</p><h1>Portable by design.</h1><p>Use the complete JSON catalog, validation schema, or generated summary statistics.</p><div class="hero-actions"><a class="button button-primary" href="/catalog/providers.json">providers.json</a><a class="button button-ghost" href="/catalog/schema.json">schema.json</a><a class="button button-ghost" href="/catalog/stats.json">stats.json</a></div></section>''',
+        main='''<section class="page-hero shell"><p class="kicker">Catalog API</p><h1>Portable by design.</h1><p>Use the complete JSON catalog, validation schema, or generated summary statistics.</p><div class="hero-actions"><a class="button button-primary" href="/catalog/providers.json">providers.json</a><a class="button button-ghost" href="/catalog/schema.json">schema.json</a><a class="button button-ghost" href="/catalog/stats.json">stats.json</a><a class="button button-ghost" href="/catalog/recommendations.json">recommendations.json</a></div></section>''',
     ))
     write(DIST / "404.html", render_base(
         title="Not found — DeployIndex",
@@ -440,13 +460,13 @@ def main() -> int:
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-    sitemap_urls = ["/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
+    sitemap_urls = ["/", "/recommend/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(
         f"  <url><loc>{esc(canonical(path))}</loc></url>" for path in sitemap_urls
     ) + "\n</urlset>\n"
     write(DIST / "sitemap.xml", sitemap)
 
-    print(f"Built {len(providers)} provider pages plus catalog, method, API, and metadata into {DIST}")
+    print(f"Built {len(providers)} provider pages plus recommender, catalog, method, API, and metadata into {DIST}")
     return 0
 
 

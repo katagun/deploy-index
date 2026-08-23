@@ -8,8 +8,9 @@ The architecture keeps four concerns separate:
 
 1. **Catalog truth** — structured records in version control.
 2. **Research proposals** — model-assisted, source-linked observations that are not trusted until validated.
-3. **Publication** — a deterministic static build.
-4. **Review and governance** — Git diffs and pull requests, especially for destructive or reputationally sensitive changes.
+3. **Recommendation profiles** — qualitative, reviewable selection traits generated from catalog facts and small curated overrides.
+4. **Publication** — a deterministic static build.
+5. **Review and governance** — Git diffs and pull requests, especially for destructive or reputationally sensitive changes.
 
 ## Components
 
@@ -22,14 +23,17 @@ flowchart LR
     D --> F[Manual status alerts]
     E --> G[catalog/providers.json]
     F --> H[Pull request review]
-    G --> I[Static generator]
-    I --> J[HTML detail pages]
-    I --> K[Searchable catalog]
-    I --> L[Public JSON API + sitemap]
+    G --> I[Recommendation profile generator]
+    I --> J[Validated qualitative profiles]
+    G --> K[Static generator]
+    J --> K
+    K --> L[HTML detail pages]
+    K --> M[Searchable catalog + browser recommender]
+    K --> N[Public JSON APIs + sitemap]
     G --> H
-    J --> M[Any static host]
-    K --> M
-    L --> M
+    L --> O[Any static host]
+    M --> O
+    N --> O
 ```
 
 ## Why static-first
@@ -56,6 +60,21 @@ A record is one deployment surface:
 `parent_slug` models ownership or product families without conflating identities. Categories are facets rather than a rigid hierarchy. `primary_category` controls initial presentation; `categories` preserves multi-category discovery.
 
 Status and availability are intentionally separate. A product can be `sunset` but still available to existing customers, or `transitioning` while generally available.
+
+
+## Recommendation subsystem
+
+The recommender is deliberately separate from catalog truth.
+
+- `scripts/recommendations.py` derives a complete profile set from catalog categories, capabilities, status, and operating model.
+- `catalog/recommendation-overrides.json` contains small, reviewable corrections for high-visibility platforms.
+- The build validates exact identity alignment and publishes `/catalog/recommendations.json`.
+- `site/recommendation-engine.js` is a deterministic pure function that scores profiles against questionnaire input.
+- `site/recommend.js` provides URL-backed browser state, scenario presets, explanations, and accessible live results.
+
+Profiles contain relative one-to-five traits and boolean capabilities. They do not contain undated prices or claim empirical precision. Exact pricing, benchmarks, compliance, region inventories, and incident histories belong in separate dated, source-aware datasets.
+
+The engine has no sponsor or affiliate weight. Representative scenario rankings are regression-tested so broad scoring changes are explicit rather than accidental.
 
 ## Research trust boundary
 

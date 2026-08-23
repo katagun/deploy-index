@@ -1,0 +1,17 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self'; upgrade-insecure-requests
+
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/catalog/*.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/*.xml
+  Cache-Control: public, max-age=3600
+
+/*.webmanifest
+  Cache-Control: public, max-age=3600

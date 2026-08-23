@@ -2134,13 +2134,14 @@
       "launch_year": 2021,
       "featured": true,
       "summary": "Cloudflare's Git-integrated static and full-stack frontend hosting product, closely integrated with Workers.",
-      "best_for": "Frontend frameworks, preview deployments, and full-stack web applications.",
+      "best_for": "Existing Cloudflare Pages projects and Git-connected static sites; Cloudflare now recommends Workers Static Assets for most new projects.",
       "source_urls": [
-        "https://pages.cloudflare.com/"
+        "https://developers.cloudflare.com/pages/",
+        "https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-08-23",
+      "confidence": "high",
+      "change_note": "Verified current Pages documentation and migration guidance; Workers Static Assets is the preferred path for most new Cloudflare projects."
     },
     {
       "slug": "cloudflare-sandbox",
@@ -2184,17 +2185,21 @@
       "parent_slug": "cloudflare",
       "primary_category": "edge-compute",
       "categories": [
+        "backend-platform",
         "edge-compute",
+        "frontend-hosting",
         "serverless-functions",
-        "backend-platform"
+        "static-hosting"
       ],
       "capabilities": [
         "autoscaling",
         "databases",
         "edge-runtime",
         "functions",
+        "git-deploy",
         "object-storage",
-        "scale-to-zero"
+        "scale-to-zero",
+        "static-sites"
       ],
       "operating_models": [
         "managed-cloud"
@@ -2205,14 +2210,16 @@
       "open_source": false,
       "launch_year": 2017,
       "featured": true,
-      "summary": "A globally distributed serverless runtime integrated with Durable Objects, storage, queues, workflows, AI, and Cloudflare's network.",
-      "best_for": "Latency-sensitive request processing and globally distributed application logic.",
+      "summary": "Cloudflare’s globally distributed application platform for static assets, serverless code, stateful coordination, and adjacent data services.",
+      "best_for": "Static and edge-native applications that benefit from globally cached assets, low-ops deployment, and an upgrade path to Workers APIs.",
       "source_urls": [
-        "https://workers.cloudflare.com/"
+        "https://developers.cloudflare.com/workers/static-assets/",
+        "https://developers.cloudflare.com/workers/static-assets/get-started/",
+        "https://developers.cloudflare.com/workers/platform/pricing/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-08-23",
+      "confidence": "high",
+      "change_note": "Expanded the record to include Workers Static Assets, current pricing documentation, and Git-oriented static application deployment."
     },
     {
       "slug": "clouding-io",

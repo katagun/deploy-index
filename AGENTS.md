@@ -11,9 +11,10 @@ DeployIndex is an evidence-oriented directory of every meaningful place develope
 - `catalog/providers.json` — source of truth.
 - `catalog/schema.json` — public JSON Schema for catalog consumers.
 - `catalog/discovery-config.json` — weekly search coverage and safety policy.
+- `catalog/recommendation-overrides.json` — reviewable qualitative corrections for the recommendation profile generator.
 - `catalog/proposals/` — dated research evidence and application reports.
 - `scripts/` — validation, research, conservative proposal application, and static generation.
-- `site/` — dependency-free HTML/CSS/JavaScript source.
+- `site/` — dependency-free HTML/CSS/JavaScript source, including the pure recommendation engine and browser UI.
 - `dist/` — generated site; never edit by hand.
 - `.github/workflows/` — CI and weekly research-to-PR automation.
 
@@ -64,6 +65,18 @@ make test
 - No tracking scripts, affiliate rankings, sponsored ordering, or remote font dependency without an explicit product decision.
 - Favor progressive enhancement. Core discovery and detail pages must remain useful without client JavaScript.
 - All generated internal links must pass `scripts/check_site.py`.
+
+## Recommendation rules
+
+- Keep catalog identity and recommendation traits separate. The canonical name, URL, status, availability, summary, and ownership always come from `providers.json`.
+- Keep the engine deterministic, browser-side, and inspectable unless a product decision explicitly requires otherwise.
+- Never add sponsored, affiliate, or vendor-paid weights.
+- Show why a result fits and what the user still needs to verify.
+- Do not store current dollar prices as timeless profile fields. Use a separate dated, sourced pricing schema.
+- Treat one-to-five traits as qualitative ordinal bands, not measurements.
+- Add or update scenario regression tests whenever scoring, defaults, or high-visibility overrides materially change.
+- Preserve URL-backed questionnaire state, keyboard accessibility, reduced-motion behavior, and useful error states.
+- Read `docs/RECOMMENDER.md` before changing the selection model.
 
 ## Automation and security
 

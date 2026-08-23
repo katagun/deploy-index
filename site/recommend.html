@@ -1,0 +1,141 @@
+<section class="recommend-hero shell">
+  <div>
+    <div class="eyebrow"><span class="live-dot"></span> Transparent matching · {{PROFILE_COUNT}} options</div>
+    <h1>Choose a host without reading <span>{{PROFILE_COUNT}} pricing pages.</span></h1>
+    <p class="hero-lede">Describe the workload, operating model, billing preference, and trade-offs you actually care about. The client-side engine scores the full catalog and explains every result.</p>
+    <div class="recommend-disclaimer"><strong>Discovery aid, not a price quote.</strong> Profiles use relative, reviewable traits. Always verify current prices, quotas, regions, support, compliance, and product status with the provider.</div>
+  </div>
+  <div class="recommend-terminal" aria-label="How recommendation scoring works">
+    <div class="terminal-bar"><span></span><span></span><span></span><code>deployindex/recommend</code></div>
+    <div class="recommend-terminal-body">
+      <p><span class="prompt">$</span> match(workload, constraints, priorities)</p>
+      <div class="score-equation">
+        <span>compatibility</span><b>+</b><span>requirements</span><b>+</b><span>weighted traits</span><b>−</b><span>trade-offs</span>
+      </div>
+      <p class="terminal-output"><span>✓</span> deterministic in your browser<br /><span>✓</span> no sponsored placement<br /><span>✓</span> shareable configuration<br /><span>✓</span> inspectable profiles</p>
+    </div>
+  </div>
+</section>
+
+<section class="recommend-shell shell" aria-labelledby="recommend-title">
+  <div class="recommend-builder">
+    <div class="section-heading compact-heading">
+      <div><p class="kicker">Recommendation builder</p><h2 id="recommend-title">Define the deployment shape.</h2></div>
+      <p>Start from a scenario or tune each variable. Results update immediately.</p>
+    </div>
+
+    <div class="preset-panel" aria-labelledby="preset-title">
+      <div class="panel-label"><span>01</span><div><h3 id="preset-title">Start with a scenario</h3><p>Use a sensible baseline, then adjust it.</p></div></div>
+      <div class="preset-grid" id="recommend-presets">
+        <button type="button" class="preset-button" data-preset="static-directory"><strong>Static directory</strong><span>Global, nearly free, no server</span></button>
+        <button type="button" class="preset-button" data-preset="startup-saas"><strong>Low-ops SaaS</strong><span>API, data, previews, workers</span></button>
+        <button type="button" class="preset-button" data-preset="global-container"><strong>Global container</strong><span>OCI, regions, TCP, volumes</span></button>
+        <button type="button" class="preset-button" data-preset="own-cloud"><strong>Own-cloud platform</strong><span>Developer UX in your account</span></button>
+        <button type="button" class="preset-button" data-preset="self-hosted"><strong>Self-hosted PaaS</strong><span>Docker on infrastructure you own</span></button>
+        <button type="button" class="preset-button" data-preset="gpu-inference"><strong>GPU inference</strong><span>Bursty accelerated endpoint</span></button>
+      </div>
+    </div>
+
+    <form id="recommend-form" class="recommend-form">
+      <fieldset class="question-panel">
+        <legend><span>02</span><div><strong>Workload and artifact</strong><small>What are you deploying, and in what form?</small></div></legend>
+        <div class="question-grid">
+          <label><span>Primary workload</span><select id="rec-workload" name="workload">
+            <option value="static-site">Static site</option><option value="frontend-app">Frontend or full-stack web app</option><option value="web-api">Web API or SaaS backend</option><option value="background-worker">Worker, queue consumer, or cron</option><option value="container-service">Long-running container service</option><option value="virtual-machine">Virtual machine</option><option value="kubernetes">Kubernetes workload</option><option value="serverless-function">Serverless function</option><option value="edge-app">Edge-native application</option><option value="database">Database or backend platform</option><option value="gpu-ai">GPU or AI workload</option><option value="agent-sandbox">AI agent or code sandbox</option><option value="game-server">Game server</option><option value="wordpress">WordPress or managed CMS</option><option value="decentralized-app">Decentralized application</option>
+          </select></label>
+          <label><span>Deployment artifact</span><select id="rec-artifact" name="artifact">
+            <option value="any">Any artifact</option><option value="git-source">Git source</option><option value="docker-image">Docker / OCI image</option><option value="docker-compose">Docker Compose</option><option value="function-code">Function code</option><option value="vm-image">VM image or root access</option><option value="kubernetes-manifest">Kubernetes manifests or Helm</option><option value="wasm">WebAssembly</option><option value="template">Provider template</option>
+          </select></label>
+          <label><span>Traffic pattern</span><select id="rec-traffic" name="traffic">
+            <option value="steady">Steady</option><option value="bursty">Bursty</option><option value="spiky">Spiky or mostly idle</option><option value="scheduled">Scheduled or batch</option><option value="global">Global traffic</option>
+          </select></label>
+          <label><span>Network protocol</span><select id="rec-protocol" name="protocol">
+            <option value="http">HTTP / HTTPS</option><option value="websocket">WebSockets</option><option value="tcp">Arbitrary TCP</option><option value="udp">UDP</option>
+          </select></label>
+          <label><span>State requirement</span><select id="rec-state" name="state">
+            <option value="stateless">Stateless</option><option value="managed-database">Managed database</option><option value="persistent-disk">Persistent disk / volume</option><option value="object-storage">Object storage</option>
+          </select></label>
+          <label><span>Geographic reach</span><select id="rec-reach" name="reach">
+            <option value="single">One primary region</option><option value="multi">Several regions</option><option value="global">Global edge / broad reach</option><option value="residency">Regional choice and data residency</option>
+          </select></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-panel">
+        <legend><span>03</span><div><strong>Economics and operations</strong><small>Model the shape of the bill and the team operating it.</small></div></legend>
+        <div class="question-grid">
+          <label><span>Relative starting budget</span><select id="rec-budget" name="budget">
+            <option value="1">1 · Free / hobby</option><option value="2">2 · Very lean</option><option value="3">3 · Normal startup</option><option value="4">4 · Well-funded / production</option><option value="5">5 · Enterprise / specialized</option>
+          </select></label>
+          <label><span>Billing preference</span><select id="rec-billing" name="billing">
+            <option value="any">No preference</option><option value="free-entry">Free or nearly-free entry</option><option value="predictable">Predictable fixed billing</option><option value="usage-based">Usage-based / scale-to-zero</option><option value="byoc-infrastructure">Bill my cloud account</option><option value="self-host-infrastructure">Pay for my own servers</option>
+          </select></label>
+          <label><span>Available expertise</span><select id="rec-expertise" name="expertise">
+            <option value="1">1 · Beginner</option><option value="2">2 · App developer</option><option value="3">3 · Full-stack / DevOps capable</option><option value="4">4 · Infrastructure engineer</option><option value="5">5 · Platform specialist</option>
+          </select></label>
+          <label><span>Operating model</span><select id="rec-operation" name="operation">
+            <option value="any">Any model</option><option value="managed-cloud">Fully managed cloud</option><option value="bring-your-own-cloud">Bring my own cloud</option><option value="self-hosted">Self-host on my servers</option><option value="dedicated-server">Dedicated infrastructure</option><option value="decentralized-network">Decentralized network</option>
+          </select></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-panel">
+        <legend><span>04</span><div><strong>Hard preferences</strong><small>Strong requirements receive larger bonuses or penalties.</small></div></legend>
+        <div class="requirement-grid">
+          <label class="check-card"><input type="checkbox" data-requirement="scaleToZero" /><span><strong>Scale to zero</strong><small>Avoid paying while idle.</small></span></label>
+          <label class="check-card"><input type="checkbox" data-requirement="previewEnvironments" /><span><strong>Preview environments</strong><small>One environment per branch or pull request.</small></span></label>
+          <label class="check-card"><input type="checkbox" data-requirement="privateNetworking" /><span><strong>Private networking</strong><small>Keep internal services off the public internet.</small></span></label>
+          <label class="check-card"><input type="checkbox" data-requirement="openSource" /><span><strong>Open source platform</strong><small>Require source availability and self-operation potential.</small></span></label>
+          <label class="check-card"><input type="checkbox" data-requirement="gpu" /><span><strong>GPU support</strong><small>Filter out platforms without accelerated compute.</small></span></label>
+        </div>
+      </fieldset>
+
+      <details class="priority-panel">
+        <summary><span><strong>05 · Tune priorities</strong><small>Optional weights from ignore to critical.</small></span><span aria-hidden="true">＋</span></summary>
+        <div class="priority-grid">
+          <label><span>Ease of use <output data-weight-output="ease">4</output></span><input type="range" min="0" max="4" step="1" value="4" data-weight="ease" /></label>
+          <label><span>Low starting cost <output data-weight-output="cost">4</output></span><input type="range" min="0" max="4" step="1" value="4" data-weight="cost" /></label>
+          <label><span>Bill predictability <output data-weight-output="predictability">3</output></span><input type="range" min="0" max="4" step="1" value="3" data-weight="predictability" /></label>
+          <label><span>Infrastructure control <output data-weight-output="control">1</output></span><input type="range" min="0" max="4" step="1" value="1" data-weight="control" /></label>
+          <label><span>Portability <output data-weight-output="portability">3</output></span><input type="range" min="0" max="4" step="1" value="3" data-weight="portability" /></label>
+          <label><span>Maturity <output data-weight-output="maturity">3</output></span><input type="range" min="0" max="4" step="1" value="3" data-weight="maturity" /></label>
+          <label><span>Global reach <output data-weight-output="global">3</output></span><input type="range" min="0" max="4" step="1" value="3" data-weight="global" /></label>
+          <label><span>Enterprise readiness <output data-weight-output="enterprise">1</output></span><input type="range" min="0" max="4" step="1" value="1" data-weight="enterprise" /></label>
+        </div>
+      </details>
+
+      <div class="form-actions">
+        <button class="button button-ghost" type="button" id="recommend-reset">Reset</button>
+        <a class="text-button" href="#variable-map">See the complete variable map ↓</a>
+      </div>
+    </form>
+  </div>
+
+  <aside class="recommend-results-panel" aria-labelledby="results-title">
+    <div class="results-heading">
+      <div><p class="kicker">Live result set</p><h2 id="results-title"><span id="recommend-count">0</span> strongest fits</h2></div>
+      <button class="icon-button share-button" type="button" id="recommend-share" aria-label="Copy shareable recommendation link" title="Copy shareable link">↗</button>
+    </div>
+    <p id="recommend-summary" class="recommend-summary">Loading the catalog profiles…</p>
+    <div id="recommend-status" class="recommend-status" role="status" aria-live="polite"></div>
+    <div id="recommend-results" class="recommend-results" aria-live="polite" aria-busy="true"></div>
+    <p class="recommend-footnote">Scores represent fit to this configuration—not absolute quality. A 79 can be a better real-world choice than an 89 after verifying price, region, support, and limits.</p>
+  </aside>
+</section>
+
+<section class="variable-map shell" id="variable-map">
+  <div class="section-heading">
+    <div><p class="kicker">Selection model</p><h2>Variables worth comparing.</h2></div>
+    <p>The first version uses the variables with enough catalog coverage to score honestly. The rest define the research roadmap.</p>
+  </div>
+  <div class="variable-grid">
+    <article><span>01</span><h3>Economics</h3><p>Free tier, minimum spend, billing unit, fixed vs metered billing, idle cost, egress, storage, build minutes, support cost, commitments, credits, and price predictability.</p></article>
+    <article><span>02</span><h3>Runtime fit</h3><p>Git, Docker, Compose, VMs, Kubernetes, functions, WebAssembly, supported languages, process duration, cold starts, background workers, cron, GPUs, and sandboxing.</p></article>
+    <article><span>03</span><h3>Network and state</h3><p>HTTP, WebSockets, TCP/UDP, Anycast, private networking, static IPs, service discovery, volumes, managed databases, object storage, backup, replication, and disaster recovery.</p></article>
+    <article><span>04</span><h3>Developer workflow</h3><p>Time to first deploy, CLI quality, local parity, build system, rollbacks, previews, monorepos, environments, secrets, logs, metrics, tracing, shell access, and API or IaC coverage.</p></article>
+    <article><span>05</span><h3>Operations</h3><p>Scale-to-zero, autoscaling controls, health checks, zero-downtime deploys, maintenance, SLOs, status history, support responsiveness, quotas, incident tooling, and observability retention.</p></article>
+    <article><span>06</span><h3>Governance</h3><p>Regions, data residency, SOC 2, ISO 27001, HIPAA, PCI, GDPR, SSO, SCIM, RBAC, audit logs, customer-managed keys, private connectivity, and enterprise contracts.</p></article>
+    <article><span>07</span><h3>Strategic fit</h3><p>Open source, portability, BYOC, cloud ownership, provider maturity, acquisition risk, roadmap stability, export paths, standard protocols, ecosystem depth, and lock-in.</p></article>
+    <article><span>08</span><h3>Workload behavior</h3><p>Steady vs bursty traffic, latency sensitivity, global distribution, compute/memory ratio, CPU architecture, GPU type, local-disk need, noisy-neighbor tolerance, and regulatory boundaries.</p></article>
+  </div>
+</section>

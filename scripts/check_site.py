@@ -12,6 +12,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 from catalog import ROOT, load_catalog
+from recommendations import validate_recommendation_catalog
 
 DIST = ROOT / "dist"
 TEMPLATE_TOKEN = re.compile(r"\{\{[^{}]+\}\}|__\w+__")
@@ -132,18 +133,23 @@ def check(dist: Path) -> list[str]:
                 if fragment not in target_parser.ids:
                     errors.append(f"{current.relative_to(dist.resolve())}: missing fragment target {href}")
 
-    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json"):
+    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json"):
         try:
             json.loads((dist / api_file).read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"{api_file}: invalid or missing JSON: {exc}")
 
     catalog = load_catalog()
+    try:
+        recommendation_payload = json.loads((dist / "catalog" / "recommendations.json").read_text(encoding="utf-8"))
+        errors.extend(f"catalog/recommendations.json: {error}" for error in validate_recommendation_catalog(recommendation_payload, catalog))
+    except (OSError, json.JSONDecodeError):
+        pass
     for item in catalog["providers"]:
         page = dist / "providers" / item["slug"] / "index.html"
         if not page.exists():
             errors.append(f"Missing provider detail page: {item['slug']}")
-    expected_sitemap_entries = len(catalog["providers"]) + 3
+    expected_sitemap_entries = len(catalog["providers"]) + 4
     sitemap = (dist / "sitemap.xml").read_text(encoding="utf-8")
     if sitemap.count("<url>") != expected_sitemap_entries:
         errors.append(

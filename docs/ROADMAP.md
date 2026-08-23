@@ -12,7 +12,9 @@ Delivered in the initial repository:
 - strict validation and internal-link checks;
 - weekly web-research proposal pipeline;
 - conservative application policy and GitHub review PRs;
-- Codex project instructions and reproducible commands.
+- Codex project instructions and reproducible commands;
+- client-side recommendation engine with six presets, shareable state, explainable scoring, and a complete qualitative profile for every catalog entry;
+- Cloudflare Workers Static Assets production configuration and deploy workflow.
 
 ## Phase 2 — better discovery
 
@@ -36,7 +38,14 @@ Delivered in the initial repository:
 
 ## Phase 4 — practical selection tools
 
-- workload questionnaire producing transparent filters rather than paid rankings;
+Delivered foundation:
+
+- workload questionnaire producing transparent matches rather than paid rankings;
+- scenario presets, relative economics, operating-model constraints, hard requirements, weighted priorities, and trade-off explanations;
+- generated recommendation profile API and regression tests.
+
+Next:
+
 - side-by-side pricing snapshots with retrieval dates and units;
 - egress, idle billing, minimum spend, cold-start, protocol, volume, and database-operation comparisons;
 - migration and portability profiles;

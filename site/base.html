@@ -19,7 +19,8 @@
   <link rel="stylesheet" href="/assets/styles.css" />
   <script>
     (() => {
-      const saved = localStorage.getItem('deployindex-theme');
+      let saved = null;
+      try { saved = localStorage.getItem('deployindex-theme'); } catch (_error) { /* storage may be unavailable */ }
       const theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       document.documentElement.dataset.theme = theme;
     })();
@@ -38,6 +39,7 @@
       </a>
       <nav class="main-nav" aria-label="Primary navigation">
         <a href="/">Catalog</a>
+        <a href="/recommend/">Recommend</a>
         <a href="/method/">Method</a>
         <a href="/catalog/providers.json">JSON API</a>
         <a href="{{REPOSITORY_URL}}" class="nav-github" data-external>GitHub</a>
@@ -56,6 +58,7 @@
         <p>An open, evidence-aware map of the hosting universe.</p>
       </div>
       <div class="footer-links">
+        <a href="/recommend/">Find a host</a>
         <a href="/method/">Methodology</a>
         <a href="/catalog/providers.json">Catalog JSON</a>
         <a href="/catalog/schema.json">Schema</a>
