@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deployindex.example/schema/catalog-v1.json",
+  "title": "DeployIndex catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalog_name", "generated_on", "methodology", "category_labels", "providers"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "catalog_name": {"type": "string", "minLength": 1},
+    "generated_on": {"type": "string", "format": "date"},
+    "methodology": {"type": "string", "minLength": 1},
+    "category_labels": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "providers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/provider"}
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug", "name", "url", "entity_type", "parent_slug", "primary_category",
+        "categories", "capabilities", "operating_models", "era", "status",
+        "availability", "open_source", "launch_year", "featured", "summary",
+        "best_for", "source_urls", "last_verified", "confidence", "change_note"
+      ],
+      "properties": {
+        "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "name": {"type": "string", "minLength": 1, "maxLength": 100},
+        "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "entity_type": {"enum": ["provider", "product", "project"]},
+        "parent_slug": {"type": ["string", "null"]},
+        "primary_category": {"type": "string"},
+        "categories": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "capabilities": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "operating_models": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["managed-cloud", "bring-your-own-cloud", "self-hosted", "dedicated-server", "marketplace", "decentralized-network"]}
+        },
+        "era": {"enum": ["established", "modern", "recent"]},
+        "status": {"enum": ["active", "beta", "transitioning", "sunset", "archived"]},
+        "availability": {"enum": ["general", "preview", "limited", "existing-customers-only", "discontinued"]},
+        "open_source": {"type": "boolean"},
+        "launch_year": {"type": ["integer", "null"], "minimum": 1990, "maximum": 2100},
+        "featured": {"type": "boolean"},
+        "summary": {"type": "string", "minLength": 20, "maxLength": 500},
+        "best_for": {"type": "string", "minLength": 20, "maxLength": 500},
+        "source_urls": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "format": "uri", "pattern": "^https://"}},
+        "last_verified": {"type": ["string", "null"], "format": "date"},
+        "confidence": {"enum": ["seed", "low", "medium", "high"]},
+        "change_note": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    }
+  }
+}

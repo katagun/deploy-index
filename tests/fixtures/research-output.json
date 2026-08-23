@@ -1,0 +1,71 @@
+{
+  "research_date": "2026-08-23",
+  "summary": "Fixture research result used to exercise candidate, update, status-alert, and verification behavior without network access.",
+  "new_candidates": [
+    {
+      "slug": "fixture-hosting-labs",
+      "name": "Fixture Hosting Labs",
+      "url": "https://fixture-hosting.invalid/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "paas",
+      "categories": ["paas", "managed-containers"],
+      "capabilities": ["containers", "git-deploy", "preview-environments"],
+      "operating_models": ["managed-cloud"],
+      "era": "recent",
+      "status": "beta",
+      "availability": "preview",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "A fictional provider record used only to test the DeployIndex research and catalog application pipeline.",
+      "best_for": "Testing deterministic catalog additions without depending on a real external provider or live network access.",
+      "source_urls": ["https://fixture-hosting.invalid/docs/launch"],
+      "confidence": "medium",
+      "change_note": "Fixture-only launch evidence used by the repository test suite."
+    }
+  ],
+  "updates": [
+    {
+      "slug": "railway",
+      "patch": {
+        "name": null,
+        "url": null,
+        "entity_type": null,
+        "parent_slug_action": "keep",
+        "parent_slug": null,
+        "primary_category": null,
+        "categories": null,
+        "capabilities": null,
+        "operating_models": null,
+        "era": null,
+        "open_source": null,
+        "launch_year_action": "keep",
+        "launch_year": null,
+        "summary": null,
+        "best_for": "Fixture-only description proving that an evidence-backed ordinary metadata correction can be staged safely."
+      },
+      "source_urls": ["https://railway.com/"],
+      "rationale": "Fixture-only metadata correction used to verify update application and source merging.",
+      "confidence": "medium"
+    }
+  ],
+  "status_alerts": [
+    {
+      "slug": "aws-app-runner",
+      "proposed_status": "archived",
+      "proposed_availability": "discontinued",
+      "effective_date": "2027-01-01",
+      "rationale": "Fixture-only status alert proving that scheduled automation does not silently archive a product.",
+      "source_urls": ["https://docs.aws.amazon.com/apprunner/"],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "fly-io",
+      "source_urls": ["https://fly.io/docs/"],
+      "note": "Fixture-only verification marker confirming the active record path and source merge behavior.",
+      "confidence": "high"
+    }
+  ]
+}

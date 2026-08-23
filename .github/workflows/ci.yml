@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python
+        run: python -m compileall -q scripts tests
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate catalog
+        run: python scripts/validate.py
+      - name: Build static site
+        env:
+          SITE_URL: https://example.invalid
+          REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: python scripts/build.py
+      - name: Validate generated site
+        run: python scripts/check_site.py
+      - name: Check browser JavaScript syntax
+        run: |
+          node --check site/app.js
+          node --check site/theme.js

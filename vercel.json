@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "python3 scripts/build.py",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "headers": [
+    {
+      "source": "/catalog/(.*)\\.json",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=300, s-maxage=3600"},
+        {"key": "Access-Control-Allow-Origin", "value": "*"}
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "rotation_batch_size": 45,
+  "max_new_candidates": 30,
+  "max_updates": 80,
+  "discovery_queries": [
+    "new developer cloud hosting platform launch",
+    "new PaaS platform launch containers Git deploy",
+    "new serverless container platform launch",
+    "new edge compute or edge container platform",
+    "new self-hosted PaaS open source",
+    "new bring your own cloud developer platform",
+    "new GPU cloud serverless inference platform",
+    "new AI agent sandbox cloud platform",
+    "new frontend hosting platform Vercel alternative",
+    "new managed Kubernetes developer platform",
+    "hosting platform shutdown acquisition rebrand migration",
+    "cloud hosting product closed to new customers discontinued"
+  ],
+  "source_preferences": [
+    "Official product documentation",
+    "Official company blog or changelog",
+    "Official GitHub repository and release history",
+    "Reputable launch announcement with a precise event date"
+  ],
+  "prohibited_automatic_actions": [
+    "Hard-delete an entry",
+    "Mark a provider discontinued from a failed HTTP request alone",
+    "Publish pricing without an official source and retrieval date",
+    "Use affiliate rankings as evidence",
+    "Copy marketing prose verbatim"
+  ]
+}

@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+"""Validate the generated static site, internal links, and catalog API files."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+from catalog import ROOT, load_catalog
+
+DIST = ROOT / "dist"
+TEMPLATE_TOKEN = re.compile(r"\{\{[^{}]+\}\}|__\w+__")
+
+
+class DocumentParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.links: list[str] = []
+        self.ids: list[str] = []
+        self.has_main = False
+        self.h1_count = 0
+        self.title_text = ""
+        self._in_title = False
+        self.meta_description = False
+        self.html_lang = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = dict(attrs)
+        if tag == "html" and values.get("lang"):
+            self.html_lang = True
+        if tag == "title":
+            self._in_title = True
+        if tag == "main":
+            self.has_main = True
+        if tag == "h1":
+            self.h1_count += 1
+        if tag == "meta" and values.get("name") == "description" and values.get("content"):
+            self.meta_description = True
+        if values.get("id"):
+            self.ids.append(values["id"] or "")
+        for attribute in ("href", "src"):
+            if values.get(attribute):
+                self.links.append(values[attribute] or "")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "title":
+            self._in_title = False
+
+    def handle_data(self, data: str) -> None:
+        if self._in_title:
+            self.title_text += data
+
+
+def target_path(dist: Path, current: Path, href: str) -> tuple[Path | None, str | None]:
+    parsed = urlparse(href)
+    if parsed.scheme or parsed.netloc or href.startswith(("mailto:", "tel:", "data:")):
+        return None, None
+    fragment = unquote(parsed.fragment) or None
+    raw_path = unquote(parsed.path)
+    if not raw_path:
+        return current, fragment
+    if raw_path.startswith("/"):
+        target = dist / raw_path.lstrip("/")
+    else:
+        target = current.parent / raw_path
+    if raw_path.endswith("/") or target.is_dir():
+        target = target / "index.html"
+    elif not target.suffix:
+        target = target / "index.html"
+    return target.resolve(), fragment
+
+
+def parse_html(path: Path) -> tuple[DocumentParser, str]:
+    text = path.read_text(encoding="utf-8")
+    parser = DocumentParser()
+    parser.feed(text)
+    return parser, text
+
+
+def check(dist: Path) -> list[str]:
+    errors: list[str] = []
+    if not dist.exists():
+        return [f"Build directory does not exist: {dist}"]
+    html_files = sorted(dist.rglob("*.html"))
+    if not html_files:
+        return ["No HTML files generated"]
+
+    parsed_docs: dict[Path, DocumentParser] = {}
+    for path in html_files:
+        parser, text = parse_html(path)
+        resolved = path.resolve()
+        parsed_docs[resolved] = parser
+        rel = path.relative_to(dist)
+        if TEMPLATE_TOKEN.search(text):
+            errors.append(f"{rel}: unresolved template token")
+        if not parser.html_lang:
+            errors.append(f"{rel}: missing html lang")
+        if not parser.title_text.strip():
+            errors.append(f"{rel}: missing title")
+        if not parser.meta_description:
+            errors.append(f"{rel}: missing meta description")
+        if not parser.has_main:
+            errors.append(f"{rel}: missing main landmark")
+        if parser.h1_count != 1:
+            errors.append(f"{rel}: expected exactly one h1, found {parser.h1_count}")
+        if len(parser.ids) != len(set(parser.ids)):
+            errors.append(f"{rel}: duplicate element IDs")
+
+    for current, parser in parsed_docs.items():
+        for href in parser.links:
+            target, fragment = target_path(dist.resolve(), current, href)
+            if target is None:
+                continue
+            try:
+                target.relative_to(dist.resolve())
+            except ValueError:
+                errors.append(f"{current.relative_to(dist.resolve())}: local link escapes dist: {href}")
+                continue
+            if not target.exists():
+                errors.append(f"{current.relative_to(dist.resolve())}: broken local link {href}")
+                continue
+            if fragment and target.suffix == ".html":
+                target_parser = parsed_docs.get(target)
+                if target_parser is None:
+                    target_parser, _ = parse_html(target)
+                    parsed_docs[target] = target_parser
+                if fragment not in target_parser.ids:
+                    errors.append(f"{current.relative_to(dist.resolve())}: missing fragment target {href}")
+
+    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json"):
+        try:
+            json.loads((dist / api_file).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"{api_file}: invalid or missing JSON: {exc}")
+
+    catalog = load_catalog()
+    for item in catalog["providers"]:
+        page = dist / "providers" / item["slug"] / "index.html"
+        if not page.exists():
+            errors.append(f"Missing provider detail page: {item['slug']}")
+    expected_sitemap_entries = len(catalog["providers"]) + 3
+    sitemap = (dist / "sitemap.xml").read_text(encoding="utf-8")
+    if sitemap.count("<url>") != expected_sitemap_entries:
+        errors.append(
+            f"sitemap.xml: expected {expected_sitemap_entries} URL entries, found {sitemap.count('<url>')}"
+        )
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dist", type=Path, default=DIST)
+    args = parser.parse_args()
+    errors = check(args.dist)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    html_count = len(list(args.dist.rglob("*.html")))
+    print(f"Static site valid: {html_count} HTML files, internal links and JSON APIs checked")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

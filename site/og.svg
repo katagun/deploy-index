@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1"><stop stop-color="#7df9c5"/><stop offset=".55" stop-color="#8fa7ff"/><stop offset="1" stop-color="#d694ff"/></linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".055"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#080b12"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1020" cy="80" r="330" fill="#8fa7ff" opacity=".12"/>
+  <circle cx="130" cy="590" r="300" fill="#7df9c5" opacity=".08"/>
+  <g transform="translate(86 84)">
+    <rect width="28" height="28" rx="3" fill="#7df9c5"/>
+    <rect x="34" width="28" height="28" rx="3" fill="#7df9c5" opacity=".65"/>
+    <rect x="68" width="28" height="28" rx="3" fill="#7df9c5" opacity=".3"/>
+    <text x="116" y="24" fill="#f4f7fb" font-size="28" font-weight="700" font-family="monospace">deploy<tspan fill="#7df9c5">/</tspan>index</text>
+  </g>
+  <text x="86" y="290" fill="#f4f7fb" font-size="92" font-weight="800" letter-spacing="-5" font-family="Arial, sans-serif">Every place to</text>
+  <text x="86" y="400" fill="url(#g)" font-size="112" font-weight="800" letter-spacing="-6" font-family="Arial, sans-serif">run code.</text>
+  <text x="90" y="492" fill="#a8b1c2" font-size="30" font-family="Arial, sans-serif">An open map of cloud, PaaS, edge, GPU, data, and self-hosted platforms.</text>
+  <rect x="88" y="544" width="450" height="2" fill="url(#g)"/>
+</svg>

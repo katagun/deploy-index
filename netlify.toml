@@ -1,0 +1,14 @@
+[build]
+  command = "python3 scripts/build.py"
+  publish = "dist"
+
+[[headers]]
+  for = "/catalog/*.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=300, s-maxage=3600"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"

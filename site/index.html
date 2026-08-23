@@ -1,0 +1,96 @@
+<section class="hero shell">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="live-dot"></span> Open catalog · weekly research</div>
+    <h1>Every place to<br /><span>run code.</span></h1>
+    <p class="hero-lede">Explore {{TOTAL_COUNT}} cloud providers, platforms, products, and open-source projects—from hyperscalers and VPS hosts to edge runtimes, PaaS, GPU clouds, and agent sandboxes.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#explorer">Explore the catalog <span aria-hidden="true">↘</span></a>
+      <a class="button button-ghost" href="/method/">How updates work</a>
+    </div>
+  </div>
+  <div class="hero-terminal" aria-label="Catalog overview">
+    <div class="terminal-bar"><span></span><span></span><span></span><code>deployindex/catalog</code></div>
+    <div class="terminal-body">
+      <p><span class="prompt">$</span> catalog.stats()</p>
+      <dl class="terminal-stats">
+        <div><dt>entries</dt><dd>{{TOTAL_COUNT}}</dd></div>
+        <div><dt>available</dt><dd>{{AVAILABLE_COUNT}}</dd></div>
+        <div><dt>categories</dt><dd>{{CATEGORY_COUNT}}</dd></div>
+        <div><dt>open_source</dt><dd>{{OPEN_SOURCE_COUNT}}</dd></div>
+      </dl>
+      <p class="terminal-output"><span>✓</span> schema valid<br /><span>✓</span> source-aware workflow<br /><span>✓</span> next scan: Monday</p>
+      <span class="terminal-cursor" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<section class="signal-strip" aria-label="Featured categories">
+  <div class="signal-track">{{SIGNAL_ITEMS}}</div>
+</section>
+
+<section class="catalog-section shell" id="explorer">
+  <div class="section-heading">
+    <div>
+      <p class="kicker">Catalog explorer</p>
+      <h2>Find your deployment surface.</h2>
+    </div>
+    <p>Filter by what the entry is, when it emerged, how it runs, and whether it remains available.</p>
+  </div>
+
+  <div class="explorer-panel">
+    <div class="search-row">
+      <label class="search-box" for="catalog-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.2-3.2"></path></svg>
+        <span class="sr-only">Search catalog</span>
+        <input id="catalog-search" type="search" autocomplete="off" placeholder="Search Railway, GPU, self-hosted, TCP…" />
+        <kbd>/</kbd>
+      </label>
+      <div class="view-toggle" role="group" aria-label="Catalog view">
+        <button type="button" data-view="grid" class="is-active" aria-label="Grid view" title="Grid view"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg></button>
+        <button type="button" data-view="list" aria-label="List view" title="List view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><circle cx="3.5" cy="6" r=".5"></circle><circle cx="3.5" cy="12" r=".5"></circle><circle cx="3.5" cy="18" r=".5"></circle></svg></button>
+      </div>
+    </div>
+
+    <div class="category-scroller" role="group" aria-label="Primary category">
+      <button class="category-chip is-active" type="button" data-category="all">All <span>{{TOTAL_COUNT}}</span></button>
+      {{CATEGORY_BUTTONS}}
+    </div>
+
+    <div class="filter-row">
+      <label><span>Entry type</span><select id="filter-entity"><option value="all">All types</option><option value="provider">Providers</option><option value="product">Products</option><option value="project">Open projects</option></select></label>
+      <label><span>Era</span><select id="filter-era"><option value="all">Any era</option><option value="recent">Recent · 2024+</option><option value="modern">Modern · 2020–23</option><option value="established">Established</option></select></label>
+      <label><span>Operating model</span><select id="filter-model"><option value="all">Any model</option><option value="managed-cloud">Managed cloud</option><option value="bring-your-own-cloud">Bring your own cloud</option><option value="self-hosted">Self-hosted</option><option value="dedicated-server">Dedicated server</option><option value="marketplace">Marketplace</option><option value="decentralized-network">Decentralized</option></select></label>
+      <label><span>Status</span><select id="filter-status"><option value="available">Available now</option><option value="all">All statuses</option><option value="active">Active</option><option value="beta">Beta</option><option value="transitioning">Transitioning</option><option value="sunset">Sunset</option><option value="archived">Archived</option></select></label>
+      <label><span>Source</span><select id="filter-source"><option value="all">Open + proprietary</option><option value="open">Open source</option><option value="proprietary">Proprietary</option></select></label>
+      <label><span>Sort</span><select id="sort-order"><option value="featured">Featured</option><option value="name">Name A–Z</option><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
+    </div>
+  </div>
+
+  <div class="results-bar" aria-live="polite">
+    <p><strong id="result-count">{{AVAILABLE_COUNT}}</strong> entries shown <span id="result-context">across the available catalog</span></p>
+    <button class="text-button" type="button" id="reset-filters">Reset filters</button>
+  </div>
+
+  <div class="provider-grid" id="provider-grid">{{PROVIDER_CARDS}}</div>
+  <div class="empty-state" id="empty-state" hidden>
+    <div class="empty-icon" aria-hidden="true">∅</div>
+    <h3>No deployment surface found.</h3>
+    <p>Try a broader query or remove one of the filters.</p>
+    <button class="button button-primary" type="button" id="empty-reset">Reset explorer</button>
+  </div>
+</section>
+
+<section class="method-teaser shell">
+  <div class="method-card">
+    <div>
+      <p class="kicker">Trust model</p>
+      <h2>A bot researches.<br />A diff earns trust.</h2>
+    </div>
+    <div class="method-steps">
+      <div><span>01</span><h3>Discover</h3><p>Search official announcements, docs, repositories, and ecosystem signals.</p></div>
+      <div><span>02</span><h3>Verify</h3><p>Require source URLs, deduplicate domains, and rotate checks across existing entries.</p></div>
+      <div><span>03</span><h3>Review</h3><p>Create a weekly pull request. Never declare a company dead from one failed request.</p></div>
+    </div>
+    <a class="button button-ghost" href="/method/">Read the complete method <span aria-hidden="true">→</span></a>
+  </div>
+</section>

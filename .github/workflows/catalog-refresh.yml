@@ -1,0 +1,92 @@
+name: Weekly catalog research
+
+on:
+  schedule:
+    # Monday at 07:17 UTC. The unusual minute reduces top-of-hour load.
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: deployindex-weekly-catalog-research
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-luna' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require research credentials
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "Repository secret OPENAI_API_KEY is required." >&2
+            exit 1
+          fi
+      - name: Validate baseline
+        run: |
+          python scripts/validate.py
+          python -m unittest discover -s tests -v
+      - name: Research current hosting landscape
+        id: dates
+        shell: bash
+        run: |
+          TODAY="$(date -u +%F)"
+          echo "today=$TODAY" >> "$GITHUB_OUTPUT"
+          python scripts/research.py \
+            --date "$TODAY" \
+            --output "catalog/proposals/$TODAY.json"
+      - name: Stage safe catalog changes
+        shell: bash
+        run: |
+          TODAY="${{ steps.dates.outputs.today }}"
+          python scripts/apply_proposal.py \
+            "catalog/proposals/$TODAY.json" \
+            --report "catalog/proposals/$TODAY.report.json"
+          python scripts/proposal_markdown.py \
+            "catalog/proposals/$TODAY.json" \
+            --report "catalog/proposals/$TODAY.report.json" \
+            --output "/tmp/catalog-pr.md"
+      - name: Build and test proposed catalog
+        env:
+          SITE_URL: https://example.invalid
+          REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          python scripts/validate.py
+          python scripts/build.py
+          python scripts/check_site.py
+          node --check site/app.js
+          node --check site/theme.js
+      - name: Open review pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        shell: bash
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain --untracked-files=all catalog/proposals)" ]; then
+            echo "No catalog changes or proposal artifacts to publish."
+            exit 0
+          fi
+          BRANCH="automation/catalog-refresh-${GITHUB_RUN_ID}"
+          git config user.name "deployindex-research[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add catalog/providers.json catalog/proposals/
+          git commit -m "catalog: weekly research ${{ steps.dates.outputs.today }}"
+          git push --set-upstream origin "$BRANCH"
+          gh pr create \
+            --base "$DEFAULT_BRANCH" \
+            --head "$BRANCH" \
+            --title "Catalog research — ${{ steps.dates.outputs.today }}" \
+            --body-file /tmp/catalog-pr.md
