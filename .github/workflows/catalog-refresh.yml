@@ -13,6 +13,7 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   research:
@@ -22,12 +23,15 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-luna' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
       - name: Require research credentials
         run: |
           if [ -z "$OPENAI_API_KEY" ]; then
@@ -62,15 +66,7 @@ jobs:
         env:
           SITE_URL: https://example.invalid
           REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
-        run: |
-          python scripts/validate.py
-          python scripts/build.py
-          python scripts/check_site.py
-          node --check site/app.js
-          node --check site/theme.js
-          node --check site/recommendation-engine.js
-          node --check site/recommend.js
-          node tests/recommendation-engine.test.js
+        run: make test
       - name: Open review pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -93,3 +89,18 @@ jobs:
             --head "$BRANCH" \
             --title "Catalog research — ${{ steps.dates.outputs.today }}" \
             --body-file /tmp/catalog-pr.md
+      - name: Surface workflow failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          TITLE="Weekly catalog research failed — $(date -u +%F)"
+          if gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq 'length' | grep -qv '^0$'; then
+            echo "An open failure issue already exists for today."
+            exit 0
+          fi
+          gh issue create \
+            --title "$TITLE" \
+            --body "The scheduled catalog research workflow failed before a pull request could be opened. No proposal was published this week. Inspect the run log: $RUN_URL"
