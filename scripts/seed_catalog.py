@@ -4,10 +4,16 @@
 This file is intentionally explicit and dependency-free. It is a starting inventory,
 not a claim that every field has been independently verified. The weekly research
 workflow turns seeded records into sourced, reviewed records over time.
+
+ARCHIVAL BOOTSTRAP: this script has served its purpose. Re-running it would reset
+every record to `confidence: seed` and discard all verification state accumulated
+since the initial import, so it refuses to overwrite an existing catalog unless
+--force is passed explicitly.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 from datetime import date
 from pathlib import Path
@@ -778,6 +784,15 @@ archived_rows = [
 for slug, name, url, summary in archived_rows:
     add(slug, name, url, "paas", status="archived", availability="discontinued",
         capabilities=["git-deploy"], summary=summary, era="modern")
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--force", action="store_true", help="Overwrite an existing catalog, discarding all verification state accumulated since the seed")
+args = parser.parse_args()
+if OUTPUT.exists() and not args.force:
+    raise SystemExit(
+        f"Refusing to overwrite {OUTPUT}: re-seeding would discard all verification "
+        "state accumulated since the initial import. Pass --force only if that is intended."
+    )
 
 # Validate uniqueness and write deterministic output.
 slugs = [item["slug"] for item in providers]

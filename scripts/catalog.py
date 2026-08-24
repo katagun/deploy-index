@@ -27,6 +27,12 @@ OPERATING_MODELS = {
     "marketplace",
     "decentralized-network",
 }
+REQUIRED_PROVIDER_FIELDS = {
+    "slug", "name", "url", "entity_type", "parent_slug", "primary_category", "categories",
+    "capabilities", "operating_models", "era", "status", "availability", "open_source",
+    "launch_year", "featured", "summary", "best_for", "source_urls", "last_verified",
+    "confidence", "change_note",
+}
 
 
 def load_catalog(path: Path = CATALOG_PATH) -> dict[str, Any]:
@@ -45,6 +51,13 @@ def atomic_write_json(path: Path, data: Any) -> None:
 def normalize_domain(url: str) -> str:
     host = urlparse(url).hostname or ""
     return host.lower().removeprefix("www.")
+
+
+def normalize_url_identity(value: str) -> str:
+    parsed = urlparse(value)
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    path = "/" + "/".join(part for part in parsed.path.split("/") if part)
+    return f"{host}{path.rstrip('/')}"
 
 
 def validate_catalog(catalog: dict[str, Any]) -> list[str]:
@@ -82,18 +95,14 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
 
     slugs: set[str] = set()
     names: dict[str, list[str]] = {}
+    url_identities: dict[str, list[str]] = {}
+    provider_domains: dict[str, list[str]] = {}
     for index, item in enumerate(providers):
         prefix = f"providers[{index}]"
         if not isinstance(item, dict):
             errors.append(f"{prefix} must be an object")
             continue
-        required = {
-            "slug", "name", "url", "entity_type", "parent_slug", "primary_category", "categories",
-            "capabilities", "operating_models", "era", "status", "availability", "open_source",
-            "launch_year", "featured", "summary", "best_for", "source_urls", "last_verified",
-            "confidence", "change_note",
-        }
-        missing = required - item.keys()
+        missing = REQUIRED_PROVIDER_FIELDS - item.keys()
         if missing:
             errors.append(f"{prefix} missing keys: {sorted(missing)}")
             continue
@@ -153,6 +162,10 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
             value = item[field]
             if not isinstance(value, str) or not value.startswith("https://") or not normalize_domain(value):
                 errors.append(f"{slug}: {field} must be a valid https URL")
+            else:
+                url_identities.setdefault(normalize_url_identity(value), []).append(str(slug))
+                if item["entity_type"] == "provider":
+                    provider_domains.setdefault(normalize_domain(value), []).append(str(slug))
         source_urls = item["source_urls"]
         if not isinstance(source_urls, list) or not source_urls:
             errors.append(f"{slug}: source_urls must be non-empty")
@@ -190,5 +203,13 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     for folded_name, name_slugs in names.items():
         if len(name_slugs) > 1:
             errors.append(f"Duplicate name {folded_name!r}: {sorted(name_slugs)}")
+
+    for identity, identity_slugs in url_identities.items():
+        if len(identity_slugs) > 1:
+            errors.append(f"Duplicate canonical URL {identity!r}: {sorted(identity_slugs)}")
+
+    for domain, domain_slugs in provider_domains.items():
+        if len(domain_slugs) > 1:
+            errors.append(f"Provider domain {domain!r} represented by multiple providers: {sorted(domain_slugs)}")
 
     return errors

@@ -50,6 +50,17 @@ class RecommendationProfileTests(unittest.TestCase):
         self.assertIn("docker-compose", coolify["artifacts"])
         self.assertEqual(coolify["portability"], 5)
 
+    def test_free_tier_capability_derives_free_entry(self) -> None:
+        entry = dict(next(item for item in self.catalog["providers"] if item["slug"] == "railway"))
+        entry = {**entry, "slug": "free-tier-host", "name": "Free Tier Host", "url": "https://free-tier-host.example/",
+                 "capabilities": sorted({*entry["capabilities"], "free-tier"})}
+        catalog = {**self.catalog, "providers": [entry]}
+        overrides = {"methodology": "m", "disclaimer": "d", "dimensions": {}, "overrides": {}}
+        payload = build_recommendation_catalog(catalog, overrides)
+        profile = payload["profiles"][0]
+        self.assertTrue(profile["free_entry"])
+        self.assertIn("free-entry", profile["billing_models"])
+
     def test_profiles_do_not_embed_undated_price_quotes(self) -> None:
         forbidden = {"price", "monthly_price", "hourly_price", "currency", "free_credit"}
         for profile in self.payload["profiles"]:

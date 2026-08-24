@@ -66,6 +66,8 @@ def research_prompt(catalog: dict[str, Any], config: dict[str, Any], batch: list
     inventory = compact_inventory(catalog)
     category_lines = "\n".join(f"- {key}: {value}" for key, value in catalog["category_labels"].items())
     queries = "\n".join(f"- {query}" for query in config["discovery_queries"])
+    source_preferences = "\n".join(f"{index + 1}. {value}" for index, value in enumerate(config.get("source_preferences", [])))
+    prohibited = "\n".join(f"- {value}" for value in config.get("prohibited_automatic_actions", []))
     batch_json = json.dumps(
         [
             {
@@ -95,6 +97,12 @@ Use live web search. Do not rely on memory for current availability, ownership, 
 
 Discovery query families:
 {queries}
+
+Preferred evidence, strongest first:
+{source_preferences}
+
+Actions that are never taken automatically (report them; do not assume they will be applied):
+{prohibited}
 
 Allowed categories:
 {category_lines}
@@ -232,7 +240,11 @@ def main() -> int:
                 api_key,
                 args.model,
                 prompt,
-                research_output_schema(list(catalog["category_labels"])),
+                research_output_schema(
+                    list(catalog["category_labels"]),
+                    max_new_candidates=int(config.get("max_new_candidates", 30)),
+                    max_updates=int(config.get("max_updates", 80)),
+                ),
                 args.timeout,
             )
         except (RuntimeError, ValueError, json.JSONDecodeError) as exc:

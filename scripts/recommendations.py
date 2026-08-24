@@ -109,6 +109,7 @@ def _artifacts(item: dict[str, Any]) -> list[str]:
 def _billing(item: dict[str, Any]) -> list[str]:
     cats, models = set(item["categories"]), set(item["operating_models"])
     values: set[str] = set()
+    if "free-tier" in item["capabilities"]: values.add("free-entry")
     if "bring-your-own-cloud" in models: values.add("byoc-infrastructure")
     if "self-hosted" in models or "dedicated-server" in models: values.update({"self-host-infrastructure", "fixed-instance"})
     if "marketplace" in models: values.add("marketplace")
@@ -167,7 +168,7 @@ def _profile(item: dict[str, Any]) -> dict[str, Any]:
         "state_options": _state(item), "expertise_required": expertise, "cost_floor": floor,
         "cost_predictability": predictable, "control": control, "portability": portability,
         "maturity": _maturity(item), "global_reach": 5 if "multi-region" in caps else reach,
-        "enterprise_readiness": enterprise, "free_entry": False, "scale_to_zero": "scale-to-zero" in caps,
+        "enterprise_readiness": enterprise, "free_entry": "free-tier" in caps, "scale_to_zero": "scale-to-zero" in caps,
         "preview_environments": "preview-environments" in caps, "private_networking": "private-networking" in caps,
         "gpu": "gpu" in caps, "profile_source": "derived",
     }
