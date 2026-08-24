@@ -68,6 +68,7 @@ SPECIAL_LABELS = {
     "distributed-compute": "Distributed compute",
     "decentralized-storage": "Decentralized storage",
     "managed-cms": "Managed CMS",
+    "free-tier": "Free tier",
 }
 
 
@@ -320,7 +321,7 @@ def method_page(total: int) -> str:
         <section id="pipeline"><h2>The weekly pipeline</h2><div class="pipeline"><div><div><h3>Snapshot</h3><p>Validate the current JSON catalog and choose a rotating batch of existing entries for re-verification.</p></div></div><div><div><h3>Discover</h3><p>Use web search across launch queries, official announcements, documentation, changelogs, and open-source ecosystems.</p></div></div><div><div><h3>Extract</h3><p>Request schema-constrained candidates, updates, status alerts, and source URLs. Unstructured prose never writes directly to the catalog.</p></div></div><div><div><h3>Verify</h3><p>Prefer first-party evidence, normalize domains, check URLs, detect duplicates, and reject incomplete or contradictory records.</p></div></div><div><div><h3>Propose</h3><p>Write a dated proposal and apply only low-risk metadata changes. New entries and material status changes remain explicit diffs.</p></div></div><div><div><h3>Review</h3><p>Open a pull request containing the proposal, catalog diff, source trail, validation results, and regenerated site.</p></div></div><div><div><h3>Publish</h3><p>Merge after review. Any static host can rebuild and deploy the generated files.</p></div></div></div><div class="callout"><strong>Design rule:</strong> the automation may be exhaustive in discovery, but it must be humble in publication.</div></section>
         <section id="changes"><h2>Add, update, archive—never silently erase</h2><h3>Addition</h3><p>A new entry needs a canonical name, official URL, clear deployment relevance, entity type, primary category, and at least one primary source. Similar names and domains are deduplicated before proposal.</p><h3>Updates</h3><p>Low-risk changes include corrected URLs, added official sources, and verification timestamps. Pricing, availability, ownership, product scope, and launch dates require explicit evidence and a dated note.</p><h3>Removal and shutdown</h3><p>A failed request is not evidence that a company is dead. An entry becomes <code>sunset</code> or <code>archived</code> only after official documentation, a first-party announcement, or multiple corroborating signals are reviewed. Archived entries remain addressable so links and historical comparisons do not disappear.</p></section>
         <section id="confidence"><h2>Confidence states</h2><ul><li><code>seed</code>: part of the broad initial inventory and awaiting source-by-source review.</li><li><code>low</code>: plausible, but material fields still need stronger evidence.</li><li><code>medium</code>: supported by reliable sources, with some incomplete fields.</li><li><code>high</code>: recently checked against primary sources and internally consistent.</li></ul><p>Confidence applies to the directory record—not to the reliability or quality of the hosting company.</p></section>
-        <section id="data"><h2>Portable data by default</h2><p>The source of truth is <code>catalog/providers.json</code>, validated by <code>catalog/schema.json</code>. The site generator produces static HTML and a public JSON endpoint. This keeps the catalog inspectable, forkable, and deployable without a proprietary database.</p><div class="code-block">{{\n  "slug": "fly-io",\n  "entity_type": "provider",\n  "primary_category": "managed-containers",\n  "categories": ["managed-containers", "edge-compute", "paas"],\n  "status": "active",\n  "source_urls": ["https://fly.io/"]\n}}</div></section>
+        <section id="data"><h2>Portable data by default</h2><p>The source of truth is <code>catalog/providers.json</code>, validated by the deterministic checks in <code>scripts/validate.py</code>; a descriptive JSON Schema is published at <code>catalog/schema.json</code> and kept enum-synchronized by a unit test. The site generator produces static HTML and a public JSON endpoint. This keeps the catalog inspectable, forkable, and deployable without a proprietary database.</p><div class="code-block">{{\n  "slug": "fly-io",\n  "entity_type": "provider",\n  "primary_category": "managed-containers",\n  "categories": ["managed-containers", "edge-compute", "paas"],\n  "status": "active",\n  "source_urls": ["https://fly.io/"]\n}}</div></section>
         <section id="operations"><h2>Operating safeguards</h2><ul><li>Use read-only web research credentials and a spend cap for the model API.</li><li>Run the workflow with least-privilege GitHub permissions: repository contents and pull requests only.</li><li>Respect robots directives and avoid high-rate crawling; this is research, not indiscriminate scraping.</li><li>Do not publish affiliate rankings as neutral recommendations.</li><li>Run schema validation, duplicate checks, static build, and link checks before every merge.</li><li>Keep generated claims paraphrased and preserve source URLs rather than copying marketing text.</li></ul><p>The weekly researcher uses OpenAI's Responses API with web search and structured output. It can be replaced by another search provider because the proposal schema is independent of the model.</p></section>
       </article>
     </div>'''
@@ -339,6 +340,12 @@ def write(path: Path, content: str) -> None:
 
 
 def main() -> int:
+    # A localhost default is fine for local previews, but a CI build without an
+    # explicit SITE_URL would silently publish localhost canonicals, robots.txt,
+    # and sitemap entries. Fail loudly instead.
+    if os.environ.get("CI") and not os.environ.get("SITE_URL"):
+        print("ERROR: SITE_URL must be set for CI builds (e.g. https://deployindex.example); canonical URLs would otherwise point at localhost.")
+        return 1
     catalog = load_catalog()
     errors = validate_catalog(catalog)
     if errors:
@@ -359,7 +366,7 @@ def main() -> int:
     (DIST / "catalog").mkdir(parents=True)
     (DIST / "providers").mkdir(parents=True)
 
-    for asset in ("styles.css", "app.js", "theme.js", "recommendation-engine.js", "recommend.js", "favicon.svg", "og.svg"):
+    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "favicon.svg", "og.svg"):
         shutil.copy2(SITE / asset, DIST / "assets" / asset)
     shutil.copy2(ROOT / "catalog" / "providers.json", DIST / "catalog" / "providers.json")
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")

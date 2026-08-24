@@ -7,7 +7,7 @@
 
   const DEFAULT_INPUT = {
     workload: 'static-site', artifact: 'git-source', expertise: 2, budget: 1,
-    billing: 'free-entry', operation: 'managed-cloud', traffic: 'global',
+    billing: 'any', operation: 'managed-cloud', traffic: 'global',
     protocol: 'http', state: 'stateless', reach: 'global',
     requirements: { scaleToZero: true, previewEnvironments: false, privateNetworking: false, openSource: false, gpu: false },
     weights: { ease: 4, cost: 4, predictability: 3, control: 1, portability: 3, maturity: 3, global: 3, enterprise: 1 },
@@ -97,10 +97,26 @@
   const clone = (value) => JSON.parse(JSON.stringify(value));
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const has = (list, value) => Array.isArray(list) && list.includes(value);
+  const hasKey = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+
+  const ENUM_LABELS = {
+    workload: () => LABELS.workloads,
+    artifact: () => LABELS.artifacts,
+    billing: () => LABELS.billing,
+    operation: () => LABELS.operations,
+    traffic: () => LABELS.traffic,
+    protocol: () => LABELS.protocol,
+    state: () => LABELS.state,
+  };
+  const REACH_VALUES = ['single', 'multi', 'global', 'residency'];
 
   const normalizeInput = (input = {}) => {
     const merged = clone(DEFAULT_INPUT);
     Object.assign(merged, input);
+    Object.entries(ENUM_LABELS).forEach(([key, labels]) => {
+      if (!hasKey(labels(), merged[key])) merged[key] = DEFAULT_INPUT[key];
+    });
+    if (!REACH_VALUES.includes(merged.reach)) merged.reach = DEFAULT_INPUT.reach;
     merged.requirements = Object.assign({}, DEFAULT_INPUT.requirements, input.requirements || {});
     merged.weights = Object.assign({}, DEFAULT_INPUT.weights, input.weights || {});
     merged.expertise = clamp(Number(merged.expertise) || 2, 1, 5);
@@ -123,8 +139,7 @@
     return Object.entries(input.weights).reduce((total, [key, weight]) => total + desirability[key] * Number(weight), 0);
   };
 
-  const scoreProfile = (profile, rawInput) => {
-    const input = normalizeInput(rawInput);
+  const scoreNormalized = (profile, input) => {
     const reasons = [];
     const tradeoffs = [];
     const hardMisses = [];
@@ -178,7 +193,7 @@
     else { raw -= input.state === 'stateless' ? 2 : 20; tradeoffs.push(`Does not directly satisfy ${LABELS.state[input.state].toLowerCase()}`); }
 
     maximum += 12;
-    if (input.reach === 'single') raw += 10;
+    if (input.reach === 'single') raw += 12;
     else if (input.reach === 'multi' && profile.global_reach >= 4) { raw += 12; reasons.push('Strong multi-region reach'); }
     else if (input.reach === 'global' && profile.global_reach === 5) { raw += 12; reasons.push('Global edge or broad regional reach'); }
     else if (input.reach === 'residency' && profile.global_reach >= 4 && profile.enterprise_readiness >= 4) { raw += 12; reasons.push('Better fit for regional governance'); }
@@ -216,14 +231,19 @@
     };
   };
 
-  const scoreProfiles = (profiles, input, limit = 6) => profiles
-    .filter((profile) => ['active', 'beta', 'transitioning'].includes(profile.status))
-    .filter((profile) => !['discontinued', 'existing-customers-only'].includes(profile.availability))
-    .filter((profile) => !(normalizeInput(input).requirements.gpu && !profile.gpu))
-    .map((profile) => scoreProfile(profile, input))
-    .filter((result) => result.score > 0)
-    .sort((a, b) => b.score - a.score || Number(b.profile.featured) - Number(a.profile.featured) || a.profile.name.localeCompare(b.profile.name))
-    .slice(0, limit);
+  const scoreProfile = (profile, rawInput) => scoreNormalized(profile, normalizeInput(rawInput));
+
+  const scoreProfiles = (profiles, input, limit = 6) => {
+    const normalized = normalizeInput(input);
+    return profiles
+      .filter((profile) => ['active', 'beta', 'transitioning'].includes(profile.status))
+      .filter((profile) => !['discontinued', 'existing-customers-only'].includes(profile.availability))
+      .filter((profile) => !(normalized.requirements.gpu && !profile.gpu))
+      .map((profile) => scoreNormalized(profile, normalized))
+      .filter((result) => result.score > 0)
+      .sort((a, b) => b.score - a.score || Number(b.profile.featured) - Number(a.profile.featured) || a.profile.name.localeCompare(b.profile.name))
+      .slice(0, limit);
+  };
 
   const presetValues = (key) => clone((PRESETS[key] || PRESETS['static-directory']).values);
 

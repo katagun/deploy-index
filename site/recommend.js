@@ -174,19 +174,16 @@
 
   shareButton.addEventListener('click', async () => {
     const shareUrl = `${location.origin}${location.pathname}?${paramsFromInput(readInput())}`;
+    let clearDelay = 2400;
     try {
       await navigator.clipboard.writeText(shareUrl);
       statusNode.textContent = 'Shareable link copied.';
     } catch (_error) {
-      const input = document.createElement('textarea');
-      input.value = shareUrl;
-      document.body.append(input);
-      input.select();
-      document.execCommand('copy');
-      input.remove();
-      statusNode.textContent = 'Shareable link copied.';
+      // Clipboard access can be denied; surface the URL so it can be copied manually.
+      statusNode.textContent = `Clipboard unavailable — copy this link: ${shareUrl}`;
+      clearDelay = 20000;
     }
-    setTimeout(() => { statusNode.textContent = ''; }, 2400);
+    setTimeout(() => { statusNode.textContent = ''; }, clearDelay);
   });
 
   fetch('/catalog/recommendations.json')

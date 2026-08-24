@@ -17,14 +17,7 @@
   <link rel="canonical" href="{{CANONICAL_URL}}" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="stylesheet" href="/assets/styles.css" />
-  <script>
-    (() => {
-      let saved = null;
-      try { saved = localStorage.getItem('deployindex-theme'); } catch (_error) { /* storage may be unavailable */ }
-      const theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.dataset.theme = theme;
-    })();
-  </script>
+  <script src="/assets/theme-init.js"></script>
   {{HEAD_EXTRA}}
 </head>
 <body class="{{BODY_CLASS}}">

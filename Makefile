@@ -19,6 +19,7 @@ check: build
 	python3 scripts/check_site.py
 	node --check site/app.js
 	node --check site/theme.js
+	node --check site/theme-init.js
 	node --check site/recommendation-engine.js
 	node --check site/recommend.js
 	node tests/recommendation-engine.test.js
