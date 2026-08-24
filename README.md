@@ -8,7 +8,7 @@ DeployIndex is a technical, searchable directory and transparent hosting recomme
 
 ## What is included
 
-The initial broad seed contains **265 records** and deliberately distinguishes:
+The initial broad seed contained **265 records** at launch — the catalog grows through weekly research pull requests, and `/catalog/stats.json` always carries the current count. The seed deliberately distinguishes:
 
 - providers such as AWS, Azure, Google Cloud, Cloudflare, DigitalOcean, Akamai/Linode, Oracle Cloud, IBM Cloud, OVHcloud, Hetzner, Vultr, and Scaleway;
 - products such as Lambda, Cloud Run, Workers, Azure Container Apps, DigitalOcean App Platform, Vercel Functions, and Kubernetes services;
@@ -78,7 +78,7 @@ python3 -m http.server 8000 --directory dist
 
 ## Catalog data and API
 
-The source of truth is `catalog/providers.json`; its schema is `catalog/schema.json`.
+The source of truth is `catalog/providers.json`. Validation is enforced by the deterministic checks in `scripts/validate.py`; a descriptive JSON Schema is published at `catalog/schema.json` for consumers, and a unit test keeps its enums synchronized with the enforced constants.
 
 The build publishes:
 
@@ -102,7 +102,7 @@ Each record includes identity type, parent relationship, categories, capabilitie
 4. extract a strict JSON proposal through the OpenAI Responses API with web search;
 5. deterministically reject duplicates, invalid categories, unsupported sources, broken parent relationships, and malformed records;
 6. stage medium/high-confidence additions, ordinary metadata corrections, and verification timestamps;
-7. **leave all status/shutdown/archive alerts unapplied**;
+7. **leave all status/shutdown/archive alerts and identity changes (name, URL, entity type) unapplied**;
 8. rebuild and test the entire site;
 9. open a pull request containing the proposal, evidence trail, generated diff, and review checklist.
 
@@ -140,6 +140,7 @@ Automation can discover aggressively, but publication stays conservative.
 - New entries need an official canonical URL and probable first-party evidence.
 - Routine corrections can be staged automatically in a pull request.
 - Shutdown, discontinuation, acquisition, migration, and archive decisions require manual review.
+- Rebrands and canonical-URL changes (name, URL, entity type) are proposed but never applied automatically.
 - Archived pages remain available for history and link stability.
 - Pricing is intentionally excluded until the project has a dated, source-aware pricing model.
 - Affiliate ordering and paid placement are outside the neutral catalog model.
@@ -179,20 +180,24 @@ Connect the custom domain in the Cloudflare Workers dashboard after the first de
 
 ### Vercel
 
-The included `vercel.json` sets the same build and output directory. Add the environment variables in project settings.
+The included `vercel.json` sets the same build and output directory. Add the environment variables in project settings — `SITE_URL` is required: CI builds fail loudly without it so canonical URLs can never silently point at localhost.
 
 ### Netlify
 
-The included `netlify.toml` sets the build and publish directory. Add the environment variables in site settings.
+The included `netlify.toml` sets the build and publish directory. Add the environment variables in site settings — `SITE_URL` is required: CI builds fail loudly without it so canonical URLs can never silently point at localhost.
 
-## Continue in Codex
+## Working with coding agents
 
-The repository contains `AGENTS.md`, deterministic commands, fixture coverage, and a clean initial Git history so Codex can safely inspect, edit, run, and review it.
+The repository contains `AGENTS.md` (the operating contract, also loaded by Claude Code via `CLAUDE.md`), deterministic commands, and fixture coverage so coding agents can safely inspect, edit, run, and review it.
 
 From the repository directory:
 
 ```bash
 codex
+```
+
+```bash
+claude
 ```
 
 Good first tasks:

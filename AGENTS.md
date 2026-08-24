@@ -10,6 +10,7 @@ Static-first, zero runtime dependencies: Python stdlib build, dependency-free HT
 - `catalog/recommendation-overrides.json` — reviewable qualitative corrections for recommender profiles
 - `catalog/discovery-config.json`, `catalog/proposals/` — weekly research config and dated evidence
 - `scripts/` — `validate.py`, `build.py`, `check_site.py`, `recommendations.py`, `research.py`, `apply_proposal.py`
+  (`seed_catalog.py` is the archival bootstrap: it refuses to overwrite the catalog without `--force`, which would reset all verification state)
 - `site/` — page templates and JS source (`recommendation-engine.js` is the pure scoring engine)
 - `dist/` — generated output; gitignored, never hand-edit
 - `docs/` — `ARCHITECTURE.md`, `RECOMMENDER.md` (read before touching scoring), `ROADMAP.md`
@@ -33,7 +34,7 @@ Run `make test` before claiming work complete.
 - Status, shutdown, acquisition, rebrand changes need explicit first-party evidence or documented manual review. HTTP failures and stale repos are not shutdown evidence.
 - Official docs/changelogs/repos are sources; affiliate comparison pages are not. Paraphrase neutrally; never copy marketing prose.
 - No pricing without a dated official source and a time-aware schema. Every entry needs an HTTPS source URL.
-- Automation may stage medium/high-confidence additions and metadata in a PR; status alerts stay unapplied until reviewed.
+- Automation may stage medium/high-confidence additions and metadata in a PR; status alerts and identity changes (name, URL, entity type) stay unapplied until reviewed.
 
 ## Recommender rules
 

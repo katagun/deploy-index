@@ -14,6 +14,8 @@ Use a stable kebab-case slug, canonical official HTTPS URL, neutral summary, con
 
 Do not remove discontinued records. Change their status and availability only when the source trail supports it; historical pages are intentionally preserved.
 
+Do not re-run `scripts/seed_catalog.py`: it is the archival bootstrap and would reset every record's verification state. It refuses to overwrite an existing catalog unless `--force` is passed.
+
 ## Evidence standard
 
 Preferred sources, in order:

@@ -4,7 +4,7 @@
 
 DeployIndex is a directory and research system, not a hosting broker or benchmark leaderboard. Its core artifact is a portable, source-aware catalog of deployment surfaces.
 
-The architecture keeps four concerns separate:
+The architecture keeps five concerns separate:
 
 1. **Catalog truth** — structured records in version control.
 2. **Research proposals** — model-assisted, source-linked observations that are not trusted until validated.
