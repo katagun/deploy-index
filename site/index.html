@@ -72,6 +72,17 @@
   </div>
 
   <div class="provider-grid" id="provider-grid">{{PROVIDER_CARDS}}</div>
+  <div class="compare-tray" id="compare-tray" hidden>
+    <div class="compare-tray-inner">
+      <p class="compare-tray-label">Compare</p>
+      <ul class="compare-chips" id="compare-chips"></ul>
+      <div class="compare-tray-actions">
+        <button class="text-button" type="button" id="compare-clear">Clear</button>
+        <a class="button button-primary compare-go" id="compare-link" href="/compare/" aria-disabled="true">Compare <span id="compare-count">0</span> <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="sr-only" id="compare-live" role="status" aria-live="polite"></div>
   <div class="empty-state" id="empty-state" hidden>
     <div class="empty-icon" aria-hidden="true">∅</div>
     <h3>No deployment surface found.</h3>

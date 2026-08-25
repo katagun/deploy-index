@@ -18,8 +18,14 @@ Delivered in the initial repository:
 
 ## Phase 2 — better discovery
 
-- comparison tray for two to four entries;
-- capability matrix and “similar options” ranking;
+Delivered:
+
+- comparison tray for two to four entries, with a capability matrix, qualitative trait bands, and URL-backed state at `/compare/`;
+- free-tier tagging across the catalog so free-entry filtering is data-driven.
+
+Next:
+
+- “similar options” ranking;
 - geographic region and data-residency facets;
 - protocol, storage, compute, scale-to-zero, GPU, and BYOC facets;
 - framework/language deployment guides;

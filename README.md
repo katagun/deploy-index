@@ -87,6 +87,7 @@ The build publishes:
 - `/catalog/stats.json`
 - `/catalog/recommendations.json`
 - `/recommend/`
+- `/compare/`
 - `/providers/<slug>/`
 - `/sitemap.xml`
 
