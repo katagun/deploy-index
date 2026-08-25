@@ -170,7 +170,8 @@
       ],
       "capabilities": [
         "autoscaling",
-        "databases"
+        "databases",
+        "free-tier"
       ],
       "operating_models": [
         "managed-cloud"
@@ -188,7 +189,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "akamai-cloud",
@@ -553,6 +554,7 @@
         "bare-metal",
         "containers",
         "databases",
+        "free-tier",
         "functions",
         "gpu",
         "managed-kubernetes",
@@ -576,7 +578,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "anyscale",
@@ -693,6 +695,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -712,7 +715,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "appwrite-sites",
@@ -727,6 +730,7 @@
         "backend-platform"
       ],
       "capabilities": [
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -748,7 +752,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "aptible",
@@ -894,6 +898,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -913,7 +918,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Reclassified as an AWS product: it is a deployment surface on aws.amazon.com, not an independent provider."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "aws-amplify-hosting",
@@ -927,6 +932,7 @@
         "static-hosting"
       ],
       "capabilities": [
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -948,7 +954,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "aws-app-runner",
@@ -1030,6 +1036,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -1049,7 +1056,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "azure-app-service",
@@ -1064,6 +1071,7 @@
       "capabilities": [
         "autoscaling",
         "containers",
+        "free-tier",
         "git-deploy",
         "preview-environments",
         "private-networking"
@@ -1084,7 +1092,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "azure-container-apps",
@@ -1102,6 +1110,7 @@
         "background-workers",
         "containers",
         "cron-jobs",
+        "free-tier",
         "private-networking",
         "scale-to-zero"
       ],
@@ -1121,7 +1130,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "azure-functions",
@@ -1135,6 +1144,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -1154,7 +1164,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "azure-aks",
@@ -1237,6 +1247,7 @@
         "serverless-functions"
       ],
       "capabilities": [
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -1258,7 +1269,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "back4app",
@@ -1273,6 +1284,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -1292,7 +1304,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "back4app-containers",
@@ -2046,6 +2058,7 @@
         "containers",
         "databases",
         "edge-runtime",
+        "free-tier",
         "functions",
         "object-storage",
         "private-networking",
@@ -2067,7 +2080,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "cloudflare-containers",
@@ -2119,6 +2132,7 @@
       ],
       "capabilities": [
         "edge-runtime",
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -2141,7 +2155,7 @@
       ],
       "last_verified": "2026-08-23",
       "confidence": "high",
-      "change_note": "Verified current Pages documentation and migration guidance; Workers Static Assets is the preferred path for most new Cloudflare projects."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "cloudflare-sandbox",
@@ -2195,6 +2209,7 @@
         "autoscaling",
         "databases",
         "edge-runtime",
+        "free-tier",
         "functions",
         "git-deploy",
         "object-storage",
@@ -2219,7 +2234,7 @@
       ],
       "last_verified": "2026-08-23",
       "confidence": "high",
-      "change_note": "Expanded the record to include Workers Static Assets, current pricing documentation, and Git-oriented static application deployment."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "clouding-io",
@@ -2466,6 +2481,7 @@
       "capabilities": [
         "code-execution",
         "containers",
+        "free-tier",
         "persistent-storage"
       ],
       "operating_models": [
@@ -2484,7 +2500,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "coherence",
@@ -2563,6 +2579,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -2582,7 +2599,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "coolify",
@@ -2899,6 +2916,7 @@
       "capabilities": [
         "autoscaling",
         "edge-runtime",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -2918,7 +2936,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "digitalocean",
@@ -2968,6 +2986,7 @@
         "background-workers",
         "containers",
         "databases",
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -2987,7 +3006,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "digitalocean-functions",
@@ -3001,6 +3020,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -3020,7 +3040,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "digitalocean-kubernetes",
@@ -3239,6 +3259,7 @@
       "capabilities": [
         "code-execution",
         "containers",
+        "free-tier",
         "persistent-storage"
       ],
       "operating_models": [
@@ -3257,7 +3278,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "easypanel",
@@ -3613,6 +3634,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -3632,7 +3654,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "firebase-app-hosting",
@@ -3682,6 +3704,7 @@
         "frontend-hosting"
       ],
       "capabilities": [
+        "free-tier",
         "git-deploy",
         "preview-environments",
         "static-sites"
@@ -3702,7 +3725,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "fireworks-ai",
@@ -4087,6 +4110,7 @@
       "capabilities": [
         "ci-cd",
         "code-execution",
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -4106,7 +4130,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "codespaces",
@@ -4121,6 +4145,7 @@
       "capabilities": [
         "code-execution",
         "containers",
+        "free-tier",
         "persistent-storage"
       ],
       "operating_models": [
@@ -4139,7 +4164,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Reclassified as a GitHub product: it is a deployment surface on github.com, not an independent provider."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "github-pages",
@@ -4152,6 +4177,7 @@
         "static-hosting"
       ],
       "capabilities": [
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -4171,7 +4197,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "gitlab",
@@ -4187,6 +4213,7 @@
       "capabilities": [
         "ci-cd",
         "code-execution",
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -4206,7 +4233,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "gitlab-pages",
@@ -4219,6 +4246,7 @@
         "static-hosting"
       ],
       "capabilities": [
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -4238,7 +4266,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "gitpod",
@@ -4381,6 +4409,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "git-deploy",
         "private-networking",
         "scale-to-zero"
@@ -4401,7 +4430,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "google-cloud",
@@ -4421,6 +4450,7 @@
       "capabilities": [
         "containers",
         "databases",
+        "free-tier",
         "functions",
         "gpu",
         "managed-kubernetes",
@@ -4444,7 +4474,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "google-cloud-run",
@@ -4462,6 +4492,7 @@
         "background-workers",
         "containers",
         "cron-jobs",
+        "free-tier",
         "private-networking",
         "scale-to-zero"
       ],
@@ -4481,7 +4512,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "google-cloud-functions",
@@ -4495,6 +4526,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -4514,7 +4546,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "google-gke",
@@ -4943,6 +4975,7 @@
       ],
       "capabilities": [
         "containers",
+        "free-tier",
         "git-deploy",
         "gpu",
         "model-inference"
@@ -4963,7 +4996,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "hugging-face-inference-endpoints",
@@ -5013,6 +5046,7 @@
       ],
       "capabilities": [
         "containers",
+        "free-tier",
         "git-deploy",
         "gpu",
         "static-sites"
@@ -5033,7 +5067,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "ibm-cloud",
@@ -5054,6 +5088,7 @@
         "bare-metal",
         "containers",
         "databases",
+        "free-tier",
         "functions",
         "managed-kubernetes",
         "private-networking",
@@ -5075,7 +5110,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "ibm-code-engine",
@@ -5093,6 +5128,7 @@
         "background-workers",
         "containers",
         "cron-jobs",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -5112,7 +5148,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "ibm-kubernetes",
@@ -5397,6 +5433,7 @@
         "autoscaling",
         "background-workers",
         "containers",
+        "free-tier",
         "git-deploy",
         "gpu",
         "multi-region",
@@ -5419,7 +5456,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "kuberns",
@@ -5576,6 +5613,7 @@
         "background-workers",
         "cron-jobs",
         "databases",
+        "free-tier",
         "git-deploy",
         "object-storage",
         "preview-environments",
@@ -5597,7 +5635,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "latitude-sh",
@@ -5650,6 +5688,7 @@
         "background-workers",
         "containers",
         "databases",
+        "free-tier",
         "git-deploy",
         "scale-to-zero"
       ],
@@ -5669,7 +5708,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "leaseweb",
@@ -5720,6 +5759,7 @@
       "capabilities": [
         "code-execution",
         "containers",
+        "free-tier",
         "gpu",
         "model-inference"
       ],
@@ -5739,7 +5779,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "linode-kubernetes",
@@ -5827,6 +5867,7 @@
       "capabilities": [
         "containers",
         "databases",
+        "free-tier",
         "functions",
         "gpu",
         "managed-kubernetes",
@@ -5850,7 +5891,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "modal",
@@ -5870,6 +5911,7 @@
         "code-execution",
         "containers",
         "cron-jobs",
+        "free-tier",
         "functions",
         "gpu",
         "scale-to-zero"
@@ -5890,7 +5932,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "mongodb-atlas",
@@ -5904,7 +5946,8 @@
       ],
       "capabilities": [
         "autoscaling",
-        "databases"
+        "databases",
+        "free-tier"
       ],
       "operating_models": [
         "managed-cloud"
@@ -5922,7 +5965,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "motherduck",
@@ -5937,6 +5980,7 @@
       "capabilities": [
         "autoscaling",
         "databases",
+        "free-tier",
         "scale-to-zero"
       ],
       "operating_models": [
@@ -5955,7 +5999,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "namecheap-hosting",
@@ -6038,6 +6082,7 @@
         "static-hosting"
       ],
       "capabilities": [
+        "free-tier",
         "static-sites"
       ],
       "operating_models": [
@@ -6056,7 +6101,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "neon",
@@ -6071,6 +6116,7 @@
       "capabilities": [
         "autoscaling",
         "databases",
+        "free-tier",
         "scale-to-zero"
       ],
       "operating_models": [
@@ -6089,7 +6135,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "netlify",
@@ -6107,6 +6153,7 @@
       "capabilities": [
         "background-workers",
         "edge-runtime",
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -6128,7 +6175,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "netlify-functions",
@@ -6142,6 +6189,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -6161,7 +6209,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "nexcess",
@@ -6209,6 +6257,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -6228,7 +6277,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "northflank",
@@ -6537,6 +6586,7 @@
         "bare-metal",
         "containers",
         "databases",
+        "free-tier",
         "gpu",
         "managed-kubernetes",
         "object-storage",
@@ -6559,7 +6609,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "oracle-oke",
@@ -7085,6 +7135,7 @@
       "capabilities": [
         "autoscaling",
         "databases",
+        "free-tier",
         "scale-to-zero"
       ],
       "operating_models": [
@@ -7103,7 +7154,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "qoddi",
@@ -7333,7 +7384,8 @@
       ],
       "capabilities": [
         "autoscaling",
-        "databases"
+        "databases",
+        "free-tier"
       ],
       "operating_models": [
         "managed-cloud"
@@ -7351,7 +7403,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "render",
@@ -7368,6 +7420,7 @@
         "containers",
         "cron-jobs",
         "databases",
+        "free-tier",
         "git-deploy",
         "preview-environments",
         "private-networking",
@@ -7389,7 +7442,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "replicate",
@@ -7440,6 +7493,7 @@
         "code-execution",
         "containers",
         "databases",
+        "free-tier",
         "git-deploy",
         "static-sites"
       ],
@@ -7459,7 +7513,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "replit-deployments",
@@ -7746,6 +7800,7 @@
       "capabilities": [
         "autoscaling",
         "containers",
+        "free-tier",
         "private-networking",
         "scale-to-zero"
       ],
@@ -7765,7 +7820,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "scalingo",
@@ -7885,6 +7940,7 @@
       "capabilities": [
         "containers",
         "databases",
+        "free-tier",
         "git-deploy",
         "object-storage",
         "static-sites"
@@ -7905,7 +7961,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "shuttle",
@@ -7921,6 +7977,7 @@
         "background-workers",
         "cron-jobs",
         "databases",
+        "free-tier",
         "git-deploy"
       ],
       "operating_models": [
@@ -7939,7 +7996,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "siteground",
@@ -8126,6 +8183,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -8145,7 +8203,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "supabase-edge-functions",
@@ -8159,6 +8217,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -8178,7 +8237,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "surge",
@@ -8192,6 +8251,7 @@
       ],
       "capabilities": [
         "cli-deploy",
+        "free-tier",
         "static-sites"
       ],
       "operating_models": [
@@ -8210,7 +8270,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "tembo",
@@ -8495,7 +8555,8 @@
       ],
       "capabilities": [
         "autoscaling",
-        "databases"
+        "databases",
+        "free-tier"
       ],
       "operating_models": [
         "managed-cloud"
@@ -8513,7 +8574,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "uncloud",
@@ -8595,6 +8656,7 @@
       "capabilities": [
         "autoscaling",
         "databases",
+        "free-tier",
         "scale-to-zero"
       ],
       "operating_models": [
@@ -8613,7 +8675,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "upsun",
@@ -8662,6 +8724,7 @@
       ],
       "capabilities": [
         "cron-jobs",
+        "free-tier",
         "functions",
         "git-deploy",
         "scale-to-zero"
@@ -8682,7 +8745,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "vast-ai",
@@ -8734,6 +8797,7 @@
         "autoscaling",
         "containers",
         "edge-runtime",
+        "free-tier",
         "functions",
         "git-deploy",
         "preview-environments",
@@ -8756,7 +8820,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "vercel-functions",
@@ -8770,6 +8834,7 @@
       ],
       "capabilities": [
         "autoscaling",
+        "free-tier",
         "functions",
         "scale-to-zero"
       ],
@@ -8789,7 +8854,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "vercel-sandbox",
@@ -8905,6 +8970,7 @@
       "capabilities": [
         "autoscaling",
         "edge-runtime",
+        "free-tier",
         "scale-to-zero",
         "webassembly"
       ],
@@ -8924,7 +8990,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "wordpress-com",
@@ -8938,6 +9004,7 @@
       ],
       "capabilities": [
         "backups",
+        "free-tier",
         "managed-cms",
         "staging"
       ],
@@ -8957,7 +9024,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "wp-engine",
@@ -9005,6 +9072,7 @@
       "capabilities": [
         "authentication",
         "databases",
+        "free-tier",
         "functions",
         "object-storage"
       ],
@@ -9024,7 +9092,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
     },
     {
       "slug": "zaneops",
