@@ -50,6 +50,16 @@ class RecommendationProfileTests(unittest.TestCase):
         self.assertIn("docker-compose", coolify["artifacts"])
         self.assertEqual(coolify["portability"], 5)
 
+    def test_free_tier_platforms_are_tagged_in_catalog_data(self) -> None:
+        representative = {
+            "supabase", "neon", "mongodb-atlas", "oracle-cloud", "aws-lambda",
+            "google-cloud-run", "render", "koyeb", "github-pages", "wordpress-com",
+        }
+        for slug in representative:
+            self.assertTrue(self.by_slug[slug]["free_entry"], f"{slug} should carry a free-tier tag")
+        free_count = sum(1 for profile in self.payload["profiles"] if profile["free_entry"])
+        self.assertGreaterEqual(free_count, 50, "free-tier coverage should be data-driven, not override-only")
+
     def test_free_tier_capability_derives_free_entry(self) -> None:
         entry = dict(next(item for item in self.catalog["providers"] if item["slug"] == "railway"))
         entry = {**entry, "slug": "free-tier-host", "name": "Free Tier Host", "url": "https://free-tier-host.example/",

@@ -27,6 +27,16 @@
     .replace(/\s+/g, ' ')
     .trim();
 
+  const compareTray = document.querySelector('#compare-tray');
+  const compareChips = document.querySelector('#compare-chips');
+  const compareLink = document.querySelector('#compare-link');
+  const compareCount = document.querySelector('#compare-count');
+  const compareClear = document.querySelector('#compare-clear');
+  const compareLive = document.querySelector('#compare-live');
+  const COMPARE_MAX = 4;
+  const cardsBySlug = new Map(cards.map((card) => [card.dataset.slug, card]));
+  let compareSelection = [];
+
   const params = new URLSearchParams(location.search);
   const setIfValid = (control, key) => {
     const value = params.get(key);
@@ -42,6 +52,61 @@
   if (params.get('category') && categoryButtons.some((button) => button.dataset.category === params.get('category'))) {
     category = params.get('category');
   }
+  if (params.get('compare')) {
+    compareSelection = [...new Set(params.get('compare').split(',').filter((slug) => cardsBySlug.has(slug)))].slice(0, COMPARE_MAX);
+  }
+
+  const cardName = (slug) => {
+    const heading = cardsBySlug.get(slug)?.querySelector('h3 a');
+    return heading ? heading.textContent : slug;
+  };
+
+  const syncCompareUI = () => {
+    if (!compareTray) return;
+    cards.forEach((card) => {
+      const toggle = card.querySelector('[data-compare-toggle]');
+      if (toggle) {
+        toggle.hidden = false;
+        const selected = compareSelection.includes(card.dataset.slug);
+        toggle.setAttribute('aria-pressed', String(selected));
+        toggle.textContent = selected ? '⊟ Comparing' : '⊞ Compare';
+      }
+    });
+    compareTray.hidden = compareSelection.length === 0;
+    compareChips.innerHTML = '';
+    compareSelection.forEach((slug) => {
+      const chip = document.createElement('li');
+      chip.className = 'compare-chip';
+      const name = document.createElement('span');
+      name.textContent = cardName(slug);
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.textContent = '✕';
+      remove.setAttribute('aria-label', `Remove ${cardName(slug)} from comparison`);
+      remove.addEventListener('click', () => toggleCompare(slug));
+      chip.append(name, remove);
+      compareChips.append(chip);
+    });
+    compareCount.textContent = String(compareSelection.length);
+    const ready = compareSelection.length >= 2;
+    compareLink.setAttribute('aria-disabled', String(!ready));
+    compareLink.href = ready ? `/compare/?s=${compareSelection.map(encodeURIComponent).join(',')}` : '/compare/';
+  };
+
+  const toggleCompare = (slug) => {
+    if (compareSelection.includes(slug)) {
+      compareSelection = compareSelection.filter((value) => value !== slug);
+      compareLive.textContent = `${cardName(slug)} removed from comparison.`;
+    } else if (compareSelection.length >= COMPARE_MAX) {
+      compareLive.textContent = `Comparison is full: up to ${COMPARE_MAX} entries. Remove one first.`;
+      return;
+    } else {
+      compareSelection = [...compareSelection, slug];
+      compareLive.textContent = `${cardName(slug)} added to comparison (${compareSelection.length} of ${COMPARE_MAX}).`;
+    }
+    syncCompareUI();
+    writeURL();
+  };
 
   const setCategoryUI = () => {
     categoryButtons.forEach((button) => {
@@ -89,6 +154,7 @@
     if (status.value !== 'available') next.set('status', status.value);
     if (source.value !== 'all') next.set('source', source.value);
     if (sort.value !== 'featured') next.set('sort', sort.value);
+    if (compareSelection.length) next.set('compare', compareSelection.join(','));
     const query = next.toString();
     history.replaceState(null, '', query ? `${location.pathname}?${query}` : location.pathname);
   };
@@ -145,6 +211,28 @@
   };
   reset.addEventListener('click', resetAll);
   emptyReset.addEventListener('click', resetAll);
+
+  if (compareTray) {
+    grid.addEventListener('click', (event) => {
+      const toggle = event.target.closest('[data-compare-toggle]');
+      if (!toggle) return;
+      const card = toggle.closest('.provider-card');
+      if (card?.dataset.slug) toggleCompare(card.dataset.slug);
+    });
+    compareClear.addEventListener('click', () => {
+      compareSelection = [];
+      compareLive.textContent = 'Comparison cleared.';
+      syncCompareUI();
+      writeURL();
+    });
+    compareLink.addEventListener('click', (event) => {
+      if (compareLink.getAttribute('aria-disabled') === 'true') {
+        event.preventDefault();
+        compareLive.textContent = 'Pick at least two entries to compare.';
+      }
+    });
+    syncCompareUI();
+  }
 
   viewButtons.forEach((button) => button.addEventListener('click', () => {
     const view = button.dataset.view;

@@ -22,6 +22,7 @@ check: build
 	node --check site/theme-init.js
 	node --check site/recommendation-engine.js
 	node --check site/recommend.js
+	node --check site/compare.js
 	node tests/recommendation-engine.test.js
 
 test:

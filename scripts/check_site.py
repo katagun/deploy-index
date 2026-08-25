@@ -149,7 +149,10 @@ def check(dist: Path) -> list[str]:
         page = dist / "providers" / item["slug"] / "index.html"
         if not page.exists():
             errors.append(f"Missing provider detail page: {item['slug']}")
-    expected_sitemap_entries = len(catalog["providers"]) + 4
+    for tool_page in ("recommend", "method", "compare"):
+        if not (dist / tool_page / "index.html").exists():
+            errors.append(f"Missing tool page: /{tool_page}/")
+    expected_sitemap_entries = len(catalog["providers"]) + 5
     sitemap = (dist / "sitemap.xml").read_text(encoding="utf-8")
     if sitemap.count("<url>") != expected_sitemap_entries:
         errors.append(

@@ -156,6 +156,7 @@ def card_html(item: dict, category_labels: dict[str, str], *, hidden: bool = Fal
     foot = f"{ENTITY_LABELS[item['entity_type']]} · {ERA_LABELS[item['era']].replace(' · 2020–23', '').replace(' · 2024+', '')}"
     hidden_attr = " hidden" if hidden else ""
     return f'''<article class="provider-card" style="--card-hue:{hue(item['slug'])}"{hidden_attr}
+      data-slug="{esc(item['slug'])}"
       data-name="{esc(item['name'].casefold())}"
       data-search="{esc(normalize_search(' '.join(search_parts)))}"
       data-primary="{esc(item['primary_category'])}"
@@ -177,7 +178,7 @@ def card_html(item: dict, category_labels: dict[str, str], *, hidden: bool = Fal
       </div>
       <p class="card-summary">{esc(item['summary'])}</p>
       <div class="tag-list">{tag_markup}</div>
-      <div class="card-foot"><p>{esc(foot)}</p><span class="card-arrow" aria-hidden="true">↗</span></div>
+      <div class="card-foot"><p>{esc(foot)}</p><div class="card-foot-actions"><button class="compare-toggle" type="button" data-compare-toggle aria-pressed="false" aria-label="Compare {esc(item['name'])}" hidden>⊞ Compare</button><span class="card-arrow" aria-hidden="true">↗</span></div></div>
     </article>'''
 
 
@@ -366,7 +367,7 @@ def main() -> int:
     (DIST / "catalog").mkdir(parents=True)
     (DIST / "providers").mkdir(parents=True)
 
-    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "favicon.svg", "og.svg"):
+    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "compare.js", "favicon.svg", "og.svg"):
         shutil.copy2(SITE / asset, DIST / "assets" / asset)
     shutil.copy2(ROOT / "catalog" / "providers.json", DIST / "catalog" / "providers.json")
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")
@@ -430,6 +431,15 @@ def main() -> int:
         body_class="recommend-page",
     ))
 
+    write(DIST / "compare" / "index.html", render_base(
+        title="Compare deployment surfaces — DeployIndex",
+        description="Side-by-side comparison of up to four catalog entries: identity, capabilities, operating models, and qualitative recommendation traits.",
+        path="/compare/",
+        main=(SITE / "compare.html").read_text(encoding="utf-8"),
+        scripts='<script src="/assets/compare.js" defer></script>',
+        body_class="compare-page",
+    ))
+
     for item in providers:
         write(DIST / "providers" / item["slug"] / "index.html", provider_page(item, providers_by_slug, providers, category_labels))
 
@@ -467,7 +477,7 @@ def main() -> int:
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-    sitemap_urls = ["/", "/recommend/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
+    sitemap_urls = ["/", "/recommend/", "/compare/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(
         f"  <url><loc>{esc(canonical(path))}</loc></url>" for path in sitemap_urls
     ) + "\n</urlset>\n"
