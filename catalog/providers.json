@@ -504,7 +504,7 @@
       "name": "Amazon GameLift Servers",
       "url": "https://aws.amazon.com/gamelift/servers/",
       "entity_type": "product",
-      "parent_slug": null,
+      "parent_slug": "aws",
       "primary_category": "game-hosting",
       "categories": [
         "game-hosting"
@@ -531,7 +531,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Linked to its parent provider AWS, which already exists in the catalog."
     },
     {
       "slug": "aws",
@@ -885,8 +885,8 @@
       "slug": "amplify",
       "name": "AWS Amplify",
       "url": "https://aws.amazon.com/amplify/",
-      "entity_type": "provider",
-      "parent_slug": null,
+      "entity_type": "product",
+      "parent_slug": "aws",
       "primary_category": "backend-platform",
       "categories": [
         "backend-platform"
@@ -913,7 +913,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Reclassified as an AWS product: it is a deployment surface on aws.amazon.com, not an independent provider."
     },
     {
       "slug": "aws-amplify-hosting",
@@ -1195,7 +1195,7 @@
       "name": "Azure PlayFab",
       "url": "https://playfab.com/",
       "entity_type": "product",
-      "parent_slug": null,
+      "parent_slug": "azure",
       "primary_category": "game-hosting",
       "categories": [
         "game-hosting"
@@ -1222,7 +1222,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Linked to its parent provider Microsoft Azure, which already exists in the catalog."
     },
     {
       "slug": "azure-static-web-apps",
@@ -3164,8 +3164,8 @@
       "slug": "dreamcompute",
       "name": "DreamCompute",
       "url": "https://www.dreamhost.com/cloud/computing/",
-      "entity_type": "provider",
-      "parent_slug": null,
+      "entity_type": "product",
+      "parent_slug": "dreamhost",
       "primary_category": "cloud-vps",
       "categories": [
         "cloud-vps"
@@ -3191,7 +3191,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Reclassified as a DreamHost product: it is a deployment surface on dreamhost.com, not an independent provider."
     },
     {
       "slug": "dreamhost",
@@ -3297,7 +3297,7 @@
       "slug": "edgegap",
       "name": "Edgegap",
       "url": "https://edgegap.com/",
-      "entity_type": "product",
+      "entity_type": "provider",
       "parent_slug": null,
       "primary_category": "game-hosting",
       "categories": [
@@ -3325,7 +3325,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Reclassified as a provider: Edgegap is an independent company, not a product of another catalog entry."
     },
     {
       "slug": "edgio",
@@ -4112,8 +4112,8 @@
       "slug": "codespaces",
       "name": "GitHub Codespaces",
       "url": "https://github.com/features/codespaces",
-      "entity_type": "provider",
-      "parent_slug": null,
+      "entity_type": "product",
+      "parent_slug": "github",
       "primary_category": "developer-sandbox",
       "categories": [
         "developer-sandbox"
@@ -4139,7 +4139,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Reclassified as a GitHub product: it is a deployment surface on github.com, not an independent provider."
     },
     {
       "slug": "github-pages",
@@ -4690,7 +4690,7 @@
       "slug": "hathora",
       "name": "Hathora",
       "url": "https://hathora.dev/",
-      "entity_type": "product",
+      "entity_type": "provider",
       "parent_slug": null,
       "primary_category": "game-hosting",
       "categories": [
@@ -4718,7 +4718,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Reclassified as a provider: Hathora is an independent company, not a product of another catalog entry."
     },
     {
       "slug": "heroic-cloud",

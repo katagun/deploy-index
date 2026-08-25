@@ -154,9 +154,10 @@
       item.classList.toggle('is-active', selected);
       item.setAttribute('aria-pressed', String(selected));
     });
-    localStorage.setItem('deployindex-view', view);
+    try { localStorage.setItem('deployindex-view', view); } catch (_error) { /* storage may be unavailable */ }
   }));
-  const savedView = localStorage.getItem('deployindex-view');
+  let savedView = null;
+  try { savedView = localStorage.getItem('deployindex-view'); } catch (_error) { /* storage may be unavailable */ }
   if (savedView === 'list') viewButtons.find((button) => button.dataset.view === 'list')?.click();
 
   document.addEventListener('keydown', (event) => {

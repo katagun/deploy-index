@@ -16,15 +16,13 @@ from catalog import (
     OPERATING_MODELS,
     STATUSES,
     normalize_domain,
+    normalize_url_identity,
     validate_catalog,
 )
 
 RESEARCH_CONFIDENCE = {"low", "medium", "high"}
 AUTO_APPLY_CONFIDENCE = {"medium", "high"}
 SAFE_UPDATE_FIELDS = {
-    "name",
-    "url",
-    "entity_type",
     "primary_category",
     "categories",
     "capabilities",
@@ -34,6 +32,10 @@ SAFE_UPDATE_FIELDS = {
     "summary",
     "best_for",
 }
+# Identity fields describe rebrands and canonical-URL moves. They may be proposed
+# and validated, but the apply step never stages them automatically: like status
+# alerts, they require explicit manual review.
+IDENTITY_UPDATE_FIELDS = {"name", "url", "entity_type"}
 
 
 def _nullable(schema: dict[str, Any]) -> dict[str, Any]:
@@ -45,7 +47,7 @@ def _nullable(schema: dict[str, Any]) -> dict[str, Any]:
     return {"anyOf": [schema, {"type": "null"}]}
 
 
-def research_output_schema(category_names: list[str]) -> dict[str, Any]:
+def research_output_schema(category_names: list[str], max_new_candidates: int = 30, max_updates: int = 80) -> dict[str, Any]:
     """Schema supplied to the Responses API for strict structured extraction."""
     https_url = {"type": "string", "pattern": "^https://", "minLength": 9, "maxLength": 500}
     source_urls = {
@@ -127,12 +129,12 @@ def research_output_schema(category_names: list[str]) -> dict[str, Any]:
             "summary": {"type": "string", "minLength": 20, "maxLength": 1500},
             "new_candidates": {
                 "type": "array",
-                "maxItems": 30,
+                "maxItems": max_new_candidates,
                 "items": strict_object(candidate_properties),
             },
             "updates": {
                 "type": "array",
-                "maxItems": 80,
+                "maxItems": max_updates,
                 "items": strict_object(
                     {
                         "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
@@ -205,13 +207,6 @@ def _is_https_url(value: Any) -> bool:
     return isinstance(value, str) and value.startswith("https://") and bool(normalize_domain(value))
 
 
-def normalize_url_identity(value: str) -> str:
-    parsed = urlparse(value)
-    host = (parsed.hostname or "").lower().removeprefix("www.")
-    path = "/" + "/".join(part for part in parsed.path.split("/") if part)
-    return f"{host}{path.rstrip('/')}"
-
-
 def _validate_sources(sources: Any, prefix: str, errors: list[str]) -> None:
     if not isinstance(sources, list) or not sources:
         errors.append(f"{prefix}: source_urls must be a non-empty array")
@@ -231,14 +226,27 @@ def _domain_is_related(source_domain: str, canonical_domain: str) -> bool:
     )
 
 
-def has_probable_primary_source(item_url: str, sources: list[str], open_source: bool = False) -> bool:
+def _github_repo_relates(source: str, item_url: str, slug: str) -> bool:
+    """A GitHub source only counts as first-party when the owner or repository
+    name plausibly relates to the entry's slug or canonical domain — an
+    arbitrary repository must not satisfy the evidence requirement."""
+    path_parts = [part for part in urlparse(source).path.split("/") if part]
+    if not path_parts:
+        return False
+    owner_repo = " ".join(path_parts[:2]).lower()
+    domain_label = normalize_domain(item_url).split(".")[0]
+    tokens = {token for token in (*slug.split("-"), domain_label) if len(token) >= 3}
+    return any(token in owner_repo for token in tokens)
+
+
+def has_probable_primary_source(item_url: str, sources: list[str], open_source: bool = False, slug: str = "") -> bool:
     """Conservative heuristic; human review remains authoritative."""
     canonical = normalize_domain(item_url)
     for source in sources:
         source_domain = normalize_domain(source)
         if _domain_is_related(source_domain, canonical):
             return True
-        if open_source and source_domain == "github.com":
+        if open_source and source_domain == "github.com" and _github_repo_relates(source, item_url, slug):
             return True
     return False
 
@@ -319,7 +327,7 @@ def validate_proposal(proposal: dict[str, Any], catalog: dict[str, Any]) -> list
         if entry["primary_category"] not in categories:
             errors.append(f"{prefix}: unknown primary category")
         _validate_sources(entry["source_urls"], prefix, errors)
-        if not has_probable_primary_source(entry["url"], entry["source_urls"], entry["open_source"]):
+        if not has_probable_primary_source(entry["url"], entry["source_urls"], entry["open_source"], entry["slug"]):
             errors.append(f"{prefix}: needs at least one probable first-party source")
 
     allowed_parent_slugs = set(by_slug) | candidate_slugs
@@ -354,7 +362,7 @@ def validate_proposal(proposal: dict[str, Any], catalog: dict[str, Any]) -> list
         if not isinstance(patch, dict):
             errors.append(f"{prefix}: patch must be an object")
             continue
-        meaningful = any(patch.get(field) is not None for field in SAFE_UPDATE_FIELDS)
+        meaningful = any(patch.get(field) is not None for field in SAFE_UPDATE_FIELDS | IDENTITY_UPDATE_FIELDS)
         meaningful = meaningful or patch.get("parent_slug_action") != "keep" or patch.get("launch_year_action") != "keep"
         if not meaningful:
             errors.append(f"{prefix}: patch contains no changes")
@@ -374,11 +382,15 @@ def validate_proposal(proposal: dict[str, Any], catalog: dict[str, Any]) -> list
             errors.append(f"{prefix}: invalid era")
         if patch.get("url") is not None and not _is_https_url(patch["url"]):
             errors.append(f"{prefix}: invalid URL")
-        canonical_for_sources = patch.get("url") or (by_slug.get(slug) or {}).get("url", "")
+        current_url = (by_slug.get(slug) or {}).get("url", "")
+        candidate_urls_for_sources = [url for url in (current_url, patch.get("url")) if url]
         open_source_for_sources = patch.get("open_source")
         if open_source_for_sources is None and slug in by_slug:
             open_source_for_sources = by_slug[slug]["open_source"]
-        if canonical_for_sources and isinstance(update.get("source_urls"), list) and not has_probable_primary_source(canonical_for_sources, update["source_urls"], bool(open_source_for_sources)):
+        if candidate_urls_for_sources and isinstance(update.get("source_urls"), list) and not any(
+            has_probable_primary_source(url, update["source_urls"], bool(open_source_for_sources), str(slug or ""))
+            for url in candidate_urls_for_sources
+        ):
             errors.append(f"{prefix}: needs at least one probable first-party source")
         parent_action = patch.get("parent_slug_action")
         if parent_action not in {"keep", "set", "clear"}:
@@ -420,7 +432,7 @@ def validate_proposal(proposal: dict[str, Any], catalog: dict[str, Any]) -> list
                 except (TypeError, ValueError):
                     errors.append(f"{prefix}: effective_date must be ISO date or null")
             _validate_sources(alert.get("source_urls"), prefix, errors)
-            if slug in by_slug and isinstance(alert.get("source_urls"), list) and not has_probable_primary_source(by_slug[slug]["url"], alert["source_urls"], by_slug[slug]["open_source"]):
+            if slug in by_slug and isinstance(alert.get("source_urls"), list) and not has_probable_primary_source(by_slug[slug]["url"], alert["source_urls"], by_slug[slug]["open_source"], slug):
                 errors.append(f"{prefix}: needs at least one probable first-party source")
 
     seen_checked: set[str] = set()
@@ -442,7 +454,7 @@ def validate_proposal(proposal: dict[str, Any], catalog: dict[str, Any]) -> list
             if item.get("confidence") not in RESEARCH_CONFIDENCE:
                 errors.append(f"{prefix}: invalid confidence")
             _validate_sources(item.get("source_urls"), prefix, errors)
-            if slug in by_slug and isinstance(item.get("source_urls"), list) and not has_probable_primary_source(by_slug[slug]["url"], item["source_urls"], by_slug[slug]["open_source"]):
+            if slug in by_slug and isinstance(item.get("source_urls"), list) and not has_probable_primary_source(by_slug[slug]["url"], item["source_urls"], by_slug[slug]["open_source"], slug):
                 errors.append(f"{prefix}: needs at least one probable first-party source")
 
     return errors

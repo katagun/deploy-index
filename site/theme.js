@@ -9,7 +9,7 @@
   };
   toggle.addEventListener('click', () => {
     root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('deployindex-theme', root.dataset.theme);
+    try { localStorage.setItem('deployindex-theme', root.dataset.theme); } catch (_error) { /* storage may be unavailable */ }
     syncLabel();
   });
   syncLabel();

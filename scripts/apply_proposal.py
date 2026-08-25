@@ -17,16 +17,35 @@ from pathlib import Path
 from typing import Any
 
 from catalog import CATALOG_PATH, atomic_write_json, load_catalog, validate_catalog
-from proposals import AUTO_APPLY_CONFIDENCE, SAFE_UPDATE_FIELDS, catalog_entry_from_candidate, proposal_stats, validate_proposal
+from proposals import (
+    AUTO_APPLY_CONFIDENCE,
+    IDENTITY_UPDATE_FIELDS,
+    SAFE_UPDATE_FIELDS,
+    catalog_entry_from_candidate,
+    proposal_stats,
+    validate_proposal,
+)
+
+
+CONFIDENCE_RANK = {"seed": 0, "low": 1, "medium": 2, "high": 3}
 
 
 def merge_sources(current: list[str], proposed: list[str]) -> list[str]:
     return list(dict.fromkeys([*current, *proposed]))[:20]
 
 
-def apply_update(item: dict[str, Any], update: dict[str, Any], research_date: str) -> list[str]:
+def raise_confidence(current: str, proposed: str) -> str:
+    """Re-verification may raise a record's confidence, never lower it."""
+    return proposed if CONFIDENCE_RANK.get(proposed, 0) >= CONFIDENCE_RANK.get(current, 0) else current
+
+
+def apply_update(item: dict[str, Any], update: dict[str, Any], research_date: str) -> tuple[list[str], list[str]]:
     changed: list[str] = []
     patch = update["patch"]
+    identity_skipped = sorted(
+        field for field in IDENTITY_UPDATE_FIELDS
+        if patch.get(field) is not None and item.get(field) != patch[field]
+    )
     for field in sorted(SAFE_UPDATE_FIELDS):
         value = patch.get(field)
         if value is not None and item.get(field) != value:
@@ -55,7 +74,7 @@ def apply_update(item: dict[str, Any], update: dict[str, Any], research_date: st
         item["last_verified"] = research_date
         item["confidence"] = update["confidence"]
         item["change_note"] = update["rationale"].strip()
-    return changed
+    return changed, identity_skipped
 
 
 def apply_proposal(catalog: dict[str, Any], proposal: dict[str, Any], include_low_confidence: bool = False) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -67,6 +86,7 @@ def apply_proposal(catalog: dict[str, Any], proposal: dict[str, Any], include_lo
         "updated": {},
         "verified": [],
         "skipped_low_confidence": [],
+        "identity_changes_not_applied": [],
         "status_alerts_not_applied": [alert["slug"] for alert in proposal.get("status_alerts", [])],
     }
 
@@ -83,9 +103,11 @@ def apply_proposal(catalog: dict[str, Any], proposal: dict[str, Any], include_lo
         if update["confidence"] not in allowed_confidence:
             report["skipped_low_confidence"].append({"kind": "update", "slug": update["slug"]})
             continue
-        changed = apply_update(by_slug[update["slug"]], update, proposal["research_date"])
+        changed, identity_skipped = apply_update(by_slug[update["slug"]], update, proposal["research_date"])
         if changed:
             report["updated"][update["slug"]] = changed
+        if identity_skipped:
+            report["identity_changes_not_applied"].append({"slug": update["slug"], "fields": identity_skipped})
 
     for checked in proposal.get("checked_active", []):
         if checked["confidence"] not in allowed_confidence:
@@ -94,7 +116,7 @@ def apply_proposal(catalog: dict[str, Any], proposal: dict[str, Any], include_lo
         item = by_slug[checked["slug"]]
         item["source_urls"] = merge_sources(item["source_urls"], checked["source_urls"])
         item["last_verified"] = proposal["research_date"]
-        item["confidence"] = checked["confidence"]
+        item["confidence"] = raise_confidence(item["confidence"], checked["confidence"])
         item["change_note"] = checked["note"].strip()
         report["verified"].append(checked["slug"])
 
@@ -137,6 +159,9 @@ def main() -> int:
     print(f"Will add {len(report['added'])}, update {len(report['updated'])}, and re-verify {len(report['verified'])} entries.")
     if report["status_alerts_not_applied"]:
         print(f"Status alerts intentionally left for review: {', '.join(report['status_alerts_not_applied'])}")
+    if report["identity_changes_not_applied"]:
+        skipped = ", ".join(f"{item['slug']} ({', '.join(item['fields'])})" for item in report["identity_changes_not_applied"])
+        print(f"Identity changes intentionally left for review: {skipped}")
     if report["skipped_low_confidence"]:
         print(f"Skipped low-confidence findings: {len(report['skipped_low_confidence'])}")
 
