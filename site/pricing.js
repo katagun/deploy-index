@@ -10,7 +10,15 @@
     .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 
   const money = (value) => `$${Number(value).toFixed(2)}`;
-  const daysBetween = (iso, today) => Math.round((today - new Date(iso)) / 86400000);
+  // Both endpoints are normalized to UTC calendar dates before subtracting, so
+  // the result is a whole number of calendar days independent of the viewer's
+  // timezone and time-of-day. `iso` (e.g. "2026-08-29") already parses as UTC
+  // midnight per the date-only ECMA-262 form; `today` is normalized the same
+  // way using its UTC calendar components rather than local ones.
+  const daysBetween = (iso, today) => {
+    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+    return Math.round((todayUtc - new Date(iso).getTime()) / 86400000);
+  };
 
   const ageCell = (result, maxAge, today) => {
     if (result.status !== 'ok' || !result.sources.length) return '';
