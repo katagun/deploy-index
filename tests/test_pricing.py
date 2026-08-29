@@ -116,6 +116,16 @@ class ObservationValidationTests(unittest.TestCase):
         errors = validate_observations(["not a dict"], self.metrics, self.catalog, today=date(2026, 8, 29))
         self.assertTrue(any("rows[0]" in error for error in errors), errors)
 
+    def test_unhashable_metric_returns_error_not_exception(self) -> None:
+        self.assert_error(make_row(metric={}), "unknown metric")
+
+    def test_unhashable_provider_slug_returns_error_not_exception(self) -> None:
+        self.assert_error(make_row(provider_slug=[]), "unknown provider_slug")
+
+    def test_non_list_rows_returns_proper_error(self) -> None:
+        errors = validate_observations({"not": "a list"}, self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertEqual(errors, ["rows must be a list"])
+
 
 if __name__ == "__main__":
     unittest.main()

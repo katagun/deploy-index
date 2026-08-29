@@ -47,6 +47,14 @@ ROW_CONFIDENCE = {"low", "medium", "high"}
 REGIONS = {"us-east"}
 
 
+def _in_set(value: Any, allowed: set) -> bool:
+    """Membership test that tolerates unhashable values from untrusted input."""
+    try:
+        return value in allowed
+    except TypeError:
+        return False
+
+
 def validate_observations(
     rows: list[dict[str, Any]],
     metrics: dict[str, Any],
@@ -75,13 +83,13 @@ def validate_observations(
         if missing:
             errors.append(f"{prefix}: missing fields {sorted(missing)}")
             continue
-        if row["metric"] not in known_metrics:
+        if not _in_set(row["metric"], known_metrics):
             errors.append(f"{prefix}: unknown metric {row['metric']!r}")
-        if row["provider_slug"] not in known_slugs:
+        if not _in_set(row["provider_slug"], known_slugs):
             errors.append(f"{prefix}: unknown provider_slug {row['provider_slug']!r}")
-        if row["currency"] not in CURRENCIES:
+        if not _in_set(row["currency"], CURRENCIES):
             errors.append(f"{prefix}: unsupported currency {row['currency']!r}")
-        if row["region"] not in REGIONS:
+        if not _in_set(row["region"], REGIONS):
             errors.append(f"{prefix}: unsupported region {row['region']!r}")
         value = row["value"]
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
@@ -91,7 +99,7 @@ def validate_observations(
             errors.append(f"{prefix}: included_allowance must be a non-negative number")
         if not isinstance(row["source_url"], str) or not row["source_url"].startswith("https://") or not normalize_domain(row["source_url"]):
             errors.append(f"{prefix}: source_url must be https")
-        if row["confidence"] not in ROW_CONFIDENCE:
+        if not _in_set(row["confidence"], ROW_CONFIDENCE):
             errors.append(f"{prefix}: invalid confidence {row['confidence']!r}")
 
         observed = None
