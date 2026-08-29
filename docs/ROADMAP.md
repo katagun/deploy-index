@@ -52,7 +52,20 @@ Delivered foundation:
 
 Next:
 
-- side-by-side pricing snapshots with retrieval dates and units;
+- side-by-side pricing snapshots with retrieval dates and units — designed in
+  [`docs/superpowers/specs/2026-08-29-database-pricing-design.md`](superpowers/specs/2026-08-29-database-pricing-design.md),
+  starting with database hosting;
+- **block storage pricing** — extends the pricing dataset with volume, IOPS, and
+  snapshot metrics. Needs no engine changes, so it ships first and proves the
+  model generalizes beyond databases;
+- **compute and VM pricing** (EC2, Compute Engine, Azure VMs, Droplets, and the
+  VPS field) — needs one new concept, SKU attributes plus shape-based selection,
+  because instance types are not comparable across providers by name;
+- **catalog prerequisite for both:** the directory currently has no VM or
+  block-storage product records at all — no EC2, Compute Engine, Azure VMs, EBS,
+  or Persistent Disk. Hyperscaler compute and storage products need their own
+  entries; VPS providers can carry pricing on the provider record, since the
+  plan is the unit sold. Worth fixing independent of pricing.
 - egress, idle billing, minimum spend, cold-start, protocol, volume, and database-operation comparisons;
 - migration and portability profiles;
 - community-maintained deployment recipes;

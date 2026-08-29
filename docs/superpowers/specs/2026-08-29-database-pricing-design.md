@@ -145,6 +145,43 @@ Every displayed price shows its observation date. Past 90 days a row is visibly 
 5. Add the research scan and the review renderer.
 6. Expand to the full 12 once the weekly review burden is measured rather than assumed.
 
+## Planned extensions: compute and block storage
+
+Same dataset, same validators, same pipeline, same display surfaces. These are backlog items, not v1 scope, and they are sequenced deliberately by how much new machinery each needs.
+
+### Block storage — no new machinery
+
+New metrics (`block_storage_gib_month`, `iops_provisioned_month`, `snapshot_gib_month`) and new workloads ("500 GiB SSD volume with daily snapshots"). That is all. Block storage bills as quantity x unit price minus allowance, which is exactly what `line_items` already expresses.
+
+Ship this first. It proves the model generalizes past databases **without changing a line of the engine** — the cheapest possible test of the abstraction.
+
+### Compute and VMs — exactly one new concept
+
+Instance types are not comparable across providers: `t3.medium`, `s-2vcpu-4gb`, and `Standard_B2s` are different names for overlapping shapes. Comparing "2 vCPU / 4 GiB" therefore requires *selecting* a qualifying SKU per provider, not looking up a fixed quantity. This is the one place the database model genuinely does not stretch.
+
+Minimal extension:
+
+- rows gain optional `attributes`: `{"vcpu": 2, "memory_gib": 4, "local_storage_gib": 80}`
+- workloads gain an optional `shape` in place of fixed `line_items`: `{"min_vcpu": 2, "min_memory_gib": 4, "hours_month": 730}`
+- the engine selects the cheapest row whose attributes satisfy the shape, then costs it
+
+The result contract is unchanged — still `{status, monthly_usd, plan, sources}`. `/pricing/`, `/compare/`, and the detail pages depend on that contract, not on what kind of thing is being priced, so **neither extension requires touching a display surface**. Shape selection stays an internal strategy. Preserve that boundary.
+
+Rejected alternatives: a hand-curated shape-to-instance-type mapping per provider (more curation burden, goes stale as providers add types), and a separate compute pricing system (duplicates the entire trust pipeline for no gain).
+
+Testing this needs its own golden cases: the cheapest qualifying SKU wins, an under-specified SKU is never selected, ties break deterministically by SKU name, and no qualifying SKU yields `insufficient_data` rather than a nearest-fit guess.
+
+### Catalog prerequisite (verified 2026-08-29)
+
+The catalog cannot support either extension as it stands. It contains **no VM or block-storage product records**: no `ec2`, `compute-engine`, `azure-vms`, `ebs`, `persistent-disk`, or `managed-disks`. The 22 `cloud-vps` entries are providers, not products.
+
+Two different fixes, because the unit sold differs:
+
+- **Hyperscalers need product records.** EC2, Compute Engine, and Azure VMs are separately selectable deployment surfaces, distinct from RDS or Lambda — the same identity rule that gives Lambda its own record.
+- **VPS providers can carry rows on the provider slug.** For DigitalOcean, Hetzner, or Vultr the plan (`s-2vcpu-4gb`) is the unit sold, and `plan` plus `attributes` already captures it.
+
+This is a directory gap worth fixing on its own merits, independent of pricing.
+
 ## Risks
 
 - **Review burden is the main failure mode.** 20–40 deltas a week is real work. If it proves too heavy, narrow scope — fewer providers or fewer metrics — rather than loosening review.
