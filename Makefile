@@ -24,6 +24,7 @@ check: build
 	node --check site/recommendation-engine.js
 	node --check site/recommend.js
 	node --check site/compare.js
+	node --check site/pricing.js
 	node tests/recommendation-engine.test.js
 
 test:

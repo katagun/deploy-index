@@ -368,7 +368,7 @@ def main() -> int:
     (DIST / "catalog").mkdir(parents=True)
     (DIST / "providers").mkdir(parents=True)
 
-    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "compare.js", "favicon.svg", "og.svg"):
+    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "compare.js", "pricing.js", "favicon.svg", "og.svg"):
         shutil.copy2(SITE / asset, DIST / "assets" / asset)
     shutil.copy2(ROOT / "catalog" / "providers.json", DIST / "catalog" / "providers.json")
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")
@@ -442,6 +442,15 @@ def main() -> int:
         body_class="compare-page",
     ))
 
+    write(DIST / "pricing" / "index.html", render_base(
+        title="Database pricing — DeployIndex",
+        description="Dated database hosting prices from official pricing pages, compared through published reference workloads.",
+        path="/pricing/",
+        main=(SITE / "pricing.html").read_text(encoding="utf-8"),
+        scripts='<script src="/assets/pricing.js" defer></script>',
+        body_class="pricing-page",
+    ))
+
     for item in providers:
         write(DIST / "providers" / item["slug"] / "index.html", provider_page(item, providers_by_slug, providers, category_labels))
 
@@ -479,7 +488,7 @@ def main() -> int:
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-    sitemap_urls = ["/", "/recommend/", "/compare/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
+    sitemap_urls = ["/", "/recommend/", "/compare/", "/pricing/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(
         f"  <url><loc>{esc(canonical(path))}</loc></url>" for path in sitemap_urls
     ) + "\n</urlset>\n"
