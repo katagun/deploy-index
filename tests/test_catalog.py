@@ -106,6 +106,16 @@ class CatalogTests(unittest.TestCase):
         self.assertNotEqual([x["slug"] for x in first], [x["slug"] for x in other_week])
         self.assertEqual(len(first), 45)
 
+    def test_database_platforms_are_discoverable_by_category(self) -> None:
+        by_slug = {item["slug"]: item for item in self.catalog["providers"]}
+        for slug in ("supabase", "firebase", "planetscale", "amazon-rds"):
+            self.assertIn(slug, by_slug, f"{slug} must exist in the catalog")
+            self.assertIn(
+                "database-platform",
+                by_slug[slug]["categories"],
+                f"{slug} must be discoverable under database-platform",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

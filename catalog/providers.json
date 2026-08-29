@@ -535,6 +535,41 @@
       "change_note": "Linked to its parent provider AWS, which already exists in the catalog."
     },
     {
+      "slug": "amazon-rds",
+      "name": "Amazon RDS",
+      "url": "https://aws.amazon.com/rds/",
+      "entity_type": "product",
+      "parent_slug": "aws",
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases",
+        "persistent-storage",
+        "private-networking",
+        "multi-region"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2009,
+      "featured": false,
+      "summary": "Amazon's managed relational database service, offering PostgreSQL, MySQL, MariaDB, Oracle, and SQL Server engines with managed backups, replicas, and failover.",
+      "best_for": "Teams standardizing on AWS that want managed relational databases with mature operational tooling and regional breadth.",
+      "source_urls": [
+        "https://aws.amazon.com/rds/",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+      ],
+      "last_verified": null,
+      "confidence": "seed",
+      "change_note": "Added to provide a hyperscaler baseline for database comparison; awaiting source-by-source verification."
+    },
+    {
       "slug": "aws",
       "name": "Amazon Web Services",
       "url": "https://aws.amazon.com/",
@@ -3629,7 +3664,8 @@
       "parent_slug": null,
       "primary_category": "backend-platform",
       "categories": [
-        "backend-platform"
+        "backend-platform",
+        "database-platform"
       ],
       "capabilities": [
         "authentication",
@@ -3654,7 +3690,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "change_note": "Added database-platform facet so the entry is discoverable under database hosting."
     },
     {
       "slug": "firebase-app-hosting",
@@ -8178,7 +8214,8 @@
       "parent_slug": null,
       "primary_category": "backend-platform",
       "categories": [
-        "backend-platform"
+        "backend-platform",
+        "database-platform"
       ],
       "capabilities": [
         "authentication",
@@ -8203,7 +8240,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "change_note": "Added database-platform facet so the entry is discoverable under database hosting."
     },
     {
       "slug": "supabase-edge-functions",
