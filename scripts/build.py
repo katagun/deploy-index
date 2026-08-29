@@ -231,7 +231,7 @@ def related_items(item: dict, providers: list[dict]) -> list[dict]:
     return [entry[2] for entry in candidates[:6]]
 
 
-def pricing_section(slug: str, rows: list[dict], metrics: dict, today: date) -> str:
+def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today: date) -> str:
     """Render one provider's own dated price rows. No cross-provider math."""
     provider_rows = sorted(
         (row for row in rows if row["provider_slug"] == slug),
@@ -255,7 +255,11 @@ def pricing_section(slug: str, rows: list[dict], metrics: dict, today: date) -> 
         "<p>Dated observations from this provider's official pricing pages. These are records, not quotes — "
         "verify current pricing with the provider.</p>"
         '<div class="compare-table-wrap"><table class="compare-table">'
-        "<thead><tr><th>Plan</th><th>Metric</th><th>Value</th><th>Included</th><th>Observed</th><th>Evidence</th></tr></thead>"
+        f'<caption class="sr-only">Observed pricing for {esc(name)}</caption>'
+        "<thead><tr>"
+        '<th scope="col">Plan</th><th scope="col">Metric</th><th scope="col">Value</th>'
+        '<th scope="col">Included</th><th scope="col">Observed</th><th scope="col">Evidence</th>'
+        "</tr></thead>"
         f"<tbody>{''.join(items)}</tbody></table></div></section>"
     )
 
@@ -492,7 +496,7 @@ def main() -> int:
                 providers_by_slug,
                 providers,
                 category_labels,
-                pricing_section(item["slug"], pricing_rows, pricing_metrics, today),
+                pricing_section(item["slug"], item["name"], pricing_rows, pricing_metrics, today),
             ),
         )
 

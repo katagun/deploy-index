@@ -247,16 +247,17 @@ class DetailPageSectionTests(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from build import pricing_section
 
-        self.assertEqual(pricing_section("no-rows-here", [], load_metrics(), date(2026, 8, 29)), "")
+        self.assertEqual(pricing_section("no-rows-here", "No Rows Here", [], load_metrics(), date(2026, 8, 29)), "")
 
     def test_section_escapes_and_lists_rows_with_dates(self) -> None:
         from build import pricing_section
 
-        rows = [make_row(note="<script>alert(1)</script>")]
-        html = pricing_section("neon", rows, load_metrics(), date(2026, 8, 29))
+        rows = [make_row(plan="<script>alert(1)</script>")]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
         self.assertIn("2026-08-01", html)
         self.assertIn("https://neon.com/pricing", html)
         self.assertNotIn("<script>alert(1)</script>", html)
+        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html)
 
 
 if __name__ == "__main__":
