@@ -50,11 +50,25 @@ Delivered foundation:
 - scenario presets, relative economics, operating-model constraints, hard requirements, weighted priorities, and trade-off explanations;
 - generated recommendation profile API and regression tests.
 
-Next:
+Delivered — database pricing dataset (foundation):
 
-- side-by-side pricing snapshots with retrieval dates and units — designed in
-  [`docs/superpowers/specs/2026-08-29-database-pricing-design.md`](superpowers/specs/2026-08-29-database-pricing-design.md),
-  starting with database hosting;
+- a validated, append-only, dated pricing dataset (`pricing/`) — controlled metric vocabulary,
+  declarative reference workloads, and `insufficient_data`-over-partial-sum computation — designed in
+  [`docs/superpowers/specs/2026-08-29-database-pricing-design.md`](superpowers/specs/2026-08-29-database-pricing-design.md)
+  and built per
+  [`docs/superpowers/plans/2026-08-29-database-pricing-foundation.md`](superpowers/plans/2026-08-29-database-pricing-foundation.md);
+  see [`../pricing/README.md`](../pricing/README.md) for the contributor guide;
+- hand-entered seed data for 3 database hosts (Neon, Supabase, PlanetScale), USD / `us-east` only;
+- `/pricing/`, a pricing block in `/compare/`, an "Observed pricing" section on provider detail pages,
+  and `/catalog/pricing.json`.
+
+Not delivered yet, still planned:
+
+- the model-assisted pricing research scan and its delta-review renderer — the dataset above is
+  entirely hand-entered today;
+- expansion from 3 seeded providers to the full v1 target of roughly 12, including a hyperscaler
+  baseline;
+- multi-region and multi-currency support;
 - **block storage pricing** — extends the pricing dataset with volume, IOPS, and
   snapshot metrics. Needs no engine changes, so it ships first and proves the
   model generalizes beyond databases;

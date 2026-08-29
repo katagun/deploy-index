@@ -86,12 +86,20 @@ The build publishes:
 - `/catalog/schema.json`
 - `/catalog/stats.json`
 - `/catalog/recommendations.json`
+- `/catalog/pricing.json`
 - `/recommend/`
 - `/compare/`
+- `/pricing/`
 - `/providers/<slug>/`
 - `/sitemap.xml`
 
 Each record includes identity type, parent relationship, categories, capabilities, operating model, launch era, status, availability, open-source flag, source trail, verification date, confidence, and change note.
+
+`/pricing/` and `/catalog/pricing.json` are a separate, hand-entered database pricing dataset — dated
+observation rows joined to the catalog by slug, computed into reference-workload totals with explicit
+`insufficient_data` semantics rather than partial sums. It currently covers 3 providers (Neon,
+Supabase, PlanetScale) in USD / `us-east` only, and is never used in recommender scoring. See
+[`pricing/README.md`](pricing/README.md) for the contributor rules.
 
 ## Weekly internet research
 
@@ -143,7 +151,7 @@ Automation can discover aggressively, but publication stays conservative.
 - Shutdown, discontinuation, acquisition, migration, and archive decisions require manual review.
 - Rebrands and canonical-URL changes (name, URL, entity type) are proposed but never applied automatically.
 - Archived pages remain available for history and link stability.
-- Pricing is intentionally excluded until the project has a dated, source-aware pricing model.
+- The weekly catalog research scan never touches pricing. A separate, hand-entered pricing dataset exists at `/pricing/` (see `pricing/README.md`); it has no automated research path yet.
 - Affiliate ordering and paid placement are outside the neutral catalog model.
 
 See the generated `/method/` page and `AGENTS.md` for the full operating contract.

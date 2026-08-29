@@ -9,7 +9,8 @@ Static-first, zero runtime dependencies: Python stdlib build, dependency-free HT
 - `catalog/providers.json` — source of truth (schema: `catalog/schema.json`)
 - `catalog/recommendation-overrides.json` — reviewable qualitative corrections for recommender profiles
 - `catalog/discovery-config.json`, `catalog/proposals/` — weekly research config and dated evidence
-- `scripts/` — `validate.py`, `build.py`, `check_site.py`, `recommendations.py`, `research.py`, `apply_proposal.py`
+- `pricing/` — dated, append-only database pricing dataset, joined to the catalog by slug only (see `pricing/README.md`)
+- `scripts/` — `validate.py`, `build.py`, `check_site.py`, `recommendations.py`, `research.py`, `apply_proposal.py`, `pricing.py`
   (`seed_catalog.py` is the archival bootstrap: it refuses to overwrite the catalog without `--force`, which would reset all verification state)
 - `site/` — page templates and JS source (`recommendation-engine.js` is the pure scoring engine)
 - `dist/` — generated output; gitignored, never hand-edit
@@ -41,6 +42,12 @@ Run `make test` before claiming work complete.
 - Identity (name, URL, status, availability, ownership) always comes from `providers.json`; traits are 1–5 ordinal bands, not measurements.
 - Deterministic, browser-side, inspectable. No sponsored/affiliate/vendor weights. Show fit reasons and what to verify.
 - Update scenario regression tests (`tests/test_recommendations.py`, `tests/recommendation-engine.test.js`) when scoring, defaults, or visible overrides change.
+
+## Pricing rules
+
+- No pricing row without a dated, HTTPS, official-source read on the date recorded. Rows are append-only — a price change is a new row with a later `observed_on`, never an edit.
+- `insufficient_data` always beats a partial sum; never approximate a missing line item.
+- Prices never feed recommender scoring. `cost_floor` stays a qualitative band.
 
 ## UI and security
 
