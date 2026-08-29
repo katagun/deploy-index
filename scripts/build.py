@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
-from pricing import build_pricing_catalog, is_stale, load_metrics, load_observations
+from pricing import build_pricing_catalog, is_stale, load_metrics, load_observations, parse_observed_on
 from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
@@ -232,28 +232,54 @@ def related_items(item: dict, providers: list[dict]) -> list[dict]:
 
 
 def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today: date) -> str:
-    """Render one provider's own dated price rows. No cross-provider math."""
-    provider_rows = sorted(
-        (row for row in rows if row["provider_slug"] == slug),
-        key=lambda row: (row["plan"], row["metric"]),
-    )
+    """Render one provider's own dated price rows. No cross-provider math.
+
+    Rows are append-only, so a metric can carry several observations. The newest
+    is what /pricing/ costs, so it prints first and every older row is marked
+    superseded — otherwise the first price a reader sees on this page is the one
+    that is no longer in force.
+    """
+    provider_rows = [row for row in rows if row["provider_slug"] == slug]
     if not provider_rows:
         return ""
-    items = []
+
+    latest_on: dict[tuple[str, str], date] = {}
     for row in provider_rows:
+        observed = parse_observed_on(row["observed_on"])
+        if observed is None:
+            continue
+        key = (row["plan"], row["metric"])
+        if key not in latest_on or observed > latest_on[key]:
+            latest_on[key] = observed
+
+    def sort_key(row: dict) -> tuple:
+        observed = parse_observed_on(row["observed_on"])
+        # Negated ordinal puts the newest observation first within (plan, metric).
+        return (row["plan"], row["metric"], -(observed.toordinal() if observed else 0))
+
+    items = []
+    for row in sorted(provider_rows, key=sort_key):
         unit = metrics["metrics"].get(row["metric"], {}).get("unit", "")
-        stale = " · stale" if is_stale(row, today) else ""
+        observed = parse_observed_on(row["observed_on"])
+        superseded = observed is not None and observed < latest_on.get((row["plan"], row["metric"]), observed)
+        flags = ""
+        if superseded:
+            flags += '<span class="superseded-flag">superseded</span>'
+        elif is_stale(row, today):
+            flags += '<span class="superseded-flag">stale</span>'
         items.append(
-            f'<tr><td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
+            f'<tr{" class=\"row-superseded\"" if superseded else ""}>'
+            f'<td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
             f'<td>{esc(row["value"])} <small>{esc(unit)}</small></td>'
             f'<td>{esc(row["included_allowance"])}</td>'
-            f'<td>{esc(row["observed_on"])}{esc(stale)}</td>'
+            f'<td>{esc(row["observed_on"])}{flags}</td>'
             f'<td><a href="{esc(row["source_url"])}" rel="noreferrer">source ↗</a></td></tr>'
         )
     return (
         '<section class="detail-section full"><h2>Observed pricing</h2>'
         "<p>Dated observations from this provider's official pricing pages. These are records, not quotes — "
-        "verify current pricing with the provider.</p>"
+        "verify current pricing with the provider. Newest first: where a price has changed, the earlier "
+        "observation is kept and marked superseded rather than deleted.</p>"
         '<div class="compare-table-wrap"><table class="compare-table">'
         f'<caption class="sr-only">Observed pricing for {esc(name)}</caption>'
         "<thead><tr>"

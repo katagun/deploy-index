@@ -28,11 +28,21 @@
     return `<span class="price-age${stale ? ' is-stale' : ''}">${stale ? 'stale · ' : ''}${age}d old</span>`;
   };
 
+  // A total is only ever the cheapest of the plans we happen to have recorded.
+  // Where that is a single plan there was no comparison to win, and the figure
+  // reflects the coverage of the dataset rather than the provider's floor.
+  const scopeNote = (result) => {
+    const count = Number(result.plans_considered);
+    if (!Number.isFinite(count) || count < 1) return '';
+    if (count === 1) return '<small class="price-scope">only plan recorded</small>';
+    return `<small class="price-scope">cheapest of ${count} recorded plans</small>`;
+  };
+
   const cell = (result, maxAge, today) => {
     if (result.status !== 'ok') {
       return `<td class="price-missing"><span>insufficient data</span><small>${escapeHtml((result.missing_metrics || []).join(', '))}</small></td>`;
     }
-    return `<td><strong>${escapeHtml(money(result.monthly_usd))}</strong><small>${escapeHtml(result.plan)} plan</small>${ageCell(result, maxAge, today)}</td>`;
+    return `<td><strong>${escapeHtml(money(result.monthly_usd))}</strong><small>${escapeHtml(result.plan)} plan</small>${scopeNote(result)}${ageCell(result, maxAge, today)}</td>`;
   };
 
   fetch('/catalog/pricing.json')
@@ -51,7 +61,7 @@
 
       const assumptions = workloads.map((workload) => `<section class="workload-note">
         <h3>${escapeHtml(workload.label)}</h3>
-        <p>${escapeHtml(Object.entries(workload.assumptions).map(([key, value]) => `${key.replaceAll('_', ' ')}: ${value}`).join(' · '))}</p>
+        <p>Priced quantities — ${escapeHtml(Object.entries(workload.assumptions).map(([key, value]) => `${key.replaceAll('_', ' ')}: ${value}`).join(' · '))}</p>
         <ul>${workload.caveats.map((caveat) => `<li>${escapeHtml(caveat)}</li>`).join('')}</ul>
       </section>`).join('');
 
@@ -61,7 +71,7 @@
           <tbody>${body}</tbody>
         </table></div>
         <p class="pricing-disclaimer">${escapeHtml(payload.disclaimer)} Dataset generated ${escapeHtml(payload.generated_on)}.</p>
-        <div class="workload-notes"><h2>Workload assumptions</h2>${assumptions}</div>`;
+        <div class="workload-notes"><h2>What each figure covers</h2>${assumptions}</div>`;
       root.setAttribute('aria-busy', 'false');
     })
     .catch((error) => {

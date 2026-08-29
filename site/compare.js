@@ -63,7 +63,38 @@
     return escapeHtml(values.map((value) => (labels ? labels[value] : null) || humanize(value)).join(', '));
   };
 
-  const renderTable = (entries, profilesBySlug, categoryLabels, pricingBySlug, pricingWorkloads) => {
+  // Both endpoints are normalized to UTC calendar dates before subtracting, so the
+  // result is a whole number of calendar days independent of the viewer's timezone.
+  const daysBetween = (iso, today) => {
+    const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+    return Math.round((todayUtc - new Date(iso).getTime()) / 86400000);
+  };
+
+  // The oldest observation behind a total governs how much of it is still current.
+  const observedOn = (result) => (result.sources || []).map((source) => source.observed_on).sort()[0] || '';
+
+  const priceCell = (result, hasRows, maxAge, today) => {
+    if (!hasRows) {
+      return `<td><span class="compare-miss">not priced here</span>
+        <small>Outside the database pricing dataset — not a missing number.</small></td>`;
+    }
+    if (!result || result.status !== 'ok') {
+      const missing = escapeHtml(((result || {}).missing_metrics || []).join(', '));
+      return `<td><span class="compare-miss">insufficient data</span>
+        ${missing ? `<small>no dated row for ${missing}</small>` : ''}</td>`;
+    }
+    const oldest = observedOn(result);
+    const age = oldest ? daysBetween(oldest, today) : null;
+    const stale = age !== null && age > maxAge;
+    const dateNote = oldest
+      ? `<span class="price-age${stale ? ' is-stale' : ''}">${stale ? 'stale · ' : ''}observed ${escapeHtml(oldest)} · ${age}d old</span>`
+      : '';
+    const scope = Number(result.plans_considered) === 1 ? '<small class="price-scope">only plan recorded</small>' : '';
+    return `<td><strong>$${Number(result.monthly_usd).toFixed(2)}</strong>
+      <small>${escapeHtml(result.plan)} plan</small>${scope}${dateNote}</td>`;
+  };
+
+  const renderTable = (entries, profilesBySlug, categoryLabels, pricingBySlug, pricing) => {
     const slugs = entries.map((entry) => entry.slug);
     const headCells = entries.map((entry) => {
       const remaining = slugs.filter((slug) => slug !== entry.slug);
@@ -109,15 +140,24 @@
       });
     }
 
+    const pricingWorkloads = (pricing || {}).workloads || [];
     const priced = entries.filter((entry) => pricingBySlug.has(entry.slug));
     if (priced.length && pricingWorkloads.length) {
-      rows.push(groupRow('Estimated monthly cost · dated observations, not quotes'));
+      const maxAge = Number(pricing.max_age_days) || 90;
+      const today = new Date();
+      rows.push(`<tr class="compare-group"><th scope="row" colspan="${entries.length + 1}">
+        Estimated monthly cost · dated observations, not quotes
+        <small class="compare-group-note">${escapeHtml(pricing.disclaimer || '')}
+        These workloads price a plan fee, storage, and egress only — metered compute is not included.
+        See <a href="/pricing/">/pricing/</a> for what each figure covers.</small>
+      </th></tr>`);
       pricingWorkloads.forEach((workload) => {
-        rows.push(row(escapeHtml(workload.label), (entry) => {
-          const result = (pricingBySlug.get(entry.slug) || {}).results?.[workload.id];
-          if (!result || result.status !== 'ok') return td('<span class="compare-miss">insufficient data</span>');
-          return td(`<strong>$${Number(result.monthly_usd).toFixed(2)}</strong> <small>${escapeHtml(result.plan)} plan</small>`);
-        }));
+        rows.push(row(escapeHtml(workload.label), (entry) => priceCell(
+          (pricingBySlug.get(entry.slug) || {}).results?.[workload.id],
+          pricingBySlug.has(entry.slug),
+          maxAge,
+          today,
+        )));
       });
     }
 
@@ -158,7 +198,6 @@
     const bySlug = new Map(catalog.providers.map((entry) => [entry.slug, entry]));
     const profilesBySlug = new Map(((recommendations || {}).profiles || []).map((profile) => [profile.slug, profile]));
     const pricingBySlug = new Map(((pricing || {}).providers || []).map((entry) => [entry.slug, entry]));
-    const pricingWorkloads = (pricing || {}).workloads || [];
     const entries = slugs.map((slug) => bySlug.get(slug)).filter(Boolean);
     const unknown = slugs.filter((slug) => !bySlug.has(slug));
     if (unknown.length) statusNode.textContent = `Not in the catalog and skipped: ${unknown.join(', ')}.`;
@@ -166,7 +205,7 @@
       renderEmpty('Fewer than two of the requested entries exist in the catalog.');
       return;
     }
-    root.innerHTML = renderTable(entries, profilesBySlug, catalog.category_labels || {}, pricingBySlug, pricingWorkloads);
+    root.innerHTML = renderTable(entries, profilesBySlug, catalog.category_labels || {}, pricingBySlug, pricing);
     root.setAttribute('aria-busy', 'false');
     document.title = `${entries.map((entry) => entry.name).join(' vs ')} — DeployIndex`;
   }).catch((error) => {
