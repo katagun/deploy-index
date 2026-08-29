@@ -16,7 +16,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
-from pricing import build_pricing_catalog
+from pricing import build_pricing_catalog, is_stale, load_metrics, load_observations
 from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
@@ -231,7 +231,36 @@ def related_items(item: dict, providers: list[dict]) -> list[dict]:
     return [entry[2] for entry in candidates[:6]]
 
 
-def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: list[dict], category_labels: dict[str, str]) -> str:
+def pricing_section(slug: str, rows: list[dict], metrics: dict, today: date) -> str:
+    """Render one provider's own dated price rows. No cross-provider math."""
+    provider_rows = sorted(
+        (row for row in rows if row["provider_slug"] == slug),
+        key=lambda row: (row["plan"], row["metric"]),
+    )
+    if not provider_rows:
+        return ""
+    items = []
+    for row in provider_rows:
+        unit = metrics["metrics"].get(row["metric"], {}).get("unit", "")
+        stale = " · stale" if is_stale(row, today) else ""
+        items.append(
+            f'<tr><td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
+            f'<td>{esc(row["value"])} <small>{esc(unit)}</small></td>'
+            f'<td>{esc(row["included_allowance"])}</td>'
+            f'<td>{esc(row["observed_on"])}{esc(stale)}</td>'
+            f'<td><a href="{esc(row["source_url"])}" rel="noreferrer">source ↗</a></td></tr>'
+        )
+    return (
+        '<section class="detail-section full"><h2>Observed pricing</h2>'
+        "<p>Dated observations from this provider's official pricing pages. These are records, not quotes — "
+        "verify current pricing with the provider.</p>"
+        '<div class="compare-table-wrap"><table class="compare-table">'
+        "<thead><tr><th>Plan</th><th>Metric</th><th>Value</th><th>Included</th><th>Observed</th><th>Evidence</th></tr></thead>"
+        f"<tbody>{''.join(items)}</tbody></table></div></section>"
+    )
+
+
+def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: list[dict], category_labels: dict[str, str], pricing_html: str = "") -> str:
     parent = providers_by_slug.get(item["parent_slug"]) if item["parent_slug"] else None
     category_tags = "".join(f'<span class="tag">{esc(category_labels[key])}</span>' for key in item["categories"])
     capability_tags = "".join(f'<span class="tag">{esc(label(value))}</span>' for value in item["capabilities"]) or '<span class="tag">Capabilities pending verification</span>'
@@ -294,6 +323,7 @@ def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: lis
         <section class="detail-section"><h2>Operating model</h2><p>Where the control plane and workload infrastructure are expected to run.</p><div class="detail-tags">{model_tags}</div></section>
         <section class="detail-section"><h2>Categories</h2><p>Directory facets used for discovery rather than mutually exclusive classifications.</p><div class="detail-tags">{category_tags}</div></section>
         <section class="detail-section"><h2>Verification</h2><p><strong>{esc(verification_tone)}.</strong> Last verified: {esc(verified)}.</p>{warning}</section>
+        {pricing_html}
         <section class="detail-section full"><h2>Source trail</h2><p>Official pages and primary evidence used or queued for review. Pricing and feature claims should always include a retrieval date.</p><div class="source-list">{source_links}</div></section>
         <section class="detail-section full"><h2>Related deployment surfaces</h2><p>Entries sharing a parent platform, category, or capability profile.</p><div class="related-grid">{related_markup}</div></section>
       </div>
@@ -451,8 +481,20 @@ def main() -> int:
         body_class="pricing-page",
     ))
 
+    pricing_rows = load_observations()
+    pricing_metrics = load_metrics()
+    today = date.today()
     for item in providers:
-        write(DIST / "providers" / item["slug"] / "index.html", provider_page(item, providers_by_slug, providers, category_labels))
+        write(
+            DIST / "providers" / item["slug"] / "index.html",
+            provider_page(
+                item,
+                providers_by_slug,
+                providers,
+                category_labels,
+                pricing_section(item["slug"], pricing_rows, pricing_metrics, today),
+            ),
+        )
 
     stats = {
         "generated_on": date.today().isoformat(),
