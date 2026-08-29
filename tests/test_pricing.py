@@ -207,5 +207,21 @@ class WorkloadComputationTests(unittest.TestCase):
         self.assertTrue(is_stale(make_row(observed_on=(TODAY - timedelta(days=91)).isoformat()), TODAY))
 
 
+class SeedDataTests(unittest.TestCase):
+    def test_repository_observations_are_valid(self) -> None:
+        rows = load_observations()
+        errors = validate_observations(rows, load_metrics(), load_catalog())
+        self.assertEqual(errors, [])
+
+    def test_seed_providers_have_computable_workloads(self) -> None:
+        rows = load_observations()
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "small-prod-postgres")
+        for slug in ("neon", "supabase", "planetscale"):
+            provider_rows = [row for row in rows if row["provider_slug"] == slug]
+            self.assertTrue(provider_rows, f"{slug} needs observation rows")
+            result = compute_workload(workload, provider_rows, date.today())
+            self.assertEqual(result["status"], "ok", f"{slug}: {result}")
+
+
 if __name__ == "__main__":
     unittest.main()
