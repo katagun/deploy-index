@@ -97,6 +97,25 @@ class ObservationValidationTests(unittest.TestCase):
         errors = validate_observations([row, dict(row)], self.metrics, self.catalog, today=date(2026, 8, 29))
         self.assertTrue(any("duplicate observation" in error for error in errors), errors)
 
+    def test_non_finite_value_is_rejected(self) -> None:
+        self.assert_error(make_row(value=float('nan')), "value must be a non-negative number")
+        self.assert_error(make_row(value=float('inf')), "value must be a non-negative number")
+
+    def test_unsupported_region_is_rejected(self) -> None:
+        self.assert_error(make_row(region="eu-west"), "unsupported region")
+
+    def test_source_url_with_no_host_is_rejected(self) -> None:
+        self.assert_error(make_row(source_url="https://"), "source_url must be https")
+
+    def test_duplicate_with_different_date_encoding_is_rejected(self) -> None:
+        row = make_row()
+        errors = validate_observations([row, make_row(observed_on="20260801")], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertTrue(any("duplicate observation" in error for error in errors), errors)
+
+    def test_non_dict_row_returns_error_not_exception(self) -> None:
+        errors = validate_observations(["not a dict"], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertTrue(any("rows[0]" in error for error in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()
