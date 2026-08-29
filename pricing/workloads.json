@@ -2,31 +2,34 @@
   "schema_version": 1,
   "workloads": [
     {
-      "id": "small-prod-postgres",
-      "label": "Small production Postgres",
-      "assumptions": {"vcpu": 2, "memory_gib": 8, "storage_gib": 100, "egress_gib_month": 50, "hours_month": 730},
+      "id": "storage-egress-100gib",
+      "label": "Storage & egress · 100 GiB storage, 50 GiB egress",
+      "assumptions": {"storage_gib": 100, "egress_gib_month": 50},
       "line_items": [
         {"metric": "plan_base_month", "quantity": 1, "optional": true},
         {"metric": "storage_gib_month", "quantity": 100},
         {"metric": "egress_gib", "quantity": 50}
       ],
       "caveats": [
+        "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
+        "That omission cuts one way: a provider that folds compute into a fixed plan fee (Supabase, PlanetScale) has that compute counted, while a provider that meters compute separately (Neon, billed per CU-hour) has none of it counted and looks cheaper than it would on a like-for-like basis.",
         "Excludes support plans, committed-use discounts, and negotiated enterprise pricing.",
-        "Excludes backups beyond default retention and cross-region transfer.",
-        "Compute is compared through each provider's own plan fee where compute is bundled into the plan."
+        "Excludes backups beyond default retention and cross-region transfer."
       ]
     },
     {
-      "id": "hobby-postgres",
-      "label": "Hobby Postgres",
-      "assumptions": {"vcpu": 1, "memory_gib": 1, "storage_gib": 10, "egress_gib_month": 5, "hours_month": 730},
+      "id": "storage-egress-10gib",
+      "label": "Storage & egress · 10 GiB storage, 5 GiB egress",
+      "assumptions": {"storage_gib": 10, "egress_gib_month": 5},
       "line_items": [
         {"metric": "plan_base_month", "quantity": 1, "optional": true},
         {"metric": "storage_gib_month", "quantity": 10},
         {"metric": "egress_gib", "quantity": 5}
       ],
       "caveats": [
-        "Free tiers often cover this workload entirely; a zero total means the plan's included allowances absorb it.",
+        "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
+        "That omission cuts one way: a provider that folds compute into a fixed plan fee (Supabase, PlanetScale) has that compute counted, while a provider that meters compute separately (Neon, billed per CU-hour) has none of it counted and looks cheaper than it would on a like-for-like basis.",
+        "At this scale included allowances often absorb the storage and egress entirely, leaving only the plan fee — or nothing at all where there is no plan fee.",
         "Excludes support plans and committed-use discounts."
       ]
     }

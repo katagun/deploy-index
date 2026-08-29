@@ -133,10 +133,16 @@ def check(dist: Path) -> list[str]:
                 if fragment not in target_parser.ids:
                     errors.append(f"{current.relative_to(dist.resolve())}: missing fragment target {href}")
 
+    # Python accepts the non-standard tokens Infinity / -Infinity / NaN; browsers
+    # and every other JSON parser do not. Reject them so a payload that no
+    # consumer can read cannot pass this check.
+    def _reject_non_standard(token: str) -> None:
+        raise ValueError(f"non-standard JSON token {token}")
+
     for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json", "catalog/pricing.json"):
         try:
-            json.loads((dist / api_file).read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
+            json.loads((dist / api_file).read_text(encoding="utf-8"), parse_constant=_reject_non_standard)
+        except (OSError, ValueError) as exc:
             errors.append(f"{api_file}: invalid or missing JSON: {exc}")
 
     catalog = load_catalog()

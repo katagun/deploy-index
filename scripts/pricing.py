@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -22,6 +23,11 @@ WORKLOADS_PATH = PRICING_DIR / "workloads.json"
 OBSERVATIONS_DIR = PRICING_DIR / "observations"
 MAX_AGE_DAYS = 90
 CURRENCIES = {"USD"}
+
+# `date.fromisoformat` also accepts the basic form ("20260801"), which sorts
+# above every extended-form date as a string and would let a superseded row
+# masquerade as the current one. Only the extended form is a valid row date.
+ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def load_metrics(path: Path = METRICS_PATH) -> dict[str, Any]:
@@ -46,6 +52,31 @@ REQUIRED_ROW_FIELDS = {
 }
 ROW_CONFIDENCE = {"low", "medium", "high"}
 REGIONS = {"us-east"}
+
+# A reference workload may only publish an assumption it actually prices.
+# Every assumption key maps to the metric that makes it a cost, and the
+# workload must carry a line item for that metric. Declaring `vcpu` while
+# pricing no compute metric is how a workload silently misdescribes itself.
+ASSUMPTION_METRICS = {
+    "storage_gib": "storage_gib_month",
+    "egress_gib_month": "egress_gib",
+    "backup_gib": "backup_gib_month",
+    "vcpu": "compute_vcpu_hour",
+    "compute_units": "compute_cu_hour",
+    "memory_gib": "memory_gib_hour",
+    "read_ops_million": "read_ops_million",
+    "write_ops_million": "write_ops_million",
+}
+
+
+def parse_observed_on(value: Any) -> date | None:
+    """Parse a row date, accepting only the extended ISO form YYYY-MM-DD."""
+    if not isinstance(value, str) or not ISO_DATE_RE.match(value):
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        return None
 
 
 def _in_set(value: Any, allowed: set) -> bool:
@@ -102,14 +133,15 @@ def validate_observations(
             errors.append(f"{prefix}: source_url must be https")
         if not _in_set(row["confidence"], ROW_CONFIDENCE):
             errors.append(f"{prefix}: invalid confidence {row['confidence']!r}")
+        for field in ("plan", "note"):
+            if not isinstance(row[field], str) or not row[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
 
-        observed = None
-        try:
-            observed = date.fromisoformat(row["observed_on"])
-            if observed > today:
-                errors.append(f"{prefix}: observed_on cannot be in the future")
-        except (TypeError, ValueError):
-            errors.append(f"{prefix}: observed_on must be an ISO date")
+        observed = parse_observed_on(row["observed_on"])
+        if observed is None:
+            errors.append(f"{prefix}: observed_on must be an ISO date of the form YYYY-MM-DD")
+        elif observed > today:
+            errors.append(f"{prefix}: observed_on cannot be in the future")
 
         if observed is not None:
             try:
@@ -125,39 +157,54 @@ def validate_observations(
 
 def is_stale(row: dict[str, Any], today: date, max_age_days: int = MAX_AGE_DAYS) -> bool:
     """A row is stale once it is older than the freshness threshold."""
-    try:
-        observed = date.fromisoformat(row["observed_on"])
-    except (KeyError, TypeError, ValueError):
+    observed = parse_observed_on(row.get("observed_on"))
+    if observed is None:
         return True
     return observed < today - timedelta(days=max_age_days)
 
 
 def _latest_by_metric(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Latest row per metric, compared as dates.
+
+    String comparison would order the basic ISO form above every extended-form
+    date and publish a superseded price as current; `parse_observed_on` rejects
+    that form outright and this compares the parsed dates.
+    """
     latest: dict[str, dict[str, Any]] = {}
+    latest_on: dict[str, date] = {}
     for row in rows:
-        current = latest.get(row["metric"])
-        if current is None or row["observed_on"] > current["observed_on"]:
-            latest[row["metric"]] = row
+        observed = parse_observed_on(row.get("observed_on"))
+        if observed is None:
+            continue
+        metric = row["metric"]
+        if metric not in latest or observed > latest_on[metric]:
+            latest[metric] = row
+            latest_on[metric] = observed
     return latest
 
 
 def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today: date) -> dict[str, Any]:
     """Compute a workload's monthly cost from one provider's rows.
 
-    Plans are never mixed: each plan is costed independently and only plans with
+    Plans are never mixed, and neither are currencies or regions: each
+    (currency, region, plan) group is costed independently and only groups with
     a fresh row for every required line item qualify. A missing required metric
     yields insufficient_data rather than a partial — and therefore misleadingly
     low — total.
     """
     fresh = [row for row in rows if not is_stale(row, today)]
-    by_plan: dict[str, list[dict[str, Any]]] = {}
+    by_group: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
     for row in fresh:
-        by_plan.setdefault(row["plan"], []).append(row)
+        by_group.setdefault((row["currency"], row["region"], row["plan"]), []).append(row)
 
     best: dict[str, Any] | None = None
     missing_overall: set[str] = set()
 
-    for plan, plan_rows in sorted(by_plan.items()):
+    for (currency, region, plan), plan_rows in sorted(by_group.items()):
+        # The published field is `monthly_usd`; a non-USD group is costed in its
+        # own currency and must never be compared against a USD total.
+        if currency != "USD":
+            continue
         latest = _latest_by_metric(plan_rows)
         total = 0.0
         sources: list[dict[str, Any]] = []
@@ -179,17 +226,108 @@ def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today
         if missing:
             missing_overall.update(missing)
             continue
-        candidate = {"status": "ok", "plan": plan, "monthly_usd": round(total, 2), "sources": sources}
+        # A total that overflowed to inf (or is otherwise not a real number) is
+        # not a price. json.dumps would emit the bare token `Infinity`, which is
+        # invalid JSON, and no browser or API consumer could read the payload.
+        if not math.isfinite(total):
+            missing_overall.update(item["metric"] for item in workload["line_items"] if not item.get("optional"))
+            continue
+        candidate = {
+            "status": "ok",
+            "plan": plan,
+            "currency": currency,
+            "region": region,
+            "monthly_usd": round(total, 2),
+            "sources": sources,
+        }
         if best is None or candidate["monthly_usd"] < best["monthly_usd"]:
             best = candidate
 
+    # How many distinct plans had any fresh row at all. A total drawn from a
+    # single plan is a coverage artifact, not the outcome of a comparison, and
+    # every surface that shows the number has to be able to say so.
+    plans_considered = len({plan for _, _, plan in by_group})
+
     if best is not None:
+        best["plans_considered"] = plans_considered
         return best
     required = [item["metric"] for item in workload["line_items"] if not item.get("optional")]
     return {
         "status": "insufficient_data",
+        "plans_considered": plans_considered,
         "missing_metrics": sorted(missing_overall or set(required)),
     }
+
+
+def validate_workloads(workloads: list[dict[str, Any]], metrics: dict[str, Any]) -> list[str]:
+    """Validate reference workload definitions.
+
+    The load-bearing check is that a workload may not publish an assumption it
+    does not price. `/pricing/` renders `assumptions` as a description of what
+    the figure covers, so an assumption without a matching line item (vCPU and
+    memory declared while only storage and egress are priced) silently
+    misdescribes every total in the column.
+    """
+    errors: list[str] = []
+    if not isinstance(workloads, list) or not workloads:
+        return ["workloads must be a non-empty list"]
+
+    known_metrics = set(metrics["metrics"])
+    seen_ids: set[str] = set()
+
+    for index, workload in enumerate(workloads):
+        prefix = f"workloads[{index}]"
+        if not isinstance(workload, dict):
+            errors.append(f"{prefix}: workload must be a dict")
+            continue
+        for field in ("id", "label"):
+            if not isinstance(workload.get(field), str) or not workload[field].strip():
+                errors.append(f"{prefix}: {field} must be a non-empty string")
+        workload_id = workload.get("id")
+        if isinstance(workload_id, str):
+            if workload_id in seen_ids:
+                errors.append(f"{prefix}: duplicate workload id {workload_id!r}")
+            seen_ids.add(workload_id)
+        if not workload.get("caveats"):
+            errors.append(f"{prefix}: at least one caveat is required")
+
+        line_items = workload.get("line_items")
+        if not isinstance(line_items, list) or not line_items:
+            errors.append(f"{prefix}: line_items must be a non-empty list")
+            continue
+        priced: set[str] = set()
+        for item_index, item in enumerate(line_items):
+            item_prefix = f"{prefix}.line_items[{item_index}]"
+            if not isinstance(item, dict):
+                errors.append(f"{item_prefix}: line item must be a dict")
+                continue
+            metric = item.get("metric")
+            if not _in_set(metric, known_metrics):
+                errors.append(f"{item_prefix}: unknown metric {metric!r}")
+                continue
+            quantity = item.get("quantity")
+            if isinstance(quantity, bool) or not isinstance(quantity, (int, float)) or not math.isfinite(quantity) or quantity <= 0:
+                errors.append(f"{item_prefix}: quantity must be a positive number")
+            priced.add(metric)
+
+        assumptions = workload.get("assumptions", {})
+        if not isinstance(assumptions, dict):
+            errors.append(f"{prefix}: assumptions must be an object")
+            continue
+        for key in sorted(assumptions):
+            metric = ASSUMPTION_METRICS.get(key)
+            if metric is None:
+                errors.append(
+                    f"{prefix}: assumption {key!r} does not name a priced quantity "
+                    f"(add it to ASSUMPTION_METRICS or remove it)"
+                )
+            elif metric not in priced:
+                errors.append(
+                    f"{prefix}: assumption {key!r} describes metric {metric!r}, "
+                    f"which this workload has no line item for"
+                )
+
+    return errors
 
 
 DISCLAIMER = (
@@ -234,7 +372,10 @@ def build_pricing_catalog(today: date | None = None) -> dict[str, Any]:
 
 def main() -> int:
     rows = load_observations()
-    errors = validate_observations(rows, load_metrics(), load_catalog())
+    metrics = load_metrics()
+    workloads = load_workloads()["workloads"]
+    errors = validate_workloads(workloads, metrics)
+    errors += validate_observations(rows, metrics, load_catalog())
     if errors:
         print(f"Pricing validation failed with {len(errors)} error(s):", file=sys.stderr)
         for error in errors:
@@ -242,7 +383,10 @@ def main() -> int:
         return 1
     payload = build_pricing_catalog()
     stale = sum(1 for row in rows if is_stale(row, date.today()))
-    print(f"Pricing valid: {len(rows)} rows across {len(payload['providers'])} providers ({stale} stale)")
+    print(
+        f"Pricing valid: {len(rows)} rows across {len(payload['providers'])} providers "
+        f"({stale} stale), {len(workloads)} reference workloads"
+    )
     return 0
 
 
