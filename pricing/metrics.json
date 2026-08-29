@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "plan_base_month": {"unit": "USD per month", "description": "Fixed recurring plan or cluster fee, independent of usage."},
+    "compute_vcpu_hour": {"unit": "USD per vCPU-hour", "description": "Charge per virtual CPU per hour of running compute."},
+    "compute_cu_hour": {"unit": "USD per compute-unit-hour", "description": "Charge per provider-defined compute unit per hour, where vCPU and memory are bundled."},
+    "memory_gib_hour": {"unit": "USD per GiB-hour", "description": "Charge per gibibyte of memory per hour, where memory is billed separately from vCPU."},
+    "storage_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of persistent database storage per month."},
+    "egress_gib": {"unit": "USD per GiB", "description": "Charge per gibibyte of outbound data transfer to the public internet."},
+    "read_ops_million": {"unit": "USD per million reads", "description": "Charge per million read operations, for providers billing by operation."},
+    "write_ops_million": {"unit": "USD per million writes", "description": "Charge per million write operations, for providers billing by operation."},
+    "backup_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of backup storage per month beyond any included retention."}
+  }
+}

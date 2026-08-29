@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "workloads": [
+    {
+      "id": "small-prod-postgres",
+      "label": "Small production Postgres",
+      "assumptions": {"vcpu": 2, "memory_gib": 8, "storage_gib": 100, "egress_gib_month": 50, "hours_month": 730},
+      "line_items": [
+        {"metric": "plan_base_month", "quantity": 1, "optional": true},
+        {"metric": "storage_gib_month", "quantity": 100},
+        {"metric": "egress_gib", "quantity": 50}
+      ],
+      "caveats": [
+        "Excludes support plans, committed-use discounts, and negotiated enterprise pricing.",
+        "Excludes backups beyond default retention and cross-region transfer.",
+        "Compute is compared through each provider's own plan fee where compute is bundled into the plan."
+      ]
+    },
+    {
+      "id": "hobby-postgres",
+      "label": "Hobby Postgres",
+      "assumptions": {"vcpu": 1, "memory_gib": 1, "storage_gib": 10, "egress_gib_month": 5, "hours_month": 730},
+      "line_items": [
+        {"metric": "plan_base_month", "quantity": 1, "optional": true},
+        {"metric": "storage_gib_month", "quantity": 10},
+        {"metric": "egress_gib", "quantity": 5}
+      ],
+      "caveats": [
+        "Free tiers often cover this workload entirely; a zero total means the plan's included allowances absorb it.",
+        "Excludes support plans and committed-use discounts."
+      ]
+    }
+  ]
+}
