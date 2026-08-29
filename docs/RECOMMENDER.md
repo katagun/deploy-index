@@ -287,21 +287,19 @@ The engine returns a zero-to-100 fit score, up to four positive reasons, and up 
 - The UI must always show fit reasons, verification caveats, and an official-provider link.
 - Material scoring changes require regression tests for representative scenarios.
 
-## Future data architecture
+## Separate dated datasets, not profile fields
 
-Exact pricing, benchmarks, regions, compliance, and incidents should not be added as loose fields to the qualitative profile. Each deserves a dated, source-aware dataset with units and provenance, for example:
+Exact pricing, benchmarks, regions, compliance, and incidents do not belong as loose fields on the
+qualitative profile. Each needs a dated, source-aware dataset with units and provenance of its own.
+That separation allows historical comparison and expiry rules without pretending that today's price
+is a permanent property of the provider — and it keeps the recommender's `cost_floor` an honest
+qualitative band rather than a number pretending to precision.
 
-```json
-{
-  "provider_slug": "example",
-  "observed_on": "2026-08-23",
-  "region": "us-east",
-  "currency": "USD",
-  "metric": "memory_gib_hour",
-  "value": 0.0123,
-  "included_allowance": 0,
-  "source_url": "https://provider.example/pricing"
-}
-```
+The first such dataset has shipped: `pricing/` holds append-only, dated database pricing
+observations joined to the catalog by slug only, with a controlled metric vocabulary, declarative
+reference workloads, and `insufficient_data`-over-partial-sum computation. See
+[`../pricing/README.md`](../pricing/README.md) for the row shape, the append-only supersede rule,
+the sourcing requirement, and how to add a metric or a row.
 
-That separation allows historical comparison and expiry rules without pretending that today’s price is a permanent property of the provider.
+Prices still never feed recommender scoring, and nothing in `scripts/recommendations.py` reads the
+pricing dataset. Benchmarks, regions, compliance, and incidents remain undesigned.

@@ -62,10 +62,19 @@ Delivered — database pricing dataset (foundation):
 - `/pricing/`, a pricing block in `/compare/`, an "Observed pricing" section on provider detail pages,
   and `/catalog/pricing.json`.
 
+The two reference workloads price a plan fee, storage, and egress — **not metered compute**, which
+the v1 metric vocabulary cannot express uniformly across Neon's CU-hours, Supabase's plan-bundled
+instance credit, and PlanetScale's fixed cluster SKUs. They are named and captioned accordingly
+(`storage-egress-100gib`, `storage-egress-10gib`), and `validate_workloads()` rejects any workload
+that publishes an assumption it does not price.
+
 Not delivered yet, still planned:
 
 - the model-assisted pricing research scan and its delta-review renderer — the dataset above is
   entirely hand-entered today;
+- a compute metric vocabulary that can express Neon-style metered CU-hours, Supabase-style bundled
+  instance credits, and PlanetScale-style fixed cluster SKUs in one comparable unit, which is the
+  prerequisite for any workload that claims to price a whole deployment;
 - expansion from 3 seeded providers to the full v1 target of roughly 12, including a hyperscaler
   baseline;
 - multi-region and multi-currency support;

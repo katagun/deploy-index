@@ -11,6 +11,11 @@ and a hand-entered seed shipped so far. The model-assisted research scan describ
 not exist — every row below was entered by a human who read the cited source. Do not describe
 automated pricing research as a feature until it is actually built.
 
+The spec and plan documents linked above are dated records of intent and were not rewritten. They
+name the reference workloads `small-prod-postgres` and `hobby-postgres`; what shipped is
+`storage-egress-100gib` and `storage-egress-10gib`, because those workloads price storage and egress
+only and must not claim to price a whole Postgres deployment. This file describes what shipped.
+
 ## Layout
 
 ```
@@ -47,22 +52,27 @@ component for one provider plan:
 ```
 
 - `provider_slug` must already exist in `catalog/providers.json`.
-- `plan` is the provider's own plan/tier/SKU name (`launch`, `pro`, `ps-80-arm64-ha`). Rows for the
-  same metric under different plans are never mixed together.
+- `plan` is the provider's own plan/tier/SKU name (`launch`, `pro`, `ps-80-arm64-ha`), a non-empty
+  string. Rows for the same metric under different plans are never mixed together. Where a provider
+  sells several qualifying SKUs, record the cheapest one too — a total computed over a single
+  recorded plan is a coverage artifact, not that provider's floor.
 - `metric` must be one of the enums in `metrics.json` (see below).
 - `value` and `included_allowance` are non-negative numbers; `included_allowance` is the free
   quantity of that metric's unit before `value` applies.
 - `currency` must be `USD` and `region` must be `us-east` in v1 — both fields exist on every row so
   widening later needs no migration, but nothing else is accepted yet.
-- `observed_on` is an ISO date, never in the future, and is what staleness and append-only history
-  are computed from.
+- `observed_on` is an ISO date in the extended form `YYYY-MM-DD` exactly, never in the future, and is
+  what staleness and append-only history are computed from. The basic form (`20260801`) is rejected:
+  `date.fromisoformat` accepts it, but it string-sorts above every extended-form date, so a row
+  carrying one would win the latest-row comparison forever and publish a superseded price as
+  current.
 - `source_url` must be `https://` and resolve to a real host — it is the official pricing page you
   read on `observed_on`, not a comparison site, blog post, or cached snapshot.
 - `confidence` is `low`, `medium`, or `high` — a human judgment of how directly the source states
   the number (e.g. read straight off a pricing table vs. derived from a calculator delta). It is
   informational only: nothing in `scripts/pricing.py` currently branches on it.
 - `note` is free text explaining what was read and any interpretation required (e.g. how a rate was
-  derived, what a plan bundles).
+  derived, what a plan bundles). It is required and must be non-empty.
 
 `(provider_slug, plan, metric, region, observed_on)` must be unique — the validator rejects
 duplicates.
@@ -95,17 +105,42 @@ inexact fit is worse than `insufficient_data`.
 ## Reference workloads and computation
 
 `workloads.json` declares fixed-quantity `line_items`, each an `{metric, quantity}` pair (optionally
-`"optional": true` for a component like `plan_base_month` that some plans fold into other metrics).
-`compute_workload()` in `scripts/pricing.py` costs one workload against one provider's rows:
+`"optional": true` for a component like `plan_base_month` that some plans genuinely do not have —
+Neon's Launch plan has no monthly minimum, so no base-fee row exists and zero is the true
+contribution).
+
+**A workload may only publish an assumption it actually prices.** `/pricing/` renders `assumptions`
+beside the totals as a description of what the figure covers, so an assumption with no matching line
+item silently misdescribes every number in that column. `validate_workloads()` enforces this:
+every key in `assumptions` must appear in `ASSUMPTION_METRICS` in `scripts/pricing.py`, and the
+metric it maps to must have a line item in that workload. Adding `vcpu: 2` to a workload that prices
+no compute metric is a validation error, not a documentation choice.
+
+This is not hypothetical. Both shipped workloads used to declare `vcpu`, `memory_gib`, and
+`hours_month` while pricing only a plan fee, storage, and egress. The effect was a silent bias:
+providers that fold compute into a fixed plan fee had that compute counted, while Neon — which
+meters compute per CU-hour — had none of it counted and was published as dramatically the cheapest.
+Both workloads are now named and captioned for what they price, and each carries a caveat naming the
+omission and its direction. **Do not add compute line items without extending the vocabulary first**;
+the three providers meter compute in three incompatible ways (Neon CU-hours, Supabase a plan-bundled
+instance credit, PlanetScale a fixed cluster SKU) and the v1 vocabulary cannot express them
+uniformly. An inexact fit is worse than an honest omission.
+
+`compute_workload()` costs one workload against one provider's rows:
 
 - Only non-stale rows are considered.
-- Rows are grouped by `plan` and costed independently — **plans are never mixed**. A total is never
-  assembled from one provider's cheapest storage plan plus its cheapest egress plan.
-- For a given plan, each required line item needs a matching, non-stale row. If any required metric
-  is missing, that plan does not qualify.
-- Across qualifying plans, the cheapest complete one wins.
-- If no plan has a row for every required line item, the result is `insufficient_data` with the
+- Rows are grouped by `(currency, region, plan)` and costed independently — **plans, currencies, and
+  regions are never mixed**. A total is never assembled from one provider's cheapest storage plan
+  plus its cheapest egress plan, nor from a `us-east` storage rate plus a `eu-west` egress rate.
+- For a given group, each required line item needs a matching, non-stale row. The latest row per
+  metric wins, compared as parsed dates. If any required metric is missing, that group does not
+  qualify.
+- Across qualifying groups, the cheapest complete one wins. A total that is not a finite number
+  (an overflow to `inf`) is not a price and disqualifies its group.
+- If no group has a row for every required line item, the result is `insufficient_data` with the
   missing metric names — never a partial sum.
+- Every result carries `plans_considered`: how many distinct plans had any fresh row. `1` means
+  there was no comparison to win, and the surfaces say so.
 
 **`insufficient_data` beats a partial sum, always.** A partial total is silently, confidently too
 low, which is exactly how comparison sites mislead. If you cannot find an official, dated source for
@@ -141,7 +176,11 @@ to approximate.
 
 - `/pricing/` — reference-workload comparison across providers with pricing data.
 - `/compare/` — a pricing block appears when compared entries have data.
-- Provider detail pages (`/providers/<slug>/`) — that provider's own dated rows, no cross-provider
-  math.
+- Provider detail pages (`/providers/<slug>/`) — that provider's own dated rows, newest first within
+  each plan and metric, with superseded and stale rows marked. No cross-provider math.
 - `/catalog/pricing.json` — the published payload (`build_pricing_catalog()`): metrics, workloads,
-  computed results per provider, the raw rows, and the disclaimer.
+  computed results per provider, the raw rows, and the disclaimer. An `ok` result carries `plan`,
+  `currency`, `region`, `monthly_usd`, `plans_considered`, and the `sources` it was derived from; an
+  `insufficient_data` result carries `missing_metrics` and `plans_considered`. It is serialized with
+  `allow_nan=False`, so a non-finite figure fails the build rather than emitting the bare token
+  `Infinity`, which Python's `json.loads` accepts but no browser does.

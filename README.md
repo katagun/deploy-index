@@ -98,8 +98,12 @@ Each record includes identity type, parent relationship, categories, capabilitie
 `/pricing/` and `/catalog/pricing.json` are a separate, hand-entered database pricing dataset — dated
 observation rows joined to the catalog by slug, computed into reference-workload totals with explicit
 `insufficient_data` semantics rather than partial sums. It currently covers 3 providers (Neon,
-Supabase, PlanetScale) in USD / `us-east` only, and is never used in recommender scoring. See
-[`pricing/README.md`](pricing/README.md) for the contributor rules.
+Supabase, PlanetScale) in USD / `us-east` only, and is never used in recommender scoring.
+
+The reference workloads price a plan fee, storage, and egress only — **metered compute is not
+included**, so the totals are not the cost of running a database, and a provider that folds compute
+into a fixed plan fee looks more expensive than one that meters it separately. Every surface says so.
+See [`pricing/README.md`](pricing/README.md) for the contributor rules.
 
 ## Weekly internet research
 
