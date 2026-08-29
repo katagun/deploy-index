@@ -63,7 +63,7 @@
     return escapeHtml(values.map((value) => (labels ? labels[value] : null) || humanize(value)).join(', '));
   };
 
-  const renderTable = (entries, profilesBySlug, categoryLabels) => {
+  const renderTable = (entries, profilesBySlug, categoryLabels, pricingBySlug, pricingWorkloads) => {
     const slugs = entries.map((entry) => entry.slug);
     const headCells = entries.map((entry) => {
       const remaining = slugs.filter((slug) => slug !== entry.slug);
@@ -109,6 +109,18 @@
       });
     }
 
+    const priced = entries.filter((entry) => pricingBySlug.has(entry.slug));
+    if (priced.length && pricingWorkloads.length) {
+      rows.push(groupRow('Estimated monthly cost · dated observations, not quotes'));
+      pricingWorkloads.forEach((workload) => {
+        rows.push(row(escapeHtml(workload.label), (entry) => {
+          const result = (pricingBySlug.get(entry.slug) || {}).results?.[workload.id];
+          if (!result || result.status !== 'ok') return td('<span class="compare-miss">insufficient data</span>');
+          return td(`<strong>$${Number(result.monthly_usd).toFixed(2)}</strong> <small>${escapeHtml(result.plan)} plan</small>`);
+        }));
+      });
+    }
+
     rows.push(groupRow('Verification'));
     rows.push(row('Last verified', (entry) => td(entry.last_verified ? escapeHtml(entry.last_verified) : '<span class="compare-miss">Seed record</span>')));
     rows.push(row('Evidence level', (entry) => td(escapeHtml(humanize(entry.confidence)))));
@@ -141,9 +153,12 @@
       return response.json();
     }),
     fetch('/catalog/recommendations.json').then((response) => (response.ok ? response.json() : null)).catch(() => null),
-  ]).then(([catalog, recommendations]) => {
+    fetch('/catalog/pricing.json').then((response) => (response.ok ? response.json() : null)).catch(() => null),
+  ]).then(([catalog, recommendations, pricing]) => {
     const bySlug = new Map(catalog.providers.map((entry) => [entry.slug, entry]));
     const profilesBySlug = new Map(((recommendations || {}).profiles || []).map((profile) => [profile.slug, profile]));
+    const pricingBySlug = new Map(((pricing || {}).providers || []).map((entry) => [entry.slug, entry]));
+    const pricingWorkloads = (pricing || {}).workloads || [];
     const entries = slugs.map((slug) => bySlug.get(slug)).filter(Boolean);
     const unknown = slugs.filter((slug) => !bySlug.has(slug));
     if (unknown.length) statusNode.textContent = `Not in the catalog and skipped: ${unknown.join(', ')}.`;
@@ -151,7 +166,7 @@
       renderEmpty('Fewer than two of the requested entries exist in the catalog.');
       return;
     }
-    root.innerHTML = renderTable(entries, profilesBySlug, catalog.category_labels || {});
+    root.innerHTML = renderTable(entries, profilesBySlug, catalog.category_labels || {}, pricingBySlug, pricingWorkloads);
     root.setAttribute('aria-busy', 'false');
     document.title = `${entries.map((entry) => entry.name).join(' vs ')} — DeployIndex`;
   }).catch((error) => {
