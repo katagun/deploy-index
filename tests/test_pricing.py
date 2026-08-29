@@ -223,5 +223,24 @@ class SeedDataTests(unittest.TestCase):
             self.assertEqual(result["status"], "ok", f"{slug}: {result}")
 
 
+from pricing import build_pricing_catalog  # noqa: E402
+
+
+class PricingCatalogTests(unittest.TestCase):
+    def test_published_payload_has_provenance_and_disclaimer(self) -> None:
+        payload = build_pricing_catalog()
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(payload["max_age_days"], 90)
+        self.assertTrue(payload["disclaimer"])
+        self.assertTrue(payload["providers"])
+        for provider in payload["providers"]:
+            self.assertTrue(provider["slug"])
+            self.assertEqual(provider["detail_path"], f"/providers/{provider['slug']}/")
+            for result in provider["results"].values():
+                self.assertIn(result["status"], {"ok", "insufficient_data"})
+                if result["status"] == "ok":
+                    self.assertTrue(result["sources"], "an ok result must carry its source rows")
+
+
 if __name__ == "__main__":
     unittest.main()

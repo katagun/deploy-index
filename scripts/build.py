@@ -16,6 +16,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
+from pricing import build_pricing_catalog
 from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
@@ -374,6 +375,7 @@ def main() -> int:
     if (SITE / "_headers").exists():
         shutil.copy2(SITE / "_headers", DIST / "_headers")
     write(DIST / "catalog" / "recommendations.json", json.dumps(recommendation_catalog, indent=2, ensure_ascii=False) + "\n")
+    write(DIST / "catalog" / "pricing.json", json.dumps(build_pricing_catalog(), indent=2, ensure_ascii=False) + "\n")
 
     providers = catalog["providers"]
     category_labels = catalog["category_labels"]

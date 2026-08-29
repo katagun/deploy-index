@@ -9,11 +9,12 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
-from catalog import ROOT, normalize_domain
+from catalog import ROOT, load_catalog, normalize_domain
 
 PRICING_DIR = ROOT / "pricing"
 METRICS_PATH = PRICING_DIR / "metrics.json"
@@ -189,3 +190,61 @@ def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today
         "status": "insufficient_data",
         "missing_metrics": sorted(missing_overall or set(required)),
     }
+
+
+DISCLAIMER = (
+    "Prices are dated observations from official pricing pages, not quotes. "
+    "Figures are computed from published reference workloads and exclude support plans, "
+    "committed-use discounts, and negotiated pricing. Verify current pricing with the provider."
+)
+
+
+def build_pricing_catalog(today: date | None = None) -> dict[str, Any]:
+    today = today or date.today()
+    catalog = load_catalog()
+    metrics = load_metrics()
+    workloads = load_workloads()["workloads"]
+    rows = load_observations()
+    by_slug = {item["slug"]: item for item in catalog["providers"]}
+
+    providers = []
+    for slug in sorted({row["provider_slug"] for row in rows}):
+        entry = by_slug.get(slug)
+        if entry is None:
+            continue
+        provider_rows = [row for row in rows if row["provider_slug"] == slug]
+        providers.append({
+            "slug": slug,
+            "name": entry["name"],
+            "detail_path": f"/providers/{slug}/",
+            "results": {w["id"]: compute_workload(w, provider_rows, today) for w in workloads},
+            "rows": provider_rows,
+        })
+
+    return {
+        "schema_version": 1,
+        "generated_on": today.isoformat(),
+        "max_age_days": MAX_AGE_DAYS,
+        "disclaimer": DISCLAIMER,
+        "metrics": metrics["metrics"],
+        "workloads": workloads,
+        "providers": providers,
+    }
+
+
+def main() -> int:
+    rows = load_observations()
+    errors = validate_observations(rows, load_metrics(), load_catalog())
+    if errors:
+        print(f"Pricing validation failed with {len(errors)} error(s):", file=sys.stderr)
+        for error in errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
+    payload = build_pricing_catalog()
+    stale = sum(1 for row in rows if is_stale(row, date.today()))
+    print(f"Pricing valid: {len(rows)} rows across {len(payload['providers'])} providers ({stale} stale)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -133,7 +133,7 @@ def check(dist: Path) -> list[str]:
                 if fragment not in target_parser.ids:
                     errors.append(f"{current.relative_to(dist.resolve())}: missing fragment target {href}")
 
-    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json"):
+    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json", "catalog/pricing.json"):
         try:
             json.loads((dist / api_file).read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:

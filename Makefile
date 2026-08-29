@@ -11,6 +11,7 @@ help:
 
 validate:
 	python3 scripts/validate.py
+	python3 scripts/pricing.py
 
 build: validate
 	python3 scripts/build.py
