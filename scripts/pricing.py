@@ -120,3 +120,72 @@ def validate_observations(
                 errors.append(f"{prefix}: row identity contains unhashable components")
 
     return errors
+
+
+def is_stale(row: dict[str, Any], today: date, max_age_days: int = MAX_AGE_DAYS) -> bool:
+    """A row is stale once it is older than the freshness threshold."""
+    try:
+        observed = date.fromisoformat(row["observed_on"])
+    except (KeyError, TypeError, ValueError):
+        return True
+    return observed < today - timedelta(days=max_age_days)
+
+
+def _latest_by_metric(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    latest: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        current = latest.get(row["metric"])
+        if current is None or row["observed_on"] > current["observed_on"]:
+            latest[row["metric"]] = row
+    return latest
+
+
+def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today: date) -> dict[str, Any]:
+    """Compute a workload's monthly cost from one provider's rows.
+
+    Plans are never mixed: each plan is costed independently and only plans with
+    a fresh row for every required line item qualify. A missing required metric
+    yields insufficient_data rather than a partial — and therefore misleadingly
+    low — total.
+    """
+    fresh = [row for row in rows if not is_stale(row, today)]
+    by_plan: dict[str, list[dict[str, Any]]] = {}
+    for row in fresh:
+        by_plan.setdefault(row["plan"], []).append(row)
+
+    best: dict[str, Any] | None = None
+    missing_overall: set[str] = set()
+
+    for plan, plan_rows in sorted(by_plan.items()):
+        latest = _latest_by_metric(plan_rows)
+        total = 0.0
+        sources: list[dict[str, Any]] = []
+        missing: list[str] = []
+        for item in workload["line_items"]:
+            row = latest.get(item["metric"])
+            if row is None:
+                if not item.get("optional"):
+                    missing.append(item["metric"])
+                continue
+            billable = max(0.0, float(item["quantity"]) - float(row["included_allowance"]))
+            total += billable * float(row["value"])
+            sources.append({
+                "metric": row["metric"],
+                "value": row["value"],
+                "observed_on": row["observed_on"],
+                "source_url": row["source_url"],
+            })
+        if missing:
+            missing_overall.update(missing)
+            continue
+        candidate = {"status": "ok", "plan": plan, "monthly_usd": round(total, 2), "sources": sources}
+        if best is None or candidate["monthly_usd"] < best["monthly_usd"]:
+            best = candidate
+
+    if best is not None:
+        return best
+    required = [item["metric"] for item in workload["line_items"] if not item.get("optional")]
+    return {
+        "status": "insufficient_data",
+        "missing_metrics": sorted(missing_overall or set(required)),
+    }

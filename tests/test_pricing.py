@@ -127,5 +127,85 @@ class ObservationValidationTests(unittest.TestCase):
         self.assertEqual(errors, ["rows must be a list"])
 
 
+from pricing import compute_workload, is_stale  # noqa: E402
+
+
+SMALL_WORKLOAD = {
+    "id": "test-workload",
+    "label": "Test workload",
+    "line_items": [
+        {"metric": "plan_base_month", "quantity": 1, "optional": True},
+        {"metric": "storage_gib_month", "quantity": 100},
+        {"metric": "egress_gib", "quantity": 50},
+    ],
+    "caveats": ["test"],
+}
+TODAY = date(2026, 8, 29)
+
+
+class WorkloadComputationTests(unittest.TestCase):
+    def test_complete_plan_computes_expected_total(self) -> None:
+        rows = [
+            make_row(metric="plan_base_month", value=19.0, included_allowance=0),
+            make_row(metric="storage_gib_month", value=0.35, included_allowance=10),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        # 19.00 + (100 - 10) * 0.35 + 50 * 0.09 = 19.00 + 31.50 + 4.50
+        self.assertEqual(result["status"], "ok")
+        self.assertAlmostEqual(result["monthly_usd"], 55.00, places=2)
+        self.assertEqual(len(result["sources"]), 3)
+
+    def test_missing_required_metric_yields_insufficient_data(self) -> None:
+        rows = [make_row(metric="storage_gib_month", value=0.35, included_allowance=0)]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("egress_gib", result["missing_metrics"])
+
+    def test_optional_line_item_absence_contributes_zero(self) -> None:
+        rows = [
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertAlmostEqual(result["monthly_usd"], 10.00, places=2)
+
+    def test_stale_rows_are_excluded_from_computation(self) -> None:
+        old = (TODAY - timedelta(days=120)).isoformat()
+        rows = [
+            make_row(metric="storage_gib_month", value=0.35, included_allowance=0, observed_on=old),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("storage_gib_month", result["missing_metrics"])
+
+    def test_plans_are_never_mixed(self) -> None:
+        rows = [
+            make_row(plan="free", metric="storage_gib_month", value=0.0, included_allowance=100),
+            make_row(plan="pro", metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_cheapest_complete_plan_wins(self) -> None:
+        rows = [
+            make_row(plan="cheap", metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(plan="cheap", metric="egress_gib", value=0.0, included_allowance=0),
+            make_row(plan="pricey", metric="storage_gib_month", value=0.50, included_allowance=0),
+            make_row(plan="pricey", metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "cheap")
+        self.assertAlmostEqual(result["monthly_usd"], 10.00, places=2)
+
+    def test_is_stale_respects_the_threshold(self) -> None:
+        self.assertFalse(is_stale(make_row(observed_on=TODAY.isoformat()), TODAY))
+        self.assertFalse(is_stale(make_row(observed_on=(TODAY - timedelta(days=89)).isoformat()), TODAY))
+        self.assertTrue(is_stale(make_row(observed_on=(TODAY - timedelta(days=91)).isoformat()), TODAY))
+
+
 if __name__ == "__main__":
     unittest.main()
