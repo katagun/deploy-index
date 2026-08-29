@@ -1,0 +1,447 @@
+from __future__ import annotations
+
+import json
+import unittest
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from pricing import load_metrics, load_observations, load_workloads, validate_workloads  # noqa: E402
+
+
+class PricingDatasetTests(unittest.TestCase):
+    def test_metric_vocabulary_defines_unit_and_description(self) -> None:
+        metrics = load_metrics()["metrics"]
+        self.assertIn("storage_gib_month", metrics)
+        self.assertIn("plan_base_month", metrics)
+        for name, definition in metrics.items():
+            self.assertTrue(definition.get("unit"), f"{name} needs a unit")
+            self.assertTrue(definition.get("description"), f"{name} needs a description")
+
+    def test_workloads_declare_explicit_line_items(self) -> None:
+        workloads = load_workloads()["workloads"]
+        self.assertTrue(workloads)
+        metrics = load_metrics()["metrics"]
+        for workload in workloads:
+            self.assertTrue(workload["id"])
+            self.assertTrue(workload["caveats"])
+            self.assertTrue(workload["line_items"])
+            for item in workload["line_items"]:
+                self.assertIn(item["metric"], metrics)
+                self.assertGreater(item["quantity"], 0)
+
+    def test_shipped_workloads_pass_the_validator(self) -> None:
+        self.assertEqual(validate_workloads(load_workloads()["workloads"], load_metrics()), [])
+
+    def test_shipped_workloads_do_not_name_compute_they_do_not_price(self) -> None:
+        """The published assumptions must not imply a compute figure is included."""
+        for workload in load_workloads()["workloads"]:
+            for key in ("vcpu", "memory_gib", "hours_month", "compute_units"):
+                self.assertNotIn(key, workload["assumptions"], f"{workload['id']} declares {key}")
+
+    def test_every_workload_warns_that_compute_is_excluded(self) -> None:
+        for workload in load_workloads()["workloads"]:
+            caveats = " ".join(workload["caveats"]).lower()
+            self.assertIn("compute", caveats, f"{workload['id']} must say compute is excluded")
+
+    def test_observations_load_from_quarter_files(self) -> None:
+        rows = load_observations()
+        self.assertIsInstance(rows, list)
+
+
+from datetime import date, timedelta  # noqa: E402
+
+from catalog import load_catalog  # noqa: E402
+from pricing import validate_observations  # noqa: E402
+
+
+def make_row(**overrides) -> dict:
+    row = {
+        "provider_slug": "neon",
+        "plan": "launch",
+        "metric": "storage_gib_month",
+        "value": 0.35,
+        "currency": "USD",
+        "included_allowance": 10,
+        "region": "us-east",
+        "observed_on": "2026-08-01",
+        "source_url": "https://neon.com/pricing",
+        "confidence": "high",
+        "note": "Storage billed per GiB-month.",
+    }
+    row.update(overrides)
+    return row
+
+
+class ObservationValidationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.catalog = load_catalog()
+        cls.metrics = load_metrics()
+
+    def assert_error(self, row: dict, needle: str) -> None:
+        errors = validate_observations([row], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertTrue(any(needle in error for error in errors), f"expected {needle!r} in {errors}")
+
+    def test_valid_row_produces_no_errors(self) -> None:
+        errors = validate_observations([make_row()], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertEqual(errors, [])
+
+    def test_unknown_metric_is_rejected(self) -> None:
+        self.assert_error(make_row(metric="cost_per_widget"), "unknown metric")
+
+    def test_slug_absent_from_catalog_is_rejected(self) -> None:
+        self.assert_error(make_row(provider_slug="not-a-real-host"), "unknown provider_slug")
+
+    def test_future_observation_date_is_rejected(self) -> None:
+        self.assert_error(make_row(observed_on="2027-01-01"), "cannot be in the future")
+
+    def test_non_https_source_is_rejected(self) -> None:
+        self.assert_error(make_row(source_url="http://neon.com/pricing"), "source_url must be https")
+
+    def test_unsupported_currency_is_rejected(self) -> None:
+        self.assert_error(make_row(currency="EUR"), "unsupported currency")
+
+    def test_negative_value_is_rejected(self) -> None:
+        self.assert_error(make_row(value=-1), "value must be a non-negative number")
+
+    def test_duplicate_row_is_rejected(self) -> None:
+        row = make_row()
+        errors = validate_observations([row, dict(row)], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertTrue(any("duplicate observation" in error for error in errors), errors)
+
+    def test_non_finite_value_is_rejected(self) -> None:
+        self.assert_error(make_row(value=float('nan')), "value must be a non-negative number")
+        self.assert_error(make_row(value=float('inf')), "value must be a non-negative number")
+
+    def test_unsupported_region_is_rejected(self) -> None:
+        self.assert_error(make_row(region="eu-west"), "unsupported region")
+
+    def test_source_url_with_no_host_is_rejected(self) -> None:
+        self.assert_error(make_row(source_url="https://"), "source_url must be https")
+
+    def test_basic_form_date_is_rejected(self) -> None:
+        """`date.fromisoformat` accepts "20260801"; a row date must not.
+
+        The basic form string-sorts above every extended-form date, so a row
+        carrying one would win `_latest_by_metric` forever and publish a
+        superseded price as current.
+        """
+        self.assert_error(make_row(observed_on="20260801"), "YYYY-MM-DD")
+
+    def test_other_non_canonical_dates_are_rejected(self) -> None:
+        for value in ("2026-8-1", "2026-08-01T00:00:00", " 2026-08-01", "2026-W31-1", 20260801, None):
+            with self.subTest(observed_on=value):
+                self.assert_error(make_row(observed_on=value), "YYYY-MM-DD")
+
+    def test_non_string_plan_is_rejected(self) -> None:
+        self.assert_error(make_row(plan=1), "plan must be a non-empty string")
+        self.assert_error(make_row(plan=""), "plan must be a non-empty string")
+        self.assert_error(make_row(plan=["launch"]), "plan must be a non-empty string")
+
+    def test_non_string_note_is_rejected(self) -> None:
+        self.assert_error(make_row(note=None), "note must be a non-empty string")
+        self.assert_error(make_row(note="   "), "note must be a non-empty string")
+
+    def test_non_dict_row_returns_error_not_exception(self) -> None:
+        errors = validate_observations(["not a dict"], self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertTrue(any("rows[0]" in error for error in errors), errors)
+
+    def test_unhashable_metric_returns_error_not_exception(self) -> None:
+        self.assert_error(make_row(metric={}), "unknown metric")
+
+    def test_unhashable_provider_slug_returns_error_not_exception(self) -> None:
+        self.assert_error(make_row(provider_slug=[]), "unknown provider_slug")
+
+    def test_non_list_rows_returns_proper_error(self) -> None:
+        errors = validate_observations({"not": "a list"}, self.metrics, self.catalog, today=date(2026, 8, 29))
+        self.assertEqual(errors, ["rows must be a list"])
+
+
+from pricing import compute_workload, is_stale  # noqa: E402
+
+
+SMALL_WORKLOAD = {
+    "id": "test-workload",
+    "label": "Test workload",
+    "line_items": [
+        {"metric": "plan_base_month", "quantity": 1, "optional": True},
+        {"metric": "storage_gib_month", "quantity": 100},
+        {"metric": "egress_gib", "quantity": 50},
+    ],
+    "caveats": ["test"],
+}
+TODAY = date(2026, 8, 29)
+
+
+class WorkloadComputationTests(unittest.TestCase):
+    def test_complete_plan_computes_expected_total(self) -> None:
+        rows = [
+            make_row(metric="plan_base_month", value=19.0, included_allowance=0),
+            make_row(metric="storage_gib_month", value=0.35, included_allowance=10),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        # 19.00 + (100 - 10) * 0.35 + 50 * 0.09 = 19.00 + 31.50 + 4.50
+        self.assertEqual(result["status"], "ok")
+        self.assertAlmostEqual(result["monthly_usd"], 55.00, places=2)
+        self.assertEqual(len(result["sources"]), 3)
+
+    def test_missing_required_metric_yields_insufficient_data(self) -> None:
+        rows = [make_row(metric="storage_gib_month", value=0.35, included_allowance=0)]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("egress_gib", result["missing_metrics"])
+
+    def test_workload_may_not_assume_a_metric_it_does_not_price(self) -> None:
+        """A workload's assumptions are rendered as what the figure covers.
+
+        `/pricing/` prints `assumptions` beside the totals, so declaring vCPU,
+        memory, or running hours while pricing no compute metric misdescribes
+        every number in the column — and biases against providers that fold
+        compute into a plan fee, since only theirs gets counted. The validator
+        has to reject that rather than the reviewer having to notice it.
+        """
+        metrics = load_metrics()
+        errors = validate_workloads([{
+            "id": "compute-that-is-never-priced",
+            "label": "Small production Postgres",
+            "assumptions": {"vcpu": 2, "memory_gib": 8, "storage_gib": 100, "hours_month": 730},
+            "line_items": [
+                {"metric": "plan_base_month", "quantity": 1, "optional": True},
+                {"metric": "storage_gib_month", "quantity": 100},
+            ],
+            "caveats": ["test"],
+        }], metrics)
+        joined = " ".join(errors)
+        self.assertIn("'vcpu'", joined)
+        self.assertIn("'memory_gib'", joined)
+        self.assertIn("'hours_month'", joined)
+        self.assertNotIn("'storage_gib'", joined.replace("'storage_gib_month'", ""))
+
+    def test_workload_assumption_matching_a_priced_metric_is_accepted(self) -> None:
+        self.assertEqual(validate_workloads([{
+            "id": "honest",
+            "label": "Storage only",
+            "assumptions": {"storage_gib": 100},
+            "line_items": [{"metric": "storage_gib_month", "quantity": 100}],
+            "caveats": ["test"],
+        }], load_metrics()), [])
+
+    def test_absent_optional_line_item_contributes_zero(self) -> None:
+        """Correct only because `plan_base_month` is genuinely optional.
+
+        Neon's Launch plan has no monthly minimum, so no base-fee row exists and
+        zero is the true contribution. The dishonesty this used to cover for was
+        never here — it was in the workload claiming to price compute it did not.
+        """
+        rows = [
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertAlmostEqual(result["monthly_usd"], 10.00, places=2)
+
+    def test_stale_rows_are_excluded_from_computation(self) -> None:
+        old = (TODAY - timedelta(days=120)).isoformat()
+        rows = [
+            make_row(metric="storage_gib_month", value=0.35, included_allowance=0, observed_on=old),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("storage_gib_month", result["missing_metrics"])
+
+    def test_plans_are_never_mixed(self) -> None:
+        rows = [
+            make_row(plan="free", metric="storage_gib_month", value=0.0, included_allowance=100),
+            make_row(plan="pro", metric="egress_gib", value=0.09, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_cheapest_complete_plan_wins(self) -> None:
+        rows = [
+            make_row(plan="cheap", metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(plan="cheap", metric="egress_gib", value=0.0, included_allowance=0),
+            make_row(plan="pricey", metric="storage_gib_month", value=0.50, included_allowance=0),
+            make_row(plan="pricey", metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "cheap")
+        self.assertAlmostEqual(result["monthly_usd"], 10.00, places=2)
+
+    def test_later_row_supersedes_an_earlier_one(self) -> None:
+        """The append-only supersede rule: the latest observation wins.
+
+        A price change is a new row with a later `observed_on`, never an edit,
+        so the whole dataset rests on the newest row being the one that is
+        costed and cited.
+        """
+        old = make_row(metric="storage_gib_month", value=0.50, included_allowance=0, observed_on="2026-07-01")
+        new = make_row(metric="storage_gib_month", value=0.10, included_allowance=0, observed_on="2026-08-15")
+        egress = make_row(metric="egress_gib", value=0.0, included_allowance=0)
+        for rows in ([old, new, egress], [new, old, egress], [egress, new, old]):
+            with self.subTest(order=[row["observed_on"] for row in rows]):
+                result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+                self.assertEqual(result["status"], "ok")
+                self.assertAlmostEqual(result["monthly_usd"], 10.00, places=2)
+                storage = next(s for s in result["sources"] if s["metric"] == "storage_gib_month")
+                self.assertEqual(storage["observed_on"], "2026-08-15")
+                self.assertEqual(storage["value"], 0.10)
+
+    def test_superseding_row_is_cited_as_provenance(self) -> None:
+        rows = [
+            make_row(metric="storage_gib_month", value=0.50, included_allowance=0,
+                     observed_on="2026-07-01", source_url="https://neon.com/old"),
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0,
+                     observed_on="2026-08-15", source_url="https://neon.com/new"),
+            make_row(metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        urls = [s["source_url"] for s in result["sources"]]
+        self.assertIn("https://neon.com/new", urls)
+        self.assertNotIn("https://neon.com/old", urls)
+
+    def test_non_finite_total_never_becomes_a_price(self) -> None:
+        """A total that overflows is not a price, and `Infinity` is not JSON."""
+        rows = [
+            make_row(metric="storage_gib_month", value=1e308, included_allowance=0),
+            make_row(metric="egress_gib", value=1e308, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        json.dumps(result, allow_nan=False)
+
+    def test_currencies_are_never_mixed(self) -> None:
+        rows = [
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0, currency="USD"),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0, currency="EUR"),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("egress_gib", result["missing_metrics"])
+
+    def test_regions_are_never_mixed(self) -> None:
+        rows = [
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0, region="us-east"),
+            make_row(metric="egress_gib", value=0.09, included_allowance=0, region="eu-west"),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("egress_gib", result["missing_metrics"])
+
+    def test_result_carries_its_currency_and_region(self) -> None:
+        rows = [
+            make_row(metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["currency"], "USD")
+        self.assertEqual(result["region"], "us-east")
+
+    def test_plans_considered_counts_plans_with_fresh_rows(self) -> None:
+        """A single-plan total is a coverage artifact, not a comparison."""
+        one_plan = [
+            make_row(plan="only", metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(plan="only", metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        self.assertEqual(compute_workload(SMALL_WORKLOAD, one_plan, TODAY)["plans_considered"], 1)
+
+        two_plans = one_plan + [
+            make_row(plan="other", metric="storage_gib_month", value=0.50, included_allowance=0),
+            make_row(plan="other", metric="egress_gib", value=0.0, included_allowance=0),
+        ]
+        result = compute_workload(SMALL_WORKLOAD, two_plans, TODAY)
+        self.assertEqual(result["plans_considered"], 2)
+        self.assertEqual(result["plan"], "only")
+
+    def test_plans_considered_counts_plans_that_did_not_qualify(self) -> None:
+        rows = [
+            make_row(plan="complete", metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(plan="complete", metric="egress_gib", value=0.0, included_allowance=0),
+            make_row(plan="partial", metric="storage_gib_month", value=0.01, included_allowance=0),
+        ]
+        self.assertEqual(compute_workload(SMALL_WORKLOAD, rows, TODAY)["plans_considered"], 2)
+
+    def test_plans_considered_excludes_stale_plans(self) -> None:
+        old = (TODAY - timedelta(days=120)).isoformat()
+        rows = [
+            make_row(plan="fresh", metric="storage_gib_month", value=0.10, included_allowance=0),
+            make_row(plan="fresh", metric="egress_gib", value=0.0, included_allowance=0),
+            make_row(plan="ancient", metric="storage_gib_month", value=0.01, included_allowance=0, observed_on=old),
+            make_row(plan="ancient", metric="egress_gib", value=0.0, included_allowance=0, observed_on=old),
+        ]
+        self.assertEqual(compute_workload(SMALL_WORKLOAD, rows, TODAY)["plans_considered"], 1)
+
+    def test_insufficient_data_still_reports_plans_considered(self) -> None:
+        rows = [make_row(metric="storage_gib_month", value=0.10, included_allowance=0)]
+        result = compute_workload(SMALL_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertEqual(result["plans_considered"], 1)
+
+    def test_is_stale_respects_the_threshold(self) -> None:
+        self.assertFalse(is_stale(make_row(observed_on=TODAY.isoformat()), TODAY))
+        self.assertFalse(is_stale(make_row(observed_on=(TODAY - timedelta(days=89)).isoformat()), TODAY))
+        self.assertTrue(is_stale(make_row(observed_on=(TODAY - timedelta(days=91)).isoformat()), TODAY))
+
+
+class SeedDataTests(unittest.TestCase):
+    def test_repository_observations_are_valid(self) -> None:
+        rows = load_observations()
+        errors = validate_observations(rows, load_metrics(), load_catalog())
+        self.assertEqual(errors, [])
+
+    def test_seed_providers_have_computable_workloads(self) -> None:
+        rows = load_observations()
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "storage-egress-100gib")
+        for slug in ("neon", "supabase", "planetscale"):
+            provider_rows = [row for row in rows if row["provider_slug"] == slug]
+            self.assertTrue(provider_rows, f"{slug} needs observation rows")
+            result = compute_workload(workload, provider_rows, date.today())
+            self.assertEqual(result["status"], "ok", f"{slug}: {result}")
+
+
+from pricing import build_pricing_catalog  # noqa: E402
+
+
+class PricingCatalogTests(unittest.TestCase):
+    def test_published_payload_has_provenance_and_disclaimer(self) -> None:
+        payload = build_pricing_catalog()
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(payload["max_age_days"], 90)
+        self.assertTrue(payload["disclaimer"])
+        self.assertTrue(payload["providers"])
+        for provider in payload["providers"]:
+            self.assertTrue(provider["slug"])
+            self.assertEqual(provider["detail_path"], f"/providers/{provider['slug']}/")
+            for result in provider["results"].values():
+                self.assertIn(result["status"], {"ok", "insufficient_data"})
+                if result["status"] == "ok":
+                    self.assertTrue(result["sources"], "an ok result must carry its source rows")
+
+
+class DetailPageSectionTests(unittest.TestCase):
+    def test_section_is_empty_for_providers_without_rows(self) -> None:
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from build import pricing_section
+
+        self.assertEqual(pricing_section("no-rows-here", "No Rows Here", [], load_metrics(), date(2026, 8, 29)), "")
+
+    def test_section_escapes_and_lists_rows_with_dates(self) -> None:
+        from build import pricing_section
+
+        rows = [make_row(plan="<script>alert(1)</script>")]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
+        self.assertIn("2026-08-01", html)
+        self.assertIn("https://neon.com/pricing", html)
+        self.assertNotIn("<script>alert(1)</script>", html)
+        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html)
+
+
+if __name__ == "__main__":
+    unittest.main()

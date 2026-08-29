@@ -133,10 +133,16 @@ def check(dist: Path) -> list[str]:
                 if fragment not in target_parser.ids:
                     errors.append(f"{current.relative_to(dist.resolve())}: missing fragment target {href}")
 
-    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json"):
+    # Python accepts the non-standard tokens Infinity / -Infinity / NaN; browsers
+    # and every other JSON parser do not. Reject them so a payload that no
+    # consumer can read cannot pass this check.
+    def _reject_non_standard(token: str) -> None:
+        raise ValueError(f"non-standard JSON token {token}")
+
+    for api_file in ("catalog/providers.json", "catalog/schema.json", "catalog/stats.json", "catalog/recommendations.json", "catalog/pricing.json"):
         try:
-            json.loads((dist / api_file).read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
+            json.loads((dist / api_file).read_text(encoding="utf-8"), parse_constant=_reject_non_standard)
+        except (OSError, ValueError) as exc:
             errors.append(f"{api_file}: invalid or missing JSON: {exc}")
 
     catalog = load_catalog()
@@ -149,10 +155,10 @@ def check(dist: Path) -> list[str]:
         page = dist / "providers" / item["slug"] / "index.html"
         if not page.exists():
             errors.append(f"Missing provider detail page: {item['slug']}")
-    for tool_page in ("recommend", "method", "compare"):
+    for tool_page in ("recommend", "method", "compare", "pricing"):
         if not (dist / tool_page / "index.html").exists():
             errors.append(f"Missing tool page: /{tool_page}/")
-    expected_sitemap_entries = len(catalog["providers"]) + 5
+    expected_sitemap_entries = len(catalog["providers"]) + 6
     sitemap = (dist / "sitemap.xml").read_text(encoding="utf-8")
     if sitemap.count("<url>") != expected_sitemap_entries:
         errors.append(

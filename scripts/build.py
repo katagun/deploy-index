@@ -16,6 +16,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
+from pricing import build_pricing_catalog, is_stale, load_metrics, load_observations, parse_observed_on
 from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
@@ -230,7 +231,66 @@ def related_items(item: dict, providers: list[dict]) -> list[dict]:
     return [entry[2] for entry in candidates[:6]]
 
 
-def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: list[dict], category_labels: dict[str, str]) -> str:
+def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today: date) -> str:
+    """Render one provider's own dated price rows. No cross-provider math.
+
+    Rows are append-only, so a metric can carry several observations. The newest
+    is what /pricing/ costs, so it prints first and every older row is marked
+    superseded — otherwise the first price a reader sees on this page is the one
+    that is no longer in force.
+    """
+    provider_rows = [row for row in rows if row["provider_slug"] == slug]
+    if not provider_rows:
+        return ""
+
+    latest_on: dict[tuple[str, str], date] = {}
+    for row in provider_rows:
+        observed = parse_observed_on(row["observed_on"])
+        if observed is None:
+            continue
+        key = (row["plan"], row["metric"])
+        if key not in latest_on or observed > latest_on[key]:
+            latest_on[key] = observed
+
+    def sort_key(row: dict) -> tuple:
+        observed = parse_observed_on(row["observed_on"])
+        # Negated ordinal puts the newest observation first within (plan, metric).
+        return (row["plan"], row["metric"], -(observed.toordinal() if observed else 0))
+
+    items = []
+    for row in sorted(provider_rows, key=sort_key):
+        unit = metrics["metrics"].get(row["metric"], {}).get("unit", "")
+        observed = parse_observed_on(row["observed_on"])
+        superseded = observed is not None and observed < latest_on.get((row["plan"], row["metric"]), observed)
+        flags = ""
+        if superseded:
+            flags += '<span class="superseded-flag">superseded</span>'
+        elif is_stale(row, today):
+            flags += '<span class="superseded-flag">stale</span>'
+        items.append(
+            f'<tr{" class=\"row-superseded\"" if superseded else ""}>'
+            f'<td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
+            f'<td>{esc(row["value"])} <small>{esc(unit)}</small></td>'
+            f'<td>{esc(row["included_allowance"])}</td>'
+            f'<td>{esc(row["observed_on"])}{flags}</td>'
+            f'<td><a href="{esc(row["source_url"])}" rel="noreferrer">source ↗</a></td></tr>'
+        )
+    return (
+        '<section class="detail-section full"><h2>Observed pricing</h2>'
+        "<p>Dated observations from this provider's official pricing pages. These are records, not quotes — "
+        "verify current pricing with the provider. Newest first: where a price has changed, the earlier "
+        "observation is kept and marked superseded rather than deleted.</p>"
+        '<div class="compare-table-wrap"><table class="compare-table">'
+        f'<caption class="sr-only">Observed pricing for {esc(name)}</caption>'
+        "<thead><tr>"
+        '<th scope="col">Plan</th><th scope="col">Metric</th><th scope="col">Value</th>'
+        '<th scope="col">Included</th><th scope="col">Observed</th><th scope="col">Evidence</th>'
+        "</tr></thead>"
+        f"<tbody>{''.join(items)}</tbody></table></div></section>"
+    )
+
+
+def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: list[dict], category_labels: dict[str, str], pricing_html: str = "") -> str:
     parent = providers_by_slug.get(item["parent_slug"]) if item["parent_slug"] else None
     category_tags = "".join(f'<span class="tag">{esc(category_labels[key])}</span>' for key in item["categories"])
     capability_tags = "".join(f'<span class="tag">{esc(label(value))}</span>' for value in item["capabilities"]) or '<span class="tag">Capabilities pending verification</span>'
@@ -293,6 +353,7 @@ def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: lis
         <section class="detail-section"><h2>Operating model</h2><p>Where the control plane and workload infrastructure are expected to run.</p><div class="detail-tags">{model_tags}</div></section>
         <section class="detail-section"><h2>Categories</h2><p>Directory facets used for discovery rather than mutually exclusive classifications.</p><div class="detail-tags">{category_tags}</div></section>
         <section class="detail-section"><h2>Verification</h2><p><strong>{esc(verification_tone)}.</strong> Last verified: {esc(verified)}.</p>{warning}</section>
+        {pricing_html}
         <section class="detail-section full"><h2>Source trail</h2><p>Official pages and primary evidence used or queued for review. Pricing and feature claims should always include a retrieval date.</p><div class="source-list">{source_links}</div></section>
         <section class="detail-section full"><h2>Related deployment surfaces</h2><p>Entries sharing a parent platform, category, or capability profile.</p><div class="related-grid">{related_markup}</div></section>
       </div>
@@ -367,13 +428,15 @@ def main() -> int:
     (DIST / "catalog").mkdir(parents=True)
     (DIST / "providers").mkdir(parents=True)
 
-    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "compare.js", "favicon.svg", "og.svg"):
+    for asset in ("styles.css", "app.js", "theme.js", "theme-init.js", "recommendation-engine.js", "recommend.js", "compare.js", "pricing.js", "favicon.svg", "og.svg"):
         shutil.copy2(SITE / asset, DIST / "assets" / asset)
     shutil.copy2(ROOT / "catalog" / "providers.json", DIST / "catalog" / "providers.json")
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")
     if (SITE / "_headers").exists():
         shutil.copy2(SITE / "_headers", DIST / "_headers")
     write(DIST / "catalog" / "recommendations.json", json.dumps(recommendation_catalog, indent=2, ensure_ascii=False) + "\n")
+    write(DIST / "catalog" / "pricing.json",
+          json.dumps(build_pricing_catalog(), indent=2, ensure_ascii=False, allow_nan=False) + "\n")
 
     providers = catalog["providers"]
     category_labels = catalog["category_labels"]
@@ -440,8 +503,29 @@ def main() -> int:
         body_class="compare-page",
     ))
 
+    write(DIST / "pricing" / "index.html", render_base(
+        title="Database pricing — DeployIndex",
+        description="Dated database hosting prices from official pricing pages, compared through published reference workloads.",
+        path="/pricing/",
+        main=(SITE / "pricing.html").read_text(encoding="utf-8"),
+        scripts='<script src="/assets/pricing.js" defer></script>',
+        body_class="pricing-page",
+    ))
+
+    pricing_rows = load_observations()
+    pricing_metrics = load_metrics()
+    today = date.today()
     for item in providers:
-        write(DIST / "providers" / item["slug"] / "index.html", provider_page(item, providers_by_slug, providers, category_labels))
+        write(
+            DIST / "providers" / item["slug"] / "index.html",
+            provider_page(
+                item,
+                providers_by_slug,
+                providers,
+                category_labels,
+                pricing_section(item["slug"], item["name"], pricing_rows, pricing_metrics, today),
+            ),
+        )
 
     stats = {
         "generated_on": date.today().isoformat(),
@@ -477,7 +561,7 @@ def main() -> int:
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
-    sitemap_urls = ["/", "/recommend/", "/compare/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
+    sitemap_urls = ["/", "/recommend/", "/compare/", "/pricing/", "/method/", "/catalog/", *[f"/providers/{item['slug']}/" for item in providers]]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(
         f"  <url><loc>{esc(canonical(path))}</loc></url>" for path in sitemap_urls
     ) + "\n</urlset>\n"

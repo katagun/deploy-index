@@ -1,0 +1,16 @@
+<section class="page-hero shell">
+  <p class="kicker">Database pricing</p>
+  <h1>Dated prices,<br />not quotes.</h1>
+  <p>Every figure is computed from dated observations of official pricing pages, using published reference workloads. Each workload prices a plan fee, storage, and egress only — metered compute is not included, so these are not the cost of running a database. Nothing here is a quote — verify current pricing with the provider before committing.</p>
+</section>
+<section class="pricing-shell shell" aria-labelledby="pricing-title">
+  <h2 id="pricing-title" class="sr-only">Reference workload comparison</h2>
+  <noscript>
+    <div class="compare-empty">
+      <strong>This comparison renders in the browser.</strong>
+      <p>The underlying dataset is published at <a href="/catalog/pricing.json">/catalog/pricing.json</a>.</p>
+    </div>
+  </noscript>
+  <div id="pricing-status" class="compare-status" role="status" aria-live="polite"></div>
+  <div id="pricing-root" class="pricing-root" aria-busy="true"></div>
+</section>

@@ -11,6 +11,7 @@ help:
 
 validate:
 	python3 scripts/validate.py
+	python3 scripts/pricing.py
 
 build: validate
 	python3 scripts/build.py
@@ -23,6 +24,7 @@ check: build
 	node --check site/recommendation-engine.js
 	node --check site/recommend.js
 	node --check site/compare.js
+	node --check site/pricing.js
 	node tests/recommendation-engine.test.js
 
 test:
