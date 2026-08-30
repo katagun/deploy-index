@@ -823,3 +823,30 @@ class DetailPageSectionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CoverageCautionTests(unittest.TestCase):
+    """A provider recorded at a single plan cannot be known to be at its floor.
+    Three published errors (PlanetScale, Heroku, Turso) were all this shape, so
+    the condition is surfaced on every validation run rather than left to memory.
+    """
+
+    def test_single_plan_providers_are_reported(self) -> None:
+        from pricing import single_plan_providers
+
+        rows = [
+            make_row(provider_slug="neon", plan="launch", metric="storage_gib_month"),
+            make_row(provider_slug="neon", plan="launch", metric="egress_gib"),
+            make_row(provider_slug="turso", plan="developer", metric="storage_gib_month"),
+            make_row(provider_slug="turso", plan="scaler", metric="storage_gib_month"),
+        ]
+        self.assertEqual(single_plan_providers(rows), ["neon"])
+
+    def test_no_providers_flagged_when_all_have_several_plans(self) -> None:
+        from pricing import single_plan_providers
+
+        rows = [
+            make_row(provider_slug="turso", plan="developer", metric="storage_gib_month"),
+            make_row(provider_slug="turso", plan="scaler", metric="storage_gib_month"),
+        ]
+        self.assertEqual(single_plan_providers(rows), [])

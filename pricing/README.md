@@ -5,6 +5,36 @@ because exact prices are unstable and require dated, sourced, auditable rows —
 provider record. See `docs/superpowers/specs/2026-08-29-database-pricing-design.md` for the full design
 rationale and `docs/superpowers/plans/2026-08-29-database-pricing-foundation.md` for what shipped.
 
+## The multi-plan rule
+
+**Before recording a provider, look at its whole published lineup and record every plan that could
+plausibly win a workload — especially the cheapest one.**
+
+This is the single most important rule here, because breaking it is the only way this dataset has
+ever published a wrong number. Three times:
+
+| Provider | Published | Actual | Cause |
+|---|---|---|---|
+| PlanetScale | $148.00 | $5.00 | only its HA production SKU was recorded |
+| Heroku | $350.00 | $200.00 | Standard 2 sat unrecorded between two plans that were |
+| Turso | $73.24 | $62.92 | only the Developer plan was recorded; Scaler is cheaper at volume |
+
+None was an arithmetic error. The engine did exactly what it was asked, over an incomplete set. It
+picks the cheapest plan *that was recorded*, and has no way to know a cheaper one exists — so a
+single-plan provider publishes a number that looks like a floor and is not one. Worse, the result
+says "cheapest of N recorded plans", which reads as though a comparison was won.
+
+In practice:
+
+- Enumerate the vendor's tiers before entering anything. Note the ones you reject and why.
+- If you record a plan that clears a shape threshold, check explicitly whether a cheaper tier also
+  clears it. Watch for traps like Heroku's Premium 0 — same price as Standard 2, half the storage.
+- Recording one plan is fine when the vendor genuinely sells one. Say so in the note.
+
+`python3 scripts/pricing.py` prints a caution listing every provider currently recorded at a single
+plan. It is not an error — some vendors do sell one tier — but each name on that list is a figure
+nobody has yet proven to be a floor.
+
 ## A note on GB and GiB
 
 Metrics and attributes are named `*_gib` and the workloads compare in GiB, but most vendors
@@ -67,9 +97,8 @@ component for one provider plan:
 
 - `provider_slug` must already exist in `catalog/providers.json`.
 - `plan` is the provider's own plan/tier/SKU name (`launch`, `pro`, `ps-80-arm64-ha`), a non-empty
-  string. Rows for the same metric under different plans are never mixed together. Where a provider
-  sells several qualifying SKUs, record the cheapest one too — a total computed over a single
-  recorded plan is a coverage artifact, not that provider's floor.
+  string. Rows for the same metric under different plans are never mixed together. See the
+  multi-plan rule below before recording any provider.
 - `metric` must be one of the enums in `metrics.json` (see below).
 - `value` and `included_allowance` are non-negative numbers; `included_allowance` is the free
   quantity of that metric's unit before `value` applies.
