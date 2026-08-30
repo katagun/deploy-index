@@ -150,6 +150,7 @@ def render_base(
         "{{TITLE}}": esc(title),
         "{{DESCRIPTION}}": esc(description),
         "{{CANONICAL_URL}}": esc(canonical(path)),
+        "{{CANONICAL_ORIGIN}}": esc(SITE_URL),
         "{{MAIN}}": main,
         "{{SCRIPTS}}": scripts,
         "{{HEAD_EXTRA}}": head_extra,
@@ -590,11 +591,11 @@ def main() -> int:
         "name": "DeployIndex",
         "short_name": "DeployIndex",
         "description": "Every place to run code.",
-        "start_url": "/",
+        "start_url": f"{BASE_PATH}/",
         "display": "standalone",
         "background_color": "#080b12",
         "theme_color": "#080b12",
-        "icons": [{"src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml"}],
+        "icons": [{"src": f"{BASE_PATH}/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml"}],
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
