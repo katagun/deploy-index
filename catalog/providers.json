@@ -1940,7 +1940,7 @@
     {
       "slug": "clever-cloud",
       "name": "Clever Cloud",
-      "url": "https://www.clever-cloud.com/",
+      "url": "https://clever.cloud/",
       "entity_type": "provider",
       "parent_slug": null,
       "primary_category": "paas",
@@ -1966,11 +1966,44 @@
       "summary": "A European PaaS for applications, add-ons, managed data, and enterprise deployment workflows.",
       "best_for": "Deploying applications without operating most of the underlying infrastructure.",
       "source_urls": [
+        "https://clever.cloud/",
         "https://www.clever-cloud.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Canonical URL updated to clever.cloud after confirming clever-cloud.com returns a 301 to it."
+    },
+    {
+      "entity_type": "product",
+      "parent_slug": "clever-cloud",
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases",
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "slug": "clever-cloud-postgresql",
+      "name": "Clever Cloud PostgreSQL",
+      "url": "https://clever.cloud/product/postgresql/",
+      "summary": "Clever Cloud's managed PostgreSQL service, provisioned on demand with automated backups, patching, and high-availability options.",
+      "best_for": "European teams wanting managed Postgres alongside Clever Cloud application hosting.",
+      "source_urls": [
+        "https://clever.cloud/product/postgresql/"
+      ],
+      "change_note": "Added from the official product page during a review of PostgreSQL hosting coverage."
     },
     {
       "slug": "cloud-66",
@@ -2984,6 +3017,7 @@
         "cloud-vps"
       ],
       "capabilities": [
+        "databases",
         "object-storage",
         "private-networking",
         "virtual-machines"
@@ -3004,7 +3038,7 @@
       ],
       "last_verified": null,
       "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "change_note": "Added the databases capability: DigitalOcean offers managed database clusters."
     },
     {
       "slug": "digitalocean-app-platform",
@@ -3110,6 +3144,39 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "entity_type": "product",
+      "parent_slug": "digitalocean",
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases",
+        "persistent-storage",
+        "private-networking"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "slug": "digitalocean-managed-postgresql",
+      "name": "DigitalOcean Managed Databases for PostgreSQL",
+      "url": "https://www.digitalocean.com/products/managed-databases-postgresql",
+      "summary": "DigitalOcean's managed PostgreSQL clusters, where provisioning, backups, and version updates are handled by the provider rather than the customer.",
+      "best_for": "Teams already on DigitalOcean that want managed Postgres without running their own database servers.",
+      "source_urls": [
+        "https://www.digitalocean.com/products/managed-databases-postgresql"
+      ],
+      "change_note": "Added from the official product page; the company was already cataloged but this separately selectable database product was not."
     },
     {
       "slug": "diploi",
@@ -3413,6 +3480,37 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "archived",
+      "availability": "discontinued",
+      "open_source": false,
+      "launch_year": 2013,
+      "featured": false,
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "slug": "elephantsql",
+      "name": "ElephantSQL",
+      "url": "https://www.elephantsql.com/",
+      "summary": "A hosted PostgreSQL service launched in 2013, one of the earliest managed Postgres offerings; its operator discontinued it to concentrate on AMQP messaging.",
+      "best_for": "Historical reference only. The service is closed; its own site now carries a discontinuation notice.",
+      "source_urls": [
+        "https://www.elephantsql.com/"
+      ],
+      "change_note": "Added as an archived record after reading the operator's own discontinuation notice; preserved so existing links and historical comparisons still resolve."
     },
     {
       "slug": "elestio",
@@ -4857,6 +4955,38 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "entity_type": "product",
+      "parent_slug": "heroku",
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases",
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "slug": "heroku-postgres",
+      "name": "Heroku Postgres",
+      "url": "https://www.heroku.com/postgres",
+      "summary": "Heroku's managed PostgreSQL service, which handles patching, failover, and backups as an add-on to Heroku applications.",
+      "best_for": "Heroku applications that need a managed relational database attached with minimal configuration.",
+      "source_urls": [
+        "https://www.heroku.com/postgres"
+      ],
+      "change_note": "Added from the official product page; Heroku was cataloged as a platform but its database product was not."
     },
     {
       "slug": "hetzner-cloud",
@@ -7893,6 +8023,38 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "entity_type": "product",
+      "parent_slug": "scalingo",
+      "primary_category": "database-platform",
+      "categories": [
+        "database-platform"
+      ],
+      "capabilities": [
+        "databases",
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "slug": "scalingo-postgresql",
+      "name": "Scalingo for PostgreSQL",
+      "url": "https://scalingo.com/databases/postgresql",
+      "summary": "Scalingo's managed PostgreSQL service, deployed on demand with backups, scaling, and high-availability handled by the platform.",
+      "best_for": "Teams on Scalingo, or European users wanting managed Postgres under EU operation.",
+      "source_urls": [
+        "https://scalingo.com/databases/postgresql"
+      ],
+      "change_note": "Added from the official product page during a review of PostgreSQL hosting coverage."
     },
     {
       "slug": "seenode",

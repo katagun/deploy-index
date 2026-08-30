@@ -174,10 +174,19 @@ def check(dist: Path) -> list[str]:
         errors.extend(f"catalog/recommendations.json: {error}" for error in validate_recommendation_catalog(recommendation_payload, catalog))
     except (OSError, json.JSONDecodeError):
         pass
+    index_html = (dist / "index.html").read_text(encoding="utf-8")
     for item in catalog["providers"]:
         page = dist / "providers" / item["slug"] / "index.html"
         if not page.exists():
             errors.append(f"Missing provider detail page: {item['slug']}")
+            continue
+        # Every entry must be reachable from the catalog, and must link out to the
+        # provider's own site once you get there. An entry nobody can navigate to,
+        # or one that dead-ends without an official link, is not really listed.
+        if f'/providers/{item["slug"]}/' not in index_html:
+            errors.append(f"Provider not linked from the catalog index: {item['slug']}")
+        if f'href="{item["url"]}"' not in page.read_text(encoding="utf-8"):
+            errors.append(f"Detail page does not link to the official site: {item['slug']}")
     for tool_page in ("recommend", "method", "compare", "pricing"):
         if not (dist / tool_page / "index.html").exists():
             errors.append(f"Missing tool page: /{tool_page}/")
