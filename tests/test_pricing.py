@@ -522,6 +522,49 @@ class ShapeWorkloadComputationTests(unittest.TestCase):
         self.assertEqual(result["missing_metrics"], [])
         self.assertIn("100", result["reason"])
         self.assertIn("storage", result["reason"])
+        self.assertIn("provides at least", result["reason"])
+
+    def test_reason_says_recorded_plans_fall_short_when_attributes_exist(self) -> None:
+        """Attributes were recorded (10 GiB) and simply do not meet the shape.
+
+        This is a fact the dataset can actually assert: the provider's own
+        recorded plan is too small. Distinct from the case below, where the
+        dataset never recorded any capacity at all and cannot make this claim.
+        """
+        rows = [
+            make_plan_row(plan="small", value=10.0, attributes={"storage_gib": 10}),
+            make_plan_row(plan="medium", value=20.0, attributes={"storage_gib": 50}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("no recorded plan provides at least 100 GiB of storage", result["reason"])
+        self.assertNotIn("has been recorded", result["reason"])
+
+    def test_reason_says_nothing_recorded_when_no_plan_has_attributes(self) -> None:
+        """No fresh `plan_base_month` row for this provider carries `attributes`
+        at all — the dataset has recorded no capacity figure, not that the
+        provider's real plans are too small. Saying "no plan provides at least
+        100 GiB" here would assert something the dataset cannot know: the
+        provider may well sell plans well over 100 GiB that were never
+        recorded (this is exactly what happened to Neon before this fix).
+        """
+        rows = [make_plan_row(plan="mystery", value=10.0)]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("has been recorded", result["reason"])
+        self.assertIn("storage", result["reason"])
+        self.assertNotIn("provides at least", result["reason"])
+        self.assertNotIn("100", result["reason"])
+
+    def test_reason_is_nothing_recorded_when_only_row_lacks_a_plan_base_month_metric(self) -> None:
+        """A provider that only ever publishes metered rows (no `plan_base_month`
+        at all) has recorded nothing about plan capacity, same as one whose
+        `plan_base_month` rows omit `attributes`.
+        """
+        rows = [make_row(plan="metered", metric="storage_gib_month", value=0.10)]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertIn("has been recorded", result["reason"])
 
     def test_plan_lacking_attributes_never_qualifies(self) -> None:
         rows = [make_plan_row(plan="no-attrs", value=1.0)]
@@ -548,6 +591,80 @@ class ShapeWorkloadComputationTests(unittest.TestCase):
         ]
         result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
         self.assertEqual(result["plans_considered"], 2)
+
+    def test_candidate_sort_breaks_price_ties_on_plan_name_regardless_of_row_order(self) -> None:
+        """Pins the explicit `(price, plan)` tiebreak in the candidate sort.
+
+        Two plans tie on price; alphabetically "alpha" must win over "zeta".
+        The input rows are given with "zeta" *first* — the adversarial order —
+        so a correct result here cannot be explained by plans happening to be
+        visited in alphabetical order already; only the sort's own tiebreak
+        key can produce it. (Feeding rows in the already-correct order would
+        let a masking incidental order stand in for a real tiebreak.)
+        """
+        rows = [
+            make_plan_row(plan="zeta", value=40.0, attributes={"storage_gib": 120}),
+            make_plan_row(plan="alpha", value=40.0, attributes={"storage_gib": 150}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "alpha")
+
+    def test_result_is_independent_of_the_order_plans_are_first_seen(self) -> None:
+        """Plans must not be iterated in some incidentally-helpful order.
+
+        Same two tied-price plans as above, fed in both possible orders; both
+        must produce the identical winner. If plan iteration order ever
+        leaked into the result (e.g. a "first one wins" comparison instead of
+        a full sort), these two orderings would disagree.
+        """
+        first = make_plan_row(plan="zeta", value=40.0, attributes={"storage_gib": 120})
+        second = make_plan_row(plan="alpha", value=40.0, attributes={"storage_gib": 150})
+        result_a = compute_workload(SHAPE_WORKLOAD, [first, second], TODAY)
+        result_b = compute_workload(SHAPE_WORKLOAD, [second, first], TODAY)
+        self.assertEqual(result_a["plan"], result_b["plan"])
+        self.assertEqual(result_a["plan"], "alpha")
+
+    def test_non_dict_attributes_are_excluded_not_treated_as_empty(self) -> None:
+        """A malformed (non-dict) `attributes` value must disqualify the plan
+        outright, not be silently coerced to `{}` and fall through to the
+        qualification check — which would risk an `AttributeError` on `.get`
+        the moment `attributes` is some other truthy, non-dict value.
+        """
+        rows = [make_plan_row(plan="malformed", value=1.0, attributes="not-a-dict")]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_boolean_attribute_value_never_satisfies_a_numeric_minimum(self) -> None:
+        """`True` is an instance of `int` in Python (`isinstance(True, int)` is
+        `True`, and `float(True) == 1.0`), so without an explicit exclusion a
+        `True` attribute value would silently satisfy any `min_` threshold at
+        or below 1 — qualifying a plan that never recorded a real quantity.
+        """
+        low_bar = {
+            "id": "shape-test-workload-low-bar",
+            "label": "Shape test workload (low bar)",
+            "shape": {"min_storage_gib": 1},
+            "assumptions": {"storage_gib": 1},
+            "caveats": ["test"],
+        }
+        rows = [make_plan_row(plan="boolean-attr", value=5.0, attributes={"storage_gib": True})]
+        result = compute_workload(low_bar, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_only_plan_base_month_may_supply_attributes_and_price(self) -> None:
+        """A `storage_gib_month` row is a per-GiB metered rate, not a plan fee.
+
+        If the shape matcher let any metric substitute for `plan_base_month`,
+        a tiny metered rate (e.g. $0.215/GiB-month) carrying `attributes`
+        could be published as if it were a whole plan's monthly price.
+        """
+        rows = [make_row(
+            plan="metered-only", metric="storage_gib_month", value=0.215,
+            included_allowance=0, attributes={"storage_gib": 200},
+        )]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
 
 
 class SeedDataTests(unittest.TestCase):
@@ -584,14 +701,32 @@ class ShapeWorkloadSeedDataTests(unittest.TestCase):
                 self.assertEqual(result["status"], "ok", f"{slug}/{workload_id}: {result}")
                 self.assertAlmostEqual(result["monthly_usd"], expected_total, places=2, msg=f"{slug}/{workload_id}")
 
-    def test_new_shape_workload_picks_heroku_premium_2(self) -> None:
+    def test_new_shape_workload_picks_heroku_standard_2(self) -> None:
         rows = load_observations()
         workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
         provider_rows = [row for row in rows if row["provider_slug"] == "heroku-postgres"]
         result = compute_workload(workload, provider_rows, date.today())
         self.assertEqual(result["status"], "ok", result)
-        self.assertEqual(result["plan"], "premium-2")
-        self.assertAlmostEqual(result["monthly_usd"], 350.00, places=2)
+        self.assertEqual(result["plan"], "standard-2")
+        self.assertAlmostEqual(result["monthly_usd"], 200.00, places=2)
+
+    def test_shape_workload_prefers_standard_2_over_premium_2_at_equal_storage(self) -> None:
+        """Standard 2 and Premium 2 both provide 256 GiB storage; Standard 2 is
+        $150 cheaper. Before Standard 2 was recorded, Premium 2 was the only
+        qualifying plan, so a single-candidate default could stand in for a
+        real comparison without being caught. This pins the actual comparison:
+        with both plans present, the cheaper one must win even though neither
+        has more storage than the other.
+        """
+        rows = load_observations()
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
+        provider_rows = [row for row in rows if row["provider_slug"] == "heroku-postgres"]
+        result = compute_workload(workload, provider_rows, date.today())
+        self.assertEqual(result["status"], "ok", result)
+        self.assertGreater(result["plans_considered"], 1)
+        self.assertEqual(result["plan"], "standard-2")
+        self.assertNotEqual(result["plan"], "premium-2")
+        self.assertLess(result["monthly_usd"], 350.00)
 
     def test_new_shape_workload_reports_insufficient_data_for_digitalocean(self) -> None:
         rows = load_observations()
@@ -638,6 +773,52 @@ class DetailPageSectionTests(unittest.TestCase):
         self.assertIn("https://neon.com/pricing", html)
         self.assertNotIn("<script>alert(1)</script>", html)
         self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html)
+
+    def test_section_renders_the_attributes_that_decided_qualification(self) -> None:
+        """The fact that made a plan qualify for a shape workload (its recorded
+        capacity) must be visible on the page that exists to show evidence —
+        otherwise a reader sees `$200.00` with no way to check what earned it.
+        """
+        from build import pricing_section
+
+        rows = [make_row(
+            metric="plan_base_month", value=200.0, included_allowance=0,
+            attributes={"storage_gib": 256, "memory_gib": 8},
+        )]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
+        self.assertIn("256", html)
+        self.assertIn("GiB", html)
+        self.assertIn("storage", html)
+        self.assertIn("8", html)
+        self.assertIn("memory", html)
+        self.assertIn('<th scope="col">Capacity</th>', html)
+
+    def test_section_escapes_attribute_keys_safely_and_never_crashes_on_bad_attributes(self) -> None:
+        """`attributes` is attacker-shaped free-form JSON from the dataset, not
+        a value the renderer should ever trust blindly — a non-dict value must
+        degrade to the empty marker rather than raising.
+        """
+        from build import pricing_section
+
+        rows = [make_row(metric="plan_base_month", value=9.0, included_allowance=0, attributes="not-a-dict")]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
+        self.assertIn("compare-miss", html)
+
+    def test_section_shows_miss_marker_when_row_has_no_attributes(self) -> None:
+        from build import pricing_section
+
+        rows = [make_row(metric="storage_gib_month", value=0.35)]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
+        self.assertIn('<span class="compare-miss">—</span>', html)
+
+    def test_section_preserves_existing_caption_and_column_headers(self) -> None:
+        from build import pricing_section
+
+        rows = [make_row()]
+        html = pricing_section("neon", "Neon", rows, load_metrics(), date(2026, 8, 29))
+        self.assertIn('<caption class="sr-only">Observed pricing for Neon</caption>', html)
+        for header in ("Plan", "Metric", "Value", "Included", "Capacity", "Observed", "Evidence"):
+            self.assertIn(f'<th scope="col">{header}</th>', html)
 
 
 if __name__ == "__main__":

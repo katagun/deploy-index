@@ -213,8 +213,21 @@ def _format_quantity(value: float) -> str:
     return str(int(value)) if float(value).is_integer() else str(value)
 
 
-def _shape_miss_reason(requirements: dict[str, float]) -> str:
-    """A human-readable explanation of why no plan satisfied a shape."""
+def _shape_miss_reason(requirements: dict[str, float], has_recorded_attributes: bool) -> str:
+    """A human-readable explanation of why no plan satisfied a shape.
+
+    A plan that is genuinely too small and a provider whose capacity was
+    simply never recorded are different facts, and the dataset must not
+    conflate them: "no plan provides at least X" asserts something about the
+    provider's actual lineup that a never-recorded `attributes` field cannot
+    support. `has_recorded_attributes` is whether any fresh `plan_base_month`
+    row for this provider carried an `attributes` object at all — if none
+    did, the honest statement is that nothing was recorded, not that the
+    provider's plans fall short.
+    """
+    if not has_recorded_attributes:
+        labels = [_humanize_attribute(attribute)[0] for attribute in sorted(requirements)]
+        return "no plan's included " + " or ".join(labels) + " has been recorded for this provider"
     parts = []
     for attribute, min_value in sorted(requirements.items()):
         label, unit = _humanize_attribute(attribute)
@@ -291,17 +304,29 @@ def _compute_shape_workload(shape: dict[str, Any], by_group: dict[tuple[str, str
     """
     requirements = {key[len("min_"):]: value for key, value in shape.items()}
 
-    plans_by_cr: dict[tuple[str, str], set[str]] = {}
+    # A dict, not a set: iteration order follows the order plans first appear
+    # in `by_group` (itself the caller's row order), not an incidental
+    # alphabetical resort. Correctness for ties must come from the explicit
+    # `(price, plan)` key in the `candidates.sort()` below — not from feeding
+    # candidates in over pre-sorted order, which would let that tiebreak key
+    # be silently deleted without any test noticing.
+    plans_by_cr: dict[tuple[str, str], dict[str, None]] = {}
     for currency, region, plan in by_group:
-        plans_by_cr.setdefault((currency, region), set()).add(plan)
+        plans_by_cr.setdefault((currency, region), {})[plan] = None
 
     best: dict[str, Any] | None = None
+    # Whether any fresh `plan_base_month` row for this provider carried an
+    # `attributes` object at all, regardless of whether it qualified. This is
+    # what separates "no plan is big enough" from "nobody recorded capacity
+    # for this provider" in `_shape_miss_reason` — the dataset must not
+    # assert the former when all it actually knows is the latter.
+    has_recorded_attributes = False
 
     for (currency, region), plans in sorted(plans_by_cr.items()):
         if currency != "USD":
             continue
         candidates: list[tuple[float, str, dict[str, Any]]] = []
-        for plan in sorted(plans):
+        for plan in plans:
             latest = _latest_by_metric(by_group[(currency, region, plan)])
             base_row = latest.get("plan_base_month")
             if base_row is None:
@@ -309,6 +334,7 @@ def _compute_shape_workload(shape: dict[str, Any], by_group: dict[tuple[str, str
             attributes = base_row.get("attributes")
             if not isinstance(attributes, dict):
                 continue
+            has_recorded_attributes = True
             value = base_row["value"]
             if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
                 continue
@@ -346,7 +372,7 @@ def _compute_shape_workload(shape: dict[str, Any], by_group: dict[tuple[str, str
     return {
         "status": "insufficient_data",
         "missing_metrics": [],
-        "reason": _shape_miss_reason(requirements),
+        "reason": _shape_miss_reason(requirements, has_recorded_attributes),
     }
 
 
