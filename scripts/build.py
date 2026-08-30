@@ -13,10 +13,22 @@ import unicodedata
 from collections import Counter
 from datetime import date
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 from catalog import ROOT, load_catalog, validate_catalog
-from pricing import build_pricing_catalog, is_stale, load_metrics, load_observations, parse_observed_on
+from pricing import (
+    _format_quantity,
+    _humanize_attribute,
+    build_pricing_catalog,
+    is_stale,
+    load_metrics,
+    load_observations,
+    load_workloads,
+    parse_observed_on,
+    validate_observations,
+    validate_workloads,
+)
 from recommendations import build_recommendation_catalog, validate_recommendation_catalog
 
 SITE = ROOT / "site"
@@ -258,6 +270,27 @@ def related_items(item: dict, providers: list[dict]) -> list[dict]:
     return [entry[2] for entry in candidates[:6]]
 
 
+def _format_attributes(attributes: Any) -> str:
+    """Compact rendering of a row's `attributes` (e.g. "256 GiB storage · 8 GiB memory").
+
+    This is the fact that decides whether a plan qualifies for a shape
+    workload; a detail page that shows a plan's price without it would let a
+    reader see `$200.00` with no way to check what capacity earned that
+    number. Returns "" when there is nothing to show.
+    """
+    if not isinstance(attributes, dict) or not attributes:
+        return ""
+    parts = []
+    for key in sorted(attributes):
+        value = attributes[key]
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+        label, unit = _humanize_attribute(key)
+        quantity = _format_quantity(value)
+        parts.append(f"{quantity} {unit} {label}" if unit else f"{quantity} {label}")
+    return " · ".join(parts)
+
+
 def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today: date) -> str:
     """Render one provider's own dated price rows. No cross-provider math.
 
@@ -297,11 +330,14 @@ def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today
         # Hoisted out of the f-string: a backslash inside an f-string expression is a
         # SyntaxError before Python 3.12, and this project supports 3.11 onward.
         row_attr = ' class="row-superseded"' if superseded else ''
+        attributes_text = _format_attributes(row.get("attributes"))
+        attributes_cell = esc(attributes_text) if attributes_text else '<span class="compare-miss">—</span>'
         items.append(
             f'<tr{row_attr}>'
             f'<td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
             f'<td>{esc(row["value"])} <small>{esc(unit)}</small></td>'
             f'<td>{esc(row["included_allowance"])}</td>'
+            f'<td>{attributes_cell}</td>'
             f'<td>{esc(row["observed_on"])}{flags}</td>'
             f'<td><a href="{esc(row["source_url"])}" rel="noreferrer">source ↗</a></td></tr>'
         )
@@ -314,7 +350,8 @@ def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today
         f'<caption class="sr-only">Observed pricing for {esc(name)}</caption>'
         "<thead><tr>"
         '<th scope="col">Plan</th><th scope="col">Metric</th><th scope="col">Value</th>'
-        '<th scope="col">Included</th><th scope="col">Observed</th><th scope="col">Evidence</th>'
+        '<th scope="col">Included</th><th scope="col">Capacity</th>'
+        '<th scope="col">Observed</th><th scope="col">Evidence</th>'
         "</tr></thead>"
         f"<tbody>{''.join(items)}</tbody></table></div></section>"
     )
@@ -460,6 +497,21 @@ def main() -> int:
             print(f"ERROR: {error}")
         return 1
 
+    # `scripts/pricing.py`'s own `main()` validates workloads and observation
+    # rows, but that is a separate entry point (`make validate` runs it before
+    # `make build` runs this file) — a bare `python3 scripts/build.py` never
+    # went through it, so an invalid workload or row could reach
+    # `build_pricing_catalog()` and get published unchecked. Validate here too
+    # so this build path can never publish what the validator would reject.
+    pricing_metrics = load_metrics()
+    pricing_rows = load_observations()
+    pricing_errors = validate_workloads(load_workloads()["workloads"], pricing_metrics)
+    pricing_errors += validate_observations(pricing_rows, pricing_metrics, catalog)
+    if pricing_errors:
+        for error in pricing_errors:
+            print(f"ERROR: {error}")
+        return 1
+
     if DIST.exists():
         shutil.rmtree(DIST)
     (DIST / "assets").mkdir(parents=True)
@@ -544,8 +596,6 @@ def main() -> int:
         body_class="pricing-page",
     ))
 
-    pricing_rows = load_observations()
-    pricing_metrics = load_metrics()
     today = date.today()
     for item in providers:
         write(
