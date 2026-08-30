@@ -133,6 +133,8 @@ def validate_observations(
         allowance = row["included_allowance"]
         if isinstance(allowance, bool) or not isinstance(allowance, (int, float)) or not math.isfinite(allowance) or allowance < 0:
             errors.append(f"{prefix}: included_allowance must be a non-negative number")
+        if "sole_plan_verified" in row and not isinstance(row["sole_plan_verified"], bool):
+            errors.append(f"{prefix}: sole_plan_verified must be true or false when present")
         if not isinstance(row["source_url"], str) or not row["source_url"].startswith("https://") or not normalize_domain(row["source_url"]):
             errors.append(f"{prefix}: source_url must be https")
         if not _in_set(row["confidence"], ROW_CONFIDENCE):
@@ -576,9 +578,13 @@ def single_plan_providers(rows: list[dict[str, Any]]) -> list[str]:
     vendors genuinely sell one tier. It is a prompt to go and check.
     """
     plans: dict[str, set[str]] = {}
+    verified: set[str] = set()
     for row in rows:
-        plans.setdefault(row.get("provider_slug", ""), set()).add(row.get("plan", ""))
-    return sorted(slug for slug, names in plans.items() if len(names) == 1)
+        slug = row.get("provider_slug", "")
+        plans.setdefault(slug, set()).add(row.get("plan", ""))
+        if row.get("sole_plan_verified") is True:
+            verified.add(slug)
+    return sorted(slug for slug, names in plans.items() if len(names) == 1 and slug not in verified)
 
 
 def main() -> int:

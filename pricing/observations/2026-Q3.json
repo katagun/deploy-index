@@ -12,7 +12,8 @@
       "observed_on": "2026-08-29",
       "source_url": "https://neon.com/pricing",
       "confidence": "high",
-      "note": "Launch plan storage, billed per GB-month with no included allowance (Launch has no free storage tier; only Free has 0.5 GB/project)."
+      "note": "Launch plan storage, billed per GB-month with no included allowance. Lineup checked 2026-08-30: Neon publishes Free, Launch and Scale; Launch and Scale are both 'Pay for what you use' with 'no monthly minimum' and the same $0.35/GB-month storage rate, so no cheaper plan can win these workloads.",
+      "sole_plan_verified": true
     },
     {
       "provider_slug": "neon",

@@ -850,3 +850,41 @@ class CoverageCautionTests(unittest.TestCase):
             make_row(provider_slug="turso", plan="scaler", metric="storage_gib_month"),
         ]
         self.assertEqual(single_plan_providers(rows), [])
+
+
+class SolePlanVerificationTests(unittest.TestCase):
+    """A provider can legitimately sell one relevant plan. Once its lineup has been
+    checked, the row records that, and the caution stops asking — otherwise the list
+    can never reach zero and becomes noise people learn to skip.
+    """
+
+    def test_verified_sole_plan_clears_the_caution(self) -> None:
+        from pricing import single_plan_providers
+
+        rows = [make_row(provider_slug="neon", plan="launch", metric="storage_gib_month",
+                         sole_plan_verified=True)]
+        self.assertEqual(single_plan_providers(rows), [])
+
+    def test_unverified_single_plan_still_reported(self) -> None:
+        from pricing import single_plan_providers
+
+        rows = [make_row(provider_slug="supabase", plan="pro", metric="storage_gib_month")]
+        self.assertEqual(single_plan_providers(rows), ["supabase"])
+
+    def test_flag_on_one_row_covers_the_provider(self) -> None:
+        from pricing import single_plan_providers
+
+        rows = [
+            make_row(provider_slug="neon", plan="launch", metric="storage_gib_month",
+                     sole_plan_verified=True),
+            make_row(provider_slug="neon", plan="launch", metric="egress_gib"),
+        ]
+        self.assertEqual(single_plan_providers(rows), [])
+
+    def test_flag_must_be_boolean(self) -> None:
+        from catalog import load_catalog
+        from pricing import load_metrics, validate_observations
+
+        bad = make_row(sole_plan_verified="yes")
+        errors = validate_observations([bad], load_metrics(), load_catalog(), today=date(2026, 8, 30))
+        self.assertTrue(any("sole_plan_verified" in e for e in errors), errors)

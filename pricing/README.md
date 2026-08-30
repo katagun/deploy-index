@@ -35,6 +35,12 @@ In practice:
 plan. It is not an error — some vendors do sell one tier — but each name on that list is a figure
 nobody has yet proven to be a floor.
 
+When you have checked a vendor's lineup and the single recorded plan genuinely is the only one that
+can win, set `"sole_plan_verified": true` on one of its rows and put the evidence in that row's
+note: which plans exist and why none of them beats the recorded one. The caution then stops naming
+that provider. Only set it after actually reading the lineup — it silences the one check that has
+caught every pricing error this dataset has published.
+
 ## A note on GB and GiB
 
 Metrics and attributes are named `*_gib` and the workloads compare in GiB, but most vendors
