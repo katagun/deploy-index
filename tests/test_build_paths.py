@@ -26,12 +26,20 @@ CHECK_SCRIPT = ROOT / "scripts" / "check_site.py"
 
 ROOT_SITE_URL = "https://deployindex.com"
 SUBPATH_SITE_URL = "https://katagun.github.io/deploy-index"
+# The repository link rendered in the site header; pinned so the "external URLs are
+# never rewritten" assertion does not depend on the ambient REPOSITORY_URL.
+EXTERNAL_URL = "https://github.com/"
 BASE_PATH = "/deploy-index"
 
 
 def run(script: Path, site_url: str) -> subprocess.CompletedProcess:
     env = dict(os.environ)
     env["SITE_URL"] = site_url
+    # Pin REPOSITORY_URL too: these assertions inspect generated markup, and CI
+    # sets REPOSITORY_URL to the live repo, which would otherwise change the very
+    # external URL the rewrite test checks. The build must be reproducible from
+    # the test alone, not from whatever the ambient environment happens to hold.
+    env["REPOSITORY_URL"] = EXTERNAL_URL
     env.pop("CI", None)
     return subprocess.run(
         [sys.executable, str(script)],
@@ -114,7 +122,7 @@ class PagesSubpathTests(unittest.TestCase):
         self.build(SUBPATH_SITE_URL)
         index_html = (DIST / "index.html").read_text(encoding="utf-8")
         # The GitHub link in the header nav is an external, absolute URL.
-        self.assertIn('href="https://github.com/"', index_html)
+        self.assertIn(f'href="{EXTERNAL_URL}"', index_html)
         self.assertNotIn("/deploy-indexhttps://", index_html)
         self.assertNotIn('href="/deploy-index//', index_html)  # would indicate a "//" protocol-relative URL got mangled
 
