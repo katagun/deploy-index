@@ -24,6 +24,27 @@ DIST = ROOT / "dist"
 SITE_URL = (os.environ.get("SITE_URL") or "http://localhost:8000").rstrip("/")
 REPOSITORY_URL = os.environ.get("REPOSITORY_URL") or "https://github.com/"
 
+# GitHub Pages serves a project repo under a subpath (https://<owner>.github.io/<repo>/)
+# rather than at the domain root. Rather than adding a second configuration knob, the
+# base path is derived from SITE_URL itself: SITE_URL already carries the canonical
+# origin, and for Pages it simply includes the subpath. canonical() keeps working
+# unchanged (SITE_URL + path already contains the subpath, so it must never also be
+# prefixed with BASE_PATH — that would double it up); BASE_PATH is only for the
+# root-absolute "/..." links emitted elsewhere in the generated output.
+BASE_PATH = urlparse(SITE_URL).path.rstrip("/")
+
+# Matches href="/...", src="/...", and action="/..." attributes whose value starts
+# with a single "/" (not "//", which is protocol-relative and must be left alone).
+# Scoped to these three attributes only, so it never touches plain text, JSON
+# payloads, or a bare "/"-prefixed string that isn't a URL.
+_ROOT_URL_ATTR_RE = re.compile(r'\b(href|src|action)="(/(?!/)[^"]*)"')
+
+
+def _prefix_base_path(content: str) -> str:
+    if not BASE_PATH:
+        return content
+    return _ROOT_URL_ATTR_RE.sub(lambda m: f'{m.group(1)}="{BASE_PATH}{m.group(2)}"', content)
+
 ENTITY_LABELS = {"provider": "Provider", "product": "Product", "project": "Open project"}
 ERA_LABELS = {"established": "Established", "modern": "Modern · 2020–23", "recent": "Recent · 2024+"}
 STATUS_LABELS = {
@@ -121,15 +142,21 @@ def render_base(
     body_class: str = "",
 ) -> str:
     template = (SITE / "base.html").read_text(encoding="utf-8")
+    # Only emitted when a base path exists, so a root build's <html> tag is byte-identical
+    # to today's output. The client scripts read it via
+    # document.documentElement.dataset.basePath and treat a missing attribute as "".
+    base_path_attr = f' data-base-path="{esc(BASE_PATH)}"' if BASE_PATH else ""
     replacements = {
         "{{TITLE}}": esc(title),
         "{{DESCRIPTION}}": esc(description),
         "{{CANONICAL_URL}}": esc(canonical(path)),
+        "{{CANONICAL_ORIGIN}}": esc(SITE_URL),
         "{{MAIN}}": main,
         "{{SCRIPTS}}": scripts,
         "{{HEAD_EXTRA}}": head_extra,
         "{{BODY_CLASS}}": esc(body_class),
         "{{REPOSITORY_URL}}": esc(REPOSITORY_URL),
+        "{{BASE_PATH_ATTR}}": base_path_attr,
     }
     for token, value in replacements.items():
         template = template.replace(token, value)
@@ -397,7 +424,15 @@ def method_page(total: int) -> str:
 
 
 def write(path: Path, content: str) -> None:
+    """Single choke point for generated output.
+
+    Every generated HTML page passes through here, so this is where root-absolute
+    href/src/action URLs get the base path prefix applied — one rewrite instead of
+    hand-editing every call site in build.py and every site/*.html template.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
+    if path.suffix == ".html":
+        content = _prefix_base_path(content)
     path.write_text(content, encoding="utf-8")
 
 
@@ -434,6 +469,9 @@ def main() -> int:
     shutil.copy2(ROOT / "catalog" / "schema.json", DIST / "catalog" / "schema.json")
     if (SITE / "_headers").exists():
         shutil.copy2(SITE / "_headers", DIST / "_headers")
+    # Without this, GitHub Pages runs the output through Jekyll, which ignores any
+    # path beginning with an underscore -- and this site ships _headers.
+    write(DIST / ".nojekyll", "")
     write(DIST / "catalog" / "recommendations.json", json.dumps(recommendation_catalog, indent=2, ensure_ascii=False) + "\n")
     write(DIST / "catalog" / "pricing.json",
           json.dumps(build_pricing_catalog(), indent=2, ensure_ascii=False, allow_nan=False) + "\n")
@@ -553,11 +591,11 @@ def main() -> int:
         "name": "DeployIndex",
         "short_name": "DeployIndex",
         "description": "Every place to run code.",
-        "start_url": "/",
+        "start_url": f"{BASE_PATH}/",
         "display": "standalone",
         "background_color": "#080b12",
         "theme_color": "#080b12",
-        "icons": [{"src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml"}],
+        "icons": [{"src": f"{BASE_PATH}/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml"}],
     }
     write(DIST / "manifest.webmanifest", json.dumps(manifest, indent=2) + "\n")
     write(DIST / "robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")

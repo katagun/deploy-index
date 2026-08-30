@@ -5,6 +5,12 @@
   const statusNode = document.querySelector('#pricing-status');
   if (!root) return;
 
+  // GitHub Pages serves a project repo under a subpath; the server exposes it once
+  // via data-base-path on <html> so the fetch and each provider's detail_path link
+  // (root-relative in the JSON payload) stay correct there too.
+  const BASE_PATH = document.documentElement.dataset.basePath || '';
+  const withBase = (path) => `${BASE_PATH}${path}`;
+
   const escapeHtml = (value) => String(value)
     .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -45,7 +51,7 @@
     return `<td><strong>${escapeHtml(money(result.monthly_usd))}</strong><small>${escapeHtml(result.plan)} plan</small>${scopeNote(result)}${ageCell(result, maxAge, today)}</td>`;
   };
 
-  fetch('/catalog/pricing.json')
+  fetch(withBase('/catalog/pricing.json'))
     .then((response) => {
       if (!response.ok) throw new Error(`Pricing request failed: ${response.status}`);
       return response.json();
@@ -55,7 +61,7 @@
       const { workloads, providers, max_age_days: maxAge } = payload;
       const head = workloads.map((workload) => `<th scope="col">${escapeHtml(workload.label)}</th>`).join('');
       const body = providers.map((provider) => `<tr>
-        <th scope="row"><a href="${escapeHtml(provider.detail_path)}">${escapeHtml(provider.name)}</a></th>
+        <th scope="row"><a href="${escapeHtml(withBase(provider.detail_path))}">${escapeHtml(provider.name)}</a></th>
         ${workloads.map((workload) => cell(provider.results[workload.id] || {status: 'insufficient_data'}, maxAge, today)).join('')}
       </tr>`).join('');
 

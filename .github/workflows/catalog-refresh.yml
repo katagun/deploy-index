@@ -1,9 +1,12 @@
 name: Weekly catalog research
 
 on:
-  schedule:
-    # Monday at 07:17 UTC. The unusual minute reduces top-of-hour load.
-    - cron: "17 7 * * 1"
+  # The weekly schedule is disabled: this workflow requires OPENAI_API_KEY, which
+  # is not configured, so every scheduled run would fail and file a failure issue.
+  # Restore the cron below once the secret exists, or delete this workflow if the
+  # research scan moves off GitHub Actions.
+  #   schedule:
+  #     - cron: "17 7 * * 1"   # Monday 07:17 UTC; the odd minute avoids top-of-hour load
   workflow_dispatch:
 
 concurrency:
