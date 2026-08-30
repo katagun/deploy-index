@@ -4,3 +4,7 @@ __pycache__/
 .DS_Store
 dist/
 .coverage
+
+# Agent scratch space: plans, ledgers, and review reports. Never part of the product.
+.superpowers/
+.claude/worktrees/
