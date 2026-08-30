@@ -27,8 +27,11 @@ scripts/pricing.py              # loading, validation, staleness, and computatio
 ```
 
 `python3 scripts/pricing.py` validates the dataset and prints a summary; it is wired into
-`make validate` and therefore `make test`. There is no separate `pricing/schema.json` — the
-enforced shape is `REQUIRED_ROW_FIELDS` and the validators in `scripts/pricing.py`.
+`make validate` and therefore `make test`. `scripts/build.py`'s own `main()` also validates
+workloads and observation rows before writing anything to `dist/`, so a bare `python3 scripts/build.py`
+(skipping `make validate`) can never publish a workload or row the validator would reject. There is no
+separate `pricing/schema.json` — the enforced shape is `REQUIRED_ROW_FIELDS` and the validators in
+`scripts/pricing.py`.
 
 ## What a row means
 
@@ -167,9 +170,22 @@ qualifying plans the cheapest wins; ties break on plan name. As with `line_items
 excluded and plans, currencies, and regions are never mixed.
 
 The result contract for `ok` is identical to a `line_items` result. For `insufficient_data`, a shape
-result carries an optional `reason` string (e.g. "no recorded plan provides at least 100 GiB of
-storage") in place of a useful `missing_metrics` list — `missing_metrics` stays present as an empty
-list so consumers that read it unconditionally do not break.
+result carries an optional `reason` string in place of a useful `missing_metrics` list —
+`missing_metrics` stays present as an empty list so consumers that read it unconditionally do not
+break. The `reason` text distinguishes two different facts the dataset must not conflate:
+
+- **No plan's capacity has been recorded at all** (e.g. "no plan's included storage has been recorded
+  for this provider") — no fresh `plan_base_month` row for that provider carries an `attributes`
+  object, so nothing is known about whether any plan qualifies. This is the case for a provider that
+  is only ever observed on metered metrics (Neon's `storage_gib_month`/`egress_gib`, say), and it is
+  not a claim that the provider's real plans are too small.
+- **Recorded plans fall short** (e.g. "no recorded plan provides at least 100 GiB of storage") — at
+  least one plan's `attributes` were recorded, and none of them meet the shape. This is the only case
+  where the dataset can honestly say a provider's plans do not provide enough.
+
+Saying the second when only the first is true is exactly the kind of wrong-but-confident claim this
+dataset exists to avoid — a provider that plainly sells larger plans than were ever recorded must not
+be told apart from one that genuinely doesn't.
 
 **`insufficient_data` beats a partial sum, always.** A partial total is silently, confidently too
 low, which is exactly how comparison sites mislead. If you cannot find an official, dated source for
@@ -203,10 +219,16 @@ to approximate.
 
 ## Published surfaces
 
-- `/pricing/` — reference-workload comparison across providers with pricing data.
-- `/compare/` — a pricing block appears when compared entries have data.
+- `/pricing/` — reference-workload comparison across providers with pricing data. An
+  `insufficient_data` cell shows the shape-miss `reason` (or the missing-metric list for a
+  `line_items` workload) as its detail text.
+- `/compare/` — a pricing block appears when compared entries have data; an `insufficient_data` cell
+  prefers the shape-miss `reason` and falls back to the missing-metric list, same as `/pricing/`.
 - Provider detail pages (`/providers/<slug>/`) — that provider's own dated rows, newest first within
-  each plan and metric, with superseded and stale rows marked. No cross-provider math.
+  each plan and metric, with superseded and stale rows marked, plus a Capacity column rendering that
+  row's `attributes` (e.g. "256 GiB storage · 8 GiB memory") — the fact that decided whether a plan
+  qualified for a shape workload is not left invisible on the page that exists to show evidence. No
+  cross-provider math.
 - `/catalog/pricing.json` — the published payload (`build_pricing_catalog()`): metrics, workloads,
   computed results per provider, the raw rows, and the disclaimer. An `ok` result carries `plan`,
   `currency`, `region`, `monthly_usd`, `plans_considered`, and the `sources` it was derived from; an
