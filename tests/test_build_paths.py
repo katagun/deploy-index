@@ -25,7 +25,7 @@ BUILD_SCRIPT = ROOT / "scripts" / "build.py"
 CHECK_SCRIPT = ROOT / "scripts" / "check_site.py"
 
 ROOT_SITE_URL = "https://deployindex.com"
-SUBPATH_SITE_URL = "https://embark-delve.github.io/deploy-index"
+SUBPATH_SITE_URL = "https://katagun.github.io/deploy-index"
 BASE_PATH = "/deploy-index"
 
 
