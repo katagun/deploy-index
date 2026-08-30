@@ -5,6 +5,11 @@
   const statusNode = document.querySelector('#compare-status');
   if (!root) return;
 
+  // GitHub Pages serves a project repo under a subpath; the server exposes it once
+  // via data-base-path on <html> so fetches and generated links stay correct there too.
+  const BASE_PATH = document.documentElement.dataset.basePath || '';
+  const withBase = (path) => `${BASE_PATH}${path}`;
+
   const MAX_ENTRIES = 4;
   const escapeHtml = (value) => String(value)
     .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -98,7 +103,7 @@
     const slugs = entries.map((entry) => entry.slug);
     const headCells = entries.map((entry) => {
       const remaining = slugs.filter((slug) => slug !== entry.slug);
-      return `<th scope="col"><div class="compare-head"><a href="/providers/${escapeHtml(entry.slug)}/">${escapeHtml(entry.name)}</a>
+      return `<th scope="col"><div class="compare-head"><a href="${withBase(`/providers/${escapeHtml(entry.slug)}/`)}">${escapeHtml(entry.name)}</a>
         <span class="status-pill" data-status="${escapeHtml(entry.status)}">${escapeHtml(STATUS_LABELS[entry.status] || entry.status)}</span>
         <a class="compare-remove" href="${escapeHtml(compareHref(remaining))}" aria-label="Remove ${escapeHtml(entry.name)} from comparison">Remove ✕</a></div></th>`;
     }).join('');
@@ -149,7 +154,7 @@
         Estimated monthly cost · dated observations, not quotes
         <small class="compare-group-note">${escapeHtml(pricing.disclaimer || '')}
         These workloads price a plan fee, storage, and egress only — metered compute is not included.
-        See <a href="/pricing/">/pricing/</a> for what each figure covers.</small>
+        See <a href="${withBase('/pricing/')}">/pricing/</a> for what each figure covers.</small>
       </th></tr>`);
       pricingWorkloads.forEach((workload) => {
         rows.push(row(escapeHtml(workload.label), (entry) => priceCell(
@@ -171,13 +176,13 @@
       <thead><tr><th scope="col">Attribute</th>${headCells}</tr></thead>
       <tbody>${rows.join('')}</tbody>
     </table></div>
-    <p class="compare-footnote"><a href="/">← Add or change entries in the catalog explorer</a></p>`;
+    <p class="compare-footnote"><a href="${withBase('/')}">← Add or change entries in the catalog explorer</a></p>`;
   };
 
   const renderEmpty = (message) => {
     root.innerHTML = `<div class="compare-empty"><strong>${escapeHtml(message)}</strong>
       <p>Pick two to four entries with the Compare buttons in the catalog explorer, then return here.</p>
-      <a class="button button-primary" href="/">Browse the catalog</a></div>`;
+      <a class="button button-primary" href="${withBase('/')}">Browse the catalog</a></div>`;
     root.setAttribute('aria-busy', 'false');
   };
 
@@ -188,12 +193,12 @@
   }
 
   Promise.all([
-    fetch('/catalog/providers.json').then((response) => {
+    fetch(withBase('/catalog/providers.json')).then((response) => {
       if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
       return response.json();
     }),
-    fetch('/catalog/recommendations.json').then((response) => (response.ok ? response.json() : null)).catch(() => null),
-    fetch('/catalog/pricing.json').then((response) => (response.ok ? response.json() : null)).catch(() => null),
+    fetch(withBase('/catalog/recommendations.json')).then((response) => (response.ok ? response.json() : null)).catch(() => null),
+    fetch(withBase('/catalog/pricing.json')).then((response) => (response.ok ? response.json() : null)).catch(() => null),
   ]).then(([catalog, recommendations, pricing]) => {
     const bySlug = new Map(catalog.providers.map((entry) => [entry.slug, entry]));
     const profilesBySlug = new Map(((recommendations || {}).profiles || []).map((profile) => [profile.slug, profile]));

@@ -5,6 +5,12 @@
   const form = document.querySelector('#recommend-form');
   if (!engine || !form) return;
 
+  // GitHub Pages serves a project repo under a subpath; the server exposes it once
+  // via data-base-path on <html> so the fetch and each profile's detail_path link
+  // (root-relative in the JSON payload) stay correct there too.
+  const BASE_PATH = document.documentElement.dataset.basePath || '';
+  const withBase = (path) => `${BASE_PATH}${path}`;
+
   const resultsNode = document.querySelector('#recommend-results');
   const countNode = document.querySelector('#recommend-count');
   const summaryNode = document.querySelector('#recommend-summary');
@@ -112,7 +118,7 @@
     return `<article class="recommendation-card" data-score-band="${scoreBand(score)}">
       <div class="recommendation-rank"><span>${String(index + 1).padStart(2, '0')}</span><div class="score-ring" style="--score:${score}" aria-label="${score} percent fit"><strong>${score}</strong><small>fit</small></div></div>
       <div class="recommendation-main">
-        <div class="recommendation-title"><div><p>${escapeHtml(profile.primary_category.replaceAll('-', ' '))}</p><h3><a href="${escapeHtml(profile.detail_path)}">${escapeHtml(profile.name)}</a></h3></div><a class="official-link" href="${escapeHtml(profile.url)}" rel="noopener noreferrer" target="_blank">Official ↗</a></div>
+        <div class="recommendation-title"><div><p>${escapeHtml(profile.primary_category.replaceAll('-', ' '))}</p><h3><a href="${escapeHtml(withBase(profile.detail_path))}">${escapeHtml(profile.name)}</a></h3></div><a class="official-link" href="${escapeHtml(profile.url)}" rel="noopener noreferrer" target="_blank">Official ↗</a></div>
         <p class="recommendation-copy">${escapeHtml(profile.summary)}</p>
         <div class="recommendation-badges">${badges.map((badge) => `<span>${escapeHtml(badge)}</span>`).join('')}</div>
         <div class="fit-grid"><div><strong>Why it fits</strong><ul>${reasonList.map((reason) => `<li>${escapeHtml(reason)}</li>`).join('')}</ul></div><div><strong>Verify first</strong><ul>${tradeoffList.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div></div>
@@ -186,7 +192,7 @@
     setTimeout(() => { statusNode.textContent = ''; }, clearDelay);
   });
 
-  fetch('/catalog/recommendations.json')
+  fetch(withBase('/catalog/recommendations.json'))
     .then((response) => {
       if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
       return response.json();

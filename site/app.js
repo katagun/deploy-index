@@ -2,6 +2,11 @@
   const grid = document.querySelector('#provider-grid');
   if (!grid) return;
 
+  // GitHub Pages serves a project repo under a subpath; the server exposes it once
+  // via data-base-path on <html> so runtime-built absolute links stay correct there too.
+  const BASE_PATH = document.documentElement.dataset.basePath || '';
+  const withBase = (path) => `${BASE_PATH}${path}`;
+
   const cards = Array.from(grid.querySelectorAll('.provider-card'));
   const search = document.querySelector('#catalog-search');
   const entity = document.querySelector('#filter-entity');
@@ -90,7 +95,7 @@
     compareCount.textContent = String(compareSelection.length);
     const ready = compareSelection.length >= 2;
     compareLink.setAttribute('aria-disabled', String(!ready));
-    compareLink.href = ready ? `/compare/?s=${compareSelection.map(encodeURIComponent).join(',')}` : '/compare/';
+    compareLink.href = ready ? withBase(`/compare/?s=${compareSelection.map(encodeURIComponent).join(',')}`) : withBase('/compare/');
   };
 
   const toggleCompare = (slug) => {
