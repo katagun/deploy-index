@@ -5,7 +5,7 @@ because exact prices are unstable and require dated, sourced, auditable rows —
 provider record. See `docs/superpowers/specs/2026-08-29-database-pricing-design.md` for the full design
 rationale and `docs/superpowers/plans/2026-08-29-database-pricing-foundation.md` for what shipped.
 
-**Current scope:** database hosting only, 3 providers (Neon, Supabase, PlanetScale), `USD` /
+**Current scope:** database hosting only, 5 providers (Neon, Supabase, PlanetScale, DigitalOcean Managed Postgres, Heroku Postgres), `USD` /
 `us-east` only. The design envisions ~12 providers and a hyperscaler baseline; only the foundation
 and a hand-entered seed shipped so far. The model-assisted research scan described in the spec does
 not exist — every row below was entered by a human who read the cited source. Do not describe
@@ -27,8 +27,11 @@ scripts/pricing.py              # loading, validation, staleness, and computatio
 ```
 
 `python3 scripts/pricing.py` validates the dataset and prints a summary; it is wired into
-`make validate` and therefore `make test`. There is no separate `pricing/schema.json` — the
-enforced shape is `REQUIRED_ROW_FIELDS` and the validators in `scripts/pricing.py`.
+`make validate` and therefore `make test`. `scripts/build.py`'s own `main()` also validates
+workloads and observation rows before writing anything to `dist/`, so a bare `python3 scripts/build.py`
+(skipping `make validate`) can never publish a workload or row the validator would reject. There is no
+separate `pricing/schema.json` — the enforced shape is `REQUIRED_ROW_FIELDS` and the validators in
+`scripts/pricing.py`.
 
 ## What a row means
 
@@ -104,9 +107,12 @@ inexact fit is worse than `insufficient_data`.
 
 ## Reference workloads and computation
 
-`workloads.json` declares fixed-quantity `line_items`, each an `{metric, quantity}` pair (optionally
-`"optional": true` for a component like `plan_base_month` that some plans genuinely do not have —
-Neon's Launch plan has no monthly minimum, so no base-fee row exists and zero is the true
+A workload prices its cost one of two ways — every workload declares **exactly one** of `line_items`
+or `shape`; declaring both or neither is a validation error.
+
+`workloads.json` can declare fixed-quantity `line_items`, each an `{metric, quantity}` pair
+(optionally `"optional": true` for a component like `plan_base_month` that some plans genuinely do
+not have — Neon's Launch plan has no monthly minimum, so no base-fee row exists and zero is the true
 contribution).
 
 **A workload may only publish an assumption it actually prices.** `/pricing/` renders `assumptions`
@@ -142,6 +148,45 @@ uniformly. An inexact fit is worse than an honest omission.
 - Every result carries `plans_considered`: how many distinct plans had any fresh row. `1` means
   there was no comparison to win, and the surfaces say so.
 
+### Shape workloads
+
+A workload can instead declare `shape`, an object mapping `min_<attribute>` keys to numbers, e.g.
+`{"min_storage_gib": 100}`. This answers a different question than `line_items` does: not "what does
+this fixed set of metered quantities cost", but "what is the cheapest plan that provides at least
+this much capacity" — the question DigitalOcean Managed Postgres and Heroku Postgres actually need,
+since they sell plans with bundled storage rather than metering it per GB. `assumptions` on a shape
+workload is validated against the shape itself (every assumption key must have a matching `min_<key>`
+entry), not against `ASSUMPTION_METRICS`, since no line item is priced.
+
+An observation row can carry an optional `attributes` object describing what a *plan* provides, e.g.
+`{"storage_gib": 10, "memory_gib": 1}` on a `plan_base_month` row. Keys must be lowercase snake_case
+and values finite non-negative numbers. Rows without `attributes` are unaffected and can never satisfy
+a shape.
+
+`compute_workload()` costs a shape workload by, within each `(currency, region)` group, finding each
+plan's latest `plan_base_month` row and checking whether its `attributes` satisfy every `min_X` in the
+shape. A plan with no `plan_base_month` row, or none with `attributes`, never qualifies. Among
+qualifying plans the cheapest wins; ties break on plan name. As with `line_items`, stale rows are
+excluded and plans, currencies, and regions are never mixed.
+
+The result contract for `ok` is identical to a `line_items` result. For `insufficient_data`, a shape
+result carries an optional `reason` string in place of a useful `missing_metrics` list —
+`missing_metrics` stays present as an empty list so consumers that read it unconditionally do not
+break. The `reason` text distinguishes two different facts the dataset must not conflate:
+
+- **No plan's capacity has been recorded at all** (e.g. "no plan's included storage has been recorded
+  for this provider") — no fresh `plan_base_month` row for that provider carries an `attributes`
+  object, so nothing is known about whether any plan qualifies. This is the case for a provider that
+  is only ever observed on metered metrics (Neon's `storage_gib_month`/`egress_gib`, say), and it is
+  not a claim that the provider's real plans are too small.
+- **Recorded plans fall short** (e.g. "no recorded plan provides at least 100 GiB of storage") — at
+  least one plan's `attributes` were recorded, and none of them meet the shape. This is the only case
+  where the dataset can honestly say a provider's plans do not provide enough.
+
+Saying the second when only the first is true is exactly the kind of wrong-but-confident claim this
+dataset exists to avoid — a provider that plainly sells larger plans than were ever recorded must not
+be told apart from one that genuinely doesn't.
+
 **`insufficient_data` beats a partial sum, always.** A partial total is silently, confidently too
 low, which is exactly how comparison sites mislead. If you cannot find an official, dated source for
 a required line item, leave it out and let the computation report `insufficient_data` rather than
@@ -174,13 +219,20 @@ to approximate.
 
 ## Published surfaces
 
-- `/pricing/` — reference-workload comparison across providers with pricing data.
-- `/compare/` — a pricing block appears when compared entries have data.
+- `/pricing/` — reference-workload comparison across providers with pricing data. An
+  `insufficient_data` cell shows the shape-miss `reason` (or the missing-metric list for a
+  `line_items` workload) as its detail text.
+- `/compare/` — a pricing block appears when compared entries have data; an `insufficient_data` cell
+  prefers the shape-miss `reason` and falls back to the missing-metric list, same as `/pricing/`.
 - Provider detail pages (`/providers/<slug>/`) — that provider's own dated rows, newest first within
-  each plan and metric, with superseded and stale rows marked. No cross-provider math.
+  each plan and metric, with superseded and stale rows marked, plus a Capacity column rendering that
+  row's `attributes` (e.g. "256 GiB storage · 8 GiB memory") — the fact that decided whether a plan
+  qualified for a shape workload is not left invisible on the page that exists to show evidence. No
+  cross-provider math.
 - `/catalog/pricing.json` — the published payload (`build_pricing_catalog()`): metrics, workloads,
   computed results per provider, the raw rows, and the disclaimer. An `ok` result carries `plan`,
   `currency`, `region`, `monthly_usd`, `plans_considered`, and the `sources` it was derived from; an
-  `insufficient_data` result carries `missing_metrics` and `plans_considered`. It is serialized with
+  `insufficient_data` result carries `missing_metrics` and `plans_considered`, and — for a shape
+  workload that found no qualifying plan — an optional `reason` string. It is serialized with
   `allow_nan=False`, so a non-finite figure fails the build rather than emitting the bare token
   `Infinity`, which Python's `json.loads` accepts but no browser does.

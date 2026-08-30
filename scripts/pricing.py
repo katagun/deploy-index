@@ -29,6 +29,10 @@ CURRENCIES = {"USD"}
 # masquerade as the current one. Only the extended form is a valid row date.
 ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
+# Shared by row `attributes` keys and workload `shape` attribute names: lowercase,
+# starts with a letter, digits and single underscores between segments.
+SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9]*(_[a-z0-9]+)*$")
+
 
 def load_metrics(path: Path = METRICS_PATH) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -137,6 +141,21 @@ def validate_observations(
             if not isinstance(row[field], str) or not row[field].strip():
                 errors.append(f"{prefix}: {field} must be a non-empty string")
 
+        # `attributes` is optional: it describes what a *plan* provides (e.g.
+        # {"storage_gib": 10}) so shape workloads can match plans by capacity
+        # rather than by a fixed line-item quantity. Rows without it are
+        # unaffected and cannot qualify for shape matching.
+        if "attributes" in row:
+            attributes = row["attributes"]
+            if not isinstance(attributes, dict):
+                errors.append(f"{prefix}: attributes must be an object")
+            else:
+                for key, value in attributes.items():
+                    if not isinstance(key, str) or not SNAKE_CASE_RE.match(key):
+                        errors.append(f"{prefix}: attributes key {key!r} must be lowercase snake_case")
+                    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+                        errors.append(f"{prefix}: attributes[{key!r}] must be a finite non-negative number")
+
         observed = parse_observed_on(row["observed_on"])
         if observed is None:
             errors.append(f"{prefix}: observed_on must be an ISO date of the form YYYY-MM-DD")
@@ -183,20 +202,42 @@ def _latest_by_metric(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return latest
 
 
-def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today: date) -> dict[str, Any]:
-    """Compute a workload's monthly cost from one provider's rows.
+def _humanize_attribute(attribute: str) -> tuple[str, str]:
+    """Best-effort (label, unit) for a capacity attribute name, for prose."""
+    if attribute.endswith("_gib"):
+        return attribute[: -len("_gib")], "GiB"
+    return attribute.replace("_", " "), ""
 
-    Plans are never mixed, and neither are currencies or regions: each
-    (currency, region, plan) group is costed independently and only groups with
-    a fresh row for every required line item qualify. A missing required metric
-    yields insufficient_data rather than a partial — and therefore misleadingly
-    low — total.
+
+def _format_quantity(value: float) -> str:
+    return str(int(value)) if float(value).is_integer() else str(value)
+
+
+def _shape_miss_reason(requirements: dict[str, float], has_recorded_attributes: bool) -> str:
+    """A human-readable explanation of why no plan satisfied a shape.
+
+    A plan that is genuinely too small and a provider whose capacity was
+    simply never recorded are different facts, and the dataset must not
+    conflate them: "no plan provides at least X" asserts something about the
+    provider's actual lineup that a never-recorded `attributes` field cannot
+    support. `has_recorded_attributes` is whether any fresh `plan_base_month`
+    row for this provider carried an `attributes` object at all — if none
+    did, the honest statement is that nothing was recorded, not that the
+    provider's plans fall short.
     """
-    fresh = [row for row in rows if not is_stale(row, today)]
-    by_group: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
-    for row in fresh:
-        by_group.setdefault((row["currency"], row["region"], row["plan"]), []).append(row)
+    if not has_recorded_attributes:
+        labels = [_humanize_attribute(attribute)[0] for attribute in sorted(requirements)]
+        return "no plan's included " + " or ".join(labels) + " has been recorded for this provider"
+    parts = []
+    for attribute, min_value in sorted(requirements.items()):
+        label, unit = _humanize_attribute(attribute)
+        quantity = _format_quantity(min_value)
+        parts.append(f"at least {quantity} {unit} of {label}" if unit else f"at least {quantity} {label}")
+    return "no recorded plan provides " + " and ".join(parts)
 
+
+def _compute_line_item_workload(workload: dict[str, Any], by_group: dict[tuple[str, str, str], list[dict[str, Any]]]) -> dict[str, Any]:
+    """Cost a fixed-quantity `line_items` workload. See `compute_workload`."""
     best: dict[str, Any] | None = None
     missing_overall: set[str] = set()
 
@@ -243,30 +284,175 @@ def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today
         if best is None or candidate["monthly_usd"] < best["monthly_usd"]:
             best = candidate
 
-    # How many distinct plans had any fresh row at all. A total drawn from a
-    # single plan is a coverage artifact, not the outcome of a comparison, and
-    # every surface that shows the number has to be able to say so.
-    plans_considered = len({plan for _, _, plan in by_group})
-
     if best is not None:
-        best["plans_considered"] = plans_considered
         return best
     required = [item["metric"] for item in workload["line_items"] if not item.get("optional")]
     return {
         "status": "insufficient_data",
-        "plans_considered": plans_considered,
         "missing_metrics": sorted(missing_overall or set(required)),
     }
+
+
+def _compute_shape_workload(shape: dict[str, Any], by_group: dict[tuple[str, str, str], list[dict[str, Any]]]) -> dict[str, Any]:
+    """Cost a `shape` workload: cheapest plan whose recorded attributes qualify.
+
+    Within each (currency, region) group, every plan's latest `plan_base_month`
+    row is checked against the shape's `min_X` requirements using that row's
+    `attributes`. A plan with no `plan_base_month` row, or no `attributes`, or
+    attributes that fall short of any requirement, never qualifies. Among
+    qualifying plans the cheapest wins; ties break on plan name.
+    """
+    requirements = {key[len("min_"):]: value for key, value in shape.items()}
+
+    # A dict, not a set: iteration order follows the order plans first appear
+    # in `by_group` (itself the caller's row order), not an incidental
+    # alphabetical resort. Correctness for ties must come from the explicit
+    # `(price, plan)` key in the `candidates.sort()` below — not from feeding
+    # candidates in over pre-sorted order, which would let that tiebreak key
+    # be silently deleted without any test noticing.
+    plans_by_cr: dict[tuple[str, str], dict[str, None]] = {}
+    for currency, region, plan in by_group:
+        plans_by_cr.setdefault((currency, region), {})[plan] = None
+
+    best: dict[str, Any] | None = None
+    # Whether any fresh `plan_base_month` row for this provider carried an
+    # `attributes` object at all, regardless of whether it qualified. This is
+    # what separates "no plan is big enough" from "nobody recorded capacity
+    # for this provider" in `_shape_miss_reason` — the dataset must not
+    # assert the former when all it actually knows is the latter.
+    has_recorded_attributes = False
+
+    for (currency, region), plans in sorted(plans_by_cr.items()):
+        if currency != "USD":
+            continue
+        candidates: list[tuple[float, str, dict[str, Any]]] = []
+        for plan in plans:
+            latest = _latest_by_metric(by_group[(currency, region, plan)])
+            base_row = latest.get("plan_base_month")
+            if base_row is None:
+                continue
+            attributes = base_row.get("attributes")
+            if not isinstance(attributes, dict):
+                continue
+            has_recorded_attributes = True
+            value = base_row["value"]
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+                continue
+            qualifies = all(
+                isinstance(attributes.get(attribute), (int, float))
+                and not isinstance(attributes.get(attribute), bool)
+                and float(attributes[attribute]) >= min_value
+                for attribute, min_value in requirements.items()
+            )
+            if not qualifies:
+                continue
+            candidates.append((float(value), plan, base_row))
+        if not candidates:
+            continue
+        candidates.sort(key=lambda candidate: (candidate[0], candidate[1]))
+        cheapest_value, cheapest_plan, cheapest_row = candidates[0]
+        candidate = {
+            "status": "ok",
+            "plan": cheapest_plan,
+            "currency": currency,
+            "region": region,
+            "monthly_usd": round(cheapest_value, 2),
+            "sources": [{
+                "metric": cheapest_row["metric"],
+                "value": cheapest_row["value"],
+                "observed_on": cheapest_row["observed_on"],
+                "source_url": cheapest_row["source_url"],
+            }],
+        }
+        if best is None or candidate["monthly_usd"] < best["monthly_usd"]:
+            best = candidate
+
+    if best is not None:
+        return best
+    return {
+        "status": "insufficient_data",
+        "missing_metrics": [],
+        "reason": _shape_miss_reason(requirements, has_recorded_attributes),
+    }
+
+
+def compute_workload(workload: dict[str, Any], rows: list[dict[str, Any]], today: date) -> dict[str, Any]:
+    """Compute a workload's monthly cost from one provider's rows.
+
+    Plans are never mixed, and neither are currencies or regions: each
+    (currency, region, plan) group is costed independently. A `line_items`
+    workload requires a fresh row for every required metric in the group; a
+    `shape` workload instead requires the group's plan to have a
+    `plan_base_month` row whose `attributes` satisfy every `min_X` in the
+    shape. Either way, a group that does not qualify never contributes a
+    partial — and therefore misleadingly low — total.
+    """
+    fresh = [row for row in rows if not is_stale(row, today)]
+    by_group: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for row in fresh:
+        by_group.setdefault((row["currency"], row["region"], row["plan"]), []).append(row)
+
+    if "shape" in workload:
+        result = _compute_shape_workload(workload["shape"], by_group)
+    else:
+        result = _compute_line_item_workload(workload, by_group)
+
+    # How many distinct plans had any fresh row at all. A total drawn from a
+    # single plan is a coverage artifact, not the outcome of a comparison, and
+    # every surface that shows the number has to be able to say so.
+    result["plans_considered"] = len({plan for _, _, plan in by_group})
+    return result
+
+
+def _validate_shape_workload(prefix: str, workload: dict[str, Any]) -> list[str]:
+    """Validate a `shape` workload: its shape keys and its assumptions.
+
+    A shape workload prices no line item, so its assumptions cannot be checked
+    against `ASSUMPTION_METRICS` (that vocabulary is for metered quantities).
+    Instead every assumption key must name an attribute the shape itself
+    requires — `assumptions: {"storage_gib": 100}` is only honest if the shape
+    carries `min_storage_gib`.
+    """
+    errors: list[str] = []
+    shape = workload.get("shape")
+    if not isinstance(shape, dict) or not shape:
+        return [f"{prefix}.shape: shape must be a non-empty object"]
+
+    shape_attributes: set[str] = set()
+    for key, value in shape.items():
+        attribute = key[len("min_"):] if isinstance(key, str) and key.startswith("min_") else None
+        if attribute is None or not SNAKE_CASE_RE.match(attribute):
+            errors.append(f"{prefix}.shape: key {key!r} must be of the form min_<attribute> in lowercase snake_case")
+            continue
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+            errors.append(f"{prefix}.shape.{key}: value must be a finite non-negative number")
+            continue
+        shape_attributes.add(attribute)
+
+    assumptions = workload.get("assumptions", {})
+    if not isinstance(assumptions, dict):
+        return errors + [f"{prefix}: assumptions must be an object"]
+    for key in sorted(assumptions):
+        if key not in shape_attributes:
+            errors.append(
+                f"{prefix}: assumption {key!r} does not correspond to a min_{key} entry in the shape "
+                f"(shape workloads validate assumptions against their shape, not ASSUMPTION_METRICS)"
+            )
+    return errors
 
 
 def validate_workloads(workloads: list[dict[str, Any]], metrics: dict[str, Any]) -> list[str]:
     """Validate reference workload definitions.
 
-    The load-bearing check is that a workload may not publish an assumption it
-    does not price. `/pricing/` renders `assumptions` as a description of what
-    the figure covers, so an assumption without a matching line item (vCPU and
-    memory declared while only storage and egress are priced) silently
-    misdescribes every total in the column.
+    A workload declares exactly one of `line_items` (fixed-quantity metering)
+    or `shape` (cheapest plan whose recorded attributes qualify) — see
+    `_validate_shape_workload` for the latter.
+
+    The load-bearing check for a `line_items` workload is that it may not
+    publish an assumption it does not price. `/pricing/` renders `assumptions`
+    as a description of what the figure covers, so an assumption without a
+    matching line item (vCPU and memory declared while only storage and
+    egress are priced) silently misdescribes every total in the column.
     """
     errors: list[str] = []
     if not isinstance(workloads, list) or not workloads:
@@ -290,6 +476,16 @@ def validate_workloads(workloads: list[dict[str, Any]], metrics: dict[str, Any])
             seen_ids.add(workload_id)
         if not workload.get("caveats"):
             errors.append(f"{prefix}: at least one caveat is required")
+
+        has_line_items = "line_items" in workload
+        has_shape = "shape" in workload
+        if has_line_items == has_shape:
+            errors.append(f"{prefix}: workload must declare exactly one of line_items or shape")
+            continue
+
+        if has_shape:
+            errors.extend(_validate_shape_workload(prefix, workload))
+            continue
 
         line_items = workload.get("line_items")
         if not isinstance(line_items, list) or not line_items:

@@ -84,9 +84,11 @@
         <small>Outside the database pricing dataset — not a missing number.</small></td>`;
     }
     if (!result || result.status !== 'ok') {
-      const missing = escapeHtml(((result || {}).missing_metrics || []).join(', '));
+      const reason = (result || {}).reason;
+      const missing = ((result || {}).missing_metrics || []).join(', ');
+      const detail = reason || (missing ? `no dated row for ${missing}` : '');
       return `<td><span class="compare-miss">insufficient data</span>
-        ${missing ? `<small>no dated row for ${missing}</small>` : ''}</td>`;
+        ${detail ? `<small>${escapeHtml(detail)}</small>` : ''}</td>`;
     }
     const oldest = observedOn(result);
     const age = oldest ? daysBetween(oldest, today) : null;

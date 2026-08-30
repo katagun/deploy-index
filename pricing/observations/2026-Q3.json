@@ -154,8 +154,9 @@
       "metric": "plan_base_month",
       "value": 15.15,
       "included_allowance": 0,
+      "attributes": {"storage_gib": 10, "memory_gib": 1},
       "source_url": "https://www.digitalocean.com/pricing/managed-databases",
-      "note": "Entry PostgreSQL plan at $15.15/month; the base tier includes a 10 GiB to 30 GiB storage range."
+      "note": "Entry PostgreSQL plan at $15.15/month; the base tier includes a 10 GiB to 30 GiB storage range. attributes.storage_gib records the floor of that range, 10 GiB, not the full range."
     },
     {
       "currency": "USD",
@@ -180,8 +181,93 @@
       "metric": "plan_base_month",
       "value": 9.0,
       "included_allowance": 0,
+      "attributes": {"storage_gib": 10},
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
       "note": "Essential 1 plan at $9/month including 10 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "essential-0",
+      "metric": "plan_base_month",
+      "value": 5.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 1},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Essential 0 plan at $5/month including 1 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "essential-2",
+      "metric": "plan_base_month",
+      "value": 20.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 32},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Essential 2 plan at $20/month including 32 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "standard-0",
+      "metric": "plan_base_month",
+      "value": 50.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 64, "memory_gib": 4},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Standard 0 plan at $50/month including 64 GB of storage and 4 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "standard-2",
+      "metric": "plan_base_month",
+      "value": 200.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 256, "memory_gib": 8},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Standard 2 plan at $200/month including 256 GB of storage and 8 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "standard-3",
+      "metric": "plan_base_month",
+      "value": 400.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 512, "memory_gib": 15},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Standard 3 plan at $400/month including 512 GB of storage and 15 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "premium-2",
+      "metric": "plan_base_month",
+      "value": 350.0,
+      "included_allowance": 0,
+      "attributes": {"storage_gib": 256, "memory_gib": 8},
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Premium 2 plan at $350/month including 256 GB of storage and 8 GB of memory; Premium tiers bundle storage with no separate per-GB charge."
     }
   ]
 }
