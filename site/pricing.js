@@ -46,7 +46,8 @@
 
   const cell = (result, maxAge, today) => {
     if (result.status !== 'ok') {
-      return `<td class="price-missing"><span>insufficient data</span><small>${escapeHtml((result.missing_metrics || []).join(', '))}</small></td>`;
+      const detail = result.reason || (result.missing_metrics || []).join(', ');
+      return `<td class="price-missing"><span>insufficient data</span><small>${escapeHtml(detail)}</small></td>`;
     }
     return `<td><strong>${escapeHtml(money(result.monthly_usd))}</strong><small>${escapeHtml(result.plan)} plan</small>${scopeNote(result)}${ageCell(result, maxAge, today)}</td>`;
   };
