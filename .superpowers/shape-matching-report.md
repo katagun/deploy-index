@@ -220,3 +220,156 @@ supabase:
    commit, `d61501f`), and it grows more so now (5 providers with pricing rows). That line was not in
    scope for this task, so I left it as I found it — flagging it here rather than fixing it silently
    or drifting scope into an unrelated doc claim.
+
+## Fix report: code review follow-up (2026-08-30)
+
+A code review of the shape-matching extension above found six issues, from a $150 published-price
+error down to a build-path validation gap. All six are fixed. Commits (on
+`claude/pricing-shape-matching`):
+
+- `4bea83d` — pricing: record Heroku Standard 2/3, fixing a $150 published-price error
+- `78c50d8` — pricing: fix misleading shape-miss reason and order-dependent tiebreak
+- `e85f905` — site: prefer the shape-miss reason in compare.js price cells
+- `962ad04` — build: render plan attributes and validate pricing before publishing
+- `44ea526` — docs: document shape-miss reason distinction, capacity column, build gate
+
+### 1. CRITICAL — Heroku's published $350 answer was wrong; the real answer is $200
+
+The shape workload's "cheapest plan with ≥100 GiB storage" reported `premium-2` at $350.00 because
+`standard-2` ($200/mo, 256 GB storage, 8 GB RAM) — which sits between the already-recorded
+`standard-0` and `premium-2` rows — had simply never been recorded. Re-read
+`https://elements.heroku.com/addons/heroku-postgresql` on 2026-08-30 and added two `plan_base_month`
+rows: `standard-2` ($200.00, `{"storage_gib": 256, "memory_gib": 8}`) and `standard-3` ($400.00,
+`{"storage_gib": 512, "memory_gib": 15}`), each with an honest note, `confidence: high`, and the
+source URL. No other Heroku plans were added.
+
+`test_new_shape_workload_picks_heroku_premium_2` is renamed
+`test_new_shape_workload_picks_heroku_standard_2` and now asserts `standard-2` / $200.00. A second
+test, `test_shape_workload_prefers_standard_2_over_premium_2_at_equal_storage`, asserts the engine
+picks the cheaper plan even though `standard-2` and `premium-2` both provide the identical 256 GiB —
+the actual regression: before `standard-2` existed, `premium-2` was the *only* qualifying plan
+(`plans_considered == 1`), so there was never a real comparison to get wrong. The new test asserts
+`plans_considered > 1` specifically so a future "only one plan recorded" state can't silently satisfy
+it again.
+
+### 2. IMPORTANT — `insufficient_data` no longer asserts what the dataset can't know
+
+`_shape_miss_reason` built its text purely from the shape's `min_X` keys, so "no recorded plan
+provides at least 100 GiB of storage" was shown identically whether a provider's plans were genuinely
+too small (DigitalOcean, 10 GiB recorded) or its capacity was simply never recorded at all (Neon,
+PlanetScale, Supabase — none of which carry a single `plan_base_month` row with `attributes`). The
+Neon case was live and wrong: Neon plainly sells more than 100 GiB.
+
+`_compute_shape_workload` now tracks `has_recorded_attributes` — true only if some fresh
+`plan_base_month` row for the provider carried an `attributes` object at all, regardless of whether it
+qualified — and `_shape_miss_reason` branches on it: `"no plan's included storage has been recorded
+for this provider"` when nothing was recorded, the original `"no recorded plan provides at least ..."`
+only when attributes exist and fall short. Confirmed against the real dataset: Neon, PlanetScale, and
+Supabase now report the "nothing recorded" text; DigitalOcean still correctly reports "falls short"
+(it has a recorded 10 GiB plan). Four new tests cover both branches plus the two ways "nothing
+recorded" can arise (no `attributes` key, and no `plan_base_month` row at all).
+
+### 3. IMPORTANT — `/compare/` now shows the same explanation as `/pricing/`
+
+`compare.js`'s `priceCell` guarded `missing_metrics` with `|| []` and rendered a bare "insufficient
+data" for a shape workload's result (whose `missing_metrics` is always `[]` by contract — the
+explanation lives in `reason`). Changed to prefer `result.reason`, falling back to the joined
+missing-metric list, matching `pricing.js`. Output stays escaped through the existing `escapeHtml`.
+
+### 4. IMPORTANT — mutation-pinning tests, including a real order-dependency fix
+
+Investigated all five reported survivors by hand-mutating a copy of `scripts/pricing.py` and running
+scenarios against it:
+
+- **Explicit plan-name tiebreak in the candidate sort.** Confirmed by experiment that this mutant
+  (dropping `candidate[1]` from the sort key) produced byte-identical output against the *original*
+  code, for any input — because `plans_by_cr` used a `set`, always re-sorted alphabetically before
+  building `candidates`, which already put ties in the same order the tiebreak would. The tiebreak key
+  was true dead code, and no test could distinguish it without a source change. Fixed by switching
+  `plans_by_cr` to an insertion-ordered `dict` (order follows the caller's row order, not an incidental
+  resort) and iterating it directly — correctness now depends solely on the explicit `(price, plan)`
+  sort key. Re-ran the same hand-mutation experiment against the fixed code: the mutant now visibly
+  picks the wrong plan when rows are fed in adversarial (non-alphabetical) order. Two new tests pin
+  this: one feeds the "wrong" plan first and asserts the alphabetically-correct winner anyway; the
+  other feeds both orderings and asserts they agree.
+- **Iterating plans unsorted.** Same root cause and same fix as above — removing the redundant
+  `sorted(plans)` was the change that made the explicit tiebreak load-bearing instead of dead code.
+- **Treating a missing `attributes` as `{}`.** Verified algebraically that this can't actually let a
+  plan wrongly *qualify* given the existing `isinstance` checks in `qualifies` (any shape has ≥1
+  required attribute, and a missing key always fails `isinstance(None, (int, float))`). The
+  observable risk is a non-dict-but-truthy `attributes` value (e.g. a stray string) reaching
+  `.get()` and raising, or silently corrupting `has_recorded_attributes`. Added a test with
+  `attributes: "not-a-dict"` asserting `insufficient_data` with no exception.
+- **Dropping the boolean guard on attribute values.** `isinstance(True, int)` is `True` in Python, so
+  without the explicit bool exclusion, `attributes: {"storage_gib": True}` would satisfy any
+  `min_storage_gib` ≤ 1. Added a workload with `min_storage_gib: 1` (low enough for `True` to matter)
+  and confirmed a `True` attribute value never qualifies.
+- **Allowing a metric other than `plan_base_month` to supply attributes and price.** Added a test with
+  only a `storage_gib_month` row of $0.215 carrying `attributes: {"storage_gib": 200}` and confirmed
+  the shape matcher reports `insufficient_data` rather than publishing $0.22 as a plan price.
+
+### 5. IMPORTANT — provider detail pages now show the capacity that decided the answer
+
+`pricing_section` in `scripts/build.py` rendered plan/metric/value/allowance/date/source but never
+`attributes`, so `/providers/heroku-postgres/` showed `standard-2 · plan_base_month · 200.0 ·
+Included: 0` with no mention of the 256 GiB that qualified it. Added a `_format_attributes` helper
+(reusing `pricing.py`'s `_humanize_attribute`/`_format_quantity`) and a new "Capacity" column rendering
+a compact string like `256 GiB storage · 8 GiB memory`, escaped via the existing `esc()`, with a
+"—" marker for rows with no attributes. The existing columns, `<caption>`, and `scope="col"` headers
+are unchanged — verified by a test asserting all seven headers are present. Verified the built
+`/providers/heroku-postgres/` page renders "256 GiB storage · 8 GiB memory" next to the $200.00
+`standard-2` row.
+
+### 6. MINOR — `python3 scripts/build.py` can no longer publish an invalid workload
+
+Only `scripts/pricing.py`'s `main()` (run via `make validate`) validated workloads and observation
+rows; `scripts/build.py`'s `main()` never did, so running it directly skipped validation entirely.
+Wired `validate_workloads`/`validate_observations` into `build.py`'s `main()`, before `dist/` is
+touched. Verified by temporarily corrupting `pricing/workloads.json` (emptying a workload's
+`line_items`) and confirming `python3 scripts/build.py` fails with `ERROR: workloads[0]: line_items
+must be a non-empty list` and exit code 1, then restoring the file and confirming a clean build.
+
+## Verification run (2026-08-30)
+
+- `make test` — 130 tests, all pass (up from 117; `test_pricing.py` alone is 84, up from 71); build,
+  `check_site.py` (278 HTML files), and all `node --check` / JS regression checks pass.
+- `python3 scripts/pricing.py` — `Pricing valid: 20 rows across 5 providers (0 stale), 3 reference
+  workloads`.
+- `python3 scripts/build.py && python3 scripts/check_site.py` — clean build, 278 HTML files, no broken
+  links or JSON API mismatches.
+- `python3.11 -m compileall -q scripts tests` — clean.
+- Full computed table for every provider × workload (`build_pricing_catalog()` against the committed
+  dataset):
+
+  | Provider | Storage & egress · 100 GiB | Storage & egress · 10 GiB | Cheapest plan with 100 GiB storage |
+  |---|---|---|---|
+  | DigitalOcean | insufficient_data (missing: egress_gib) | insufficient_data (missing: egress_gib) | insufficient_data — "no recorded plan provides at least 100 GiB of storage" |
+  | Heroku Postgres | insufficient_data (missing: egress_gib, storage_gib_month) | insufficient_data (missing: egress_gib, storage_gib_month) | **ok** — `standard-2`, **$200.00**, plans_considered=7 |
+  | Neon | **ok** — `launch`, **$35.00** | **ok** — `launch`, **$3.50** | insufficient_data — "no plan's included storage has been recorded for this provider" |
+  | PlanetScale | **ok** — `ps-5-non-ha`, **$18.65** | **ok** — `ps-5-non-ha`, **$5.00** | insufficient_data — "no plan's included storage has been recorded for this provider" |
+  | Supabase | **ok** — `pro`, **$36.50** | **ok** — `pro`, **$25.25** | insufficient_data — "no plan's included storage has been recorded for this provider" |
+
+  The three metered providers are confirmed byte-for-byte unchanged: Neon $35.00/$3.50, PlanetScale
+  $18.65/$5.00, Supabase $36.50/$25.25. Heroku's answer moved from the wrong $350.00 (`premium-2`) to
+  the correct $200.00 (`standard-2`), now backed by a real 7-plan comparison. DigitalOcean's reason is
+  unchanged (it has a recorded, if small, plan); Neon/PlanetScale/Supabase's reason changed to
+  correctly say nothing was recorded, rather than implying their real plans are too small.
+
+## Judgment calls / things worth a second look (this pass)
+
+1. **Bundled findings 2 and 4 into one commit (`78c50d8`) and findings 5/6 into one commit (`962ad04`).**
+   Findings 2 and 4 both live inside `_compute_shape_workload` and are causally linked — the order-
+   independence fix for finding 4 is what makes finding 2's `has_recorded_attributes` tracking
+   trustworthy under any input order — so splitting them at the line level would have meant
+   duplicating the same diff hunks across two commits with no real isolation. Findings 5 and 6 are both
+   `scripts/build.py` changes that share a single import statement; same reasoning.
+2. **`pricing_metrics`/`pricing_rows` in `build.py`'s `main()`.** Wiring in validation needed
+   `load_metrics()`/`load_observations()` before `dist/` is touched; the later `pricing_section` loop
+   already loaded them again under the same names, so I removed the second load and reused the first,
+   rather than leaving two redundant reads of the same files.
+3. **Did not touch the stale "Current scope: 3 providers" line in `pricing/README.md`**, noted as
+   already out of scope in the prior pass above — still out of scope here.
+4. **The `_format_attributes` helper in `build.py` silently skips a non-numeric or boolean value**
+   inside an `attributes` dict rather than rendering it, consistent with `_compute_shape_workload`'s
+   own numeric-and-non-boolean guard — a malformed attribute is treated as absent everywhere, not
+   rendered as garbage in one place and excluded in another.
