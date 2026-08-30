@@ -5,7 +5,7 @@ because exact prices are unstable and require dated, sourced, auditable rows —
 provider record. See `docs/superpowers/specs/2026-08-29-database-pricing-design.md` for the full design
 rationale and `docs/superpowers/plans/2026-08-29-database-pricing-foundation.md` for what shipped.
 
-**Current scope:** database hosting only, 3 providers (Neon, Supabase, PlanetScale), `USD` /
+**Current scope:** database hosting only, 5 providers (Neon, Supabase, PlanetScale, DigitalOcean Managed Postgres, Heroku Postgres), `USD` /
 `us-east` only. The design envisions ~12 providers and a hyperscaler baseline; only the foundation
 and a hand-entered seed shipped so far. The model-assisted research scan described in the spec does
 not exist — every row below was entered by a human who read the cited source. Do not describe
