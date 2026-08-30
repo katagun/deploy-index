@@ -143,6 +143,45 @@
       "source_url": "https://planetscale.com/pricing",
       "confidence": "high",
       "note": "Single-node PS-5 egress bandwidth: '10 GB of egress bandwidth is included. Additional usage: $0.06 / GB.' The included allowance is SKU-specific and lower than the HA cluster's 100 GB. Confirmed against the calculator total: 1010 GB egress gives $65 against a $5 base, i.e. $60 for 1000 GB = $0.06/GB."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "digitalocean-managed-postgresql",
+      "plan": "db-s-1vcpu-1gb",
+      "metric": "plan_base_month",
+      "value": 15.15,
+      "included_allowance": 0,
+      "source_url": "https://www.digitalocean.com/pricing/managed-databases",
+      "note": "Entry PostgreSQL plan at $15.15/month; the base tier includes a 10 GiB to 30 GiB storage range."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "digitalocean-managed-postgresql",
+      "plan": "db-s-1vcpu-1gb",
+      "metric": "storage_gib_month",
+      "value": 0.215,
+      "included_allowance": 10,
+      "source_url": "https://www.digitalocean.com/pricing/managed-databases",
+      "note": "Storage expansion beyond the plan's included 10 GiB, quoted as $0.215/GiB/mo and sold in 10 GiB increments."
+    },
+    {
+      "currency": "USD",
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "confidence": "high",
+      "provider_slug": "heroku-postgres",
+      "plan": "essential-1",
+      "metric": "plan_base_month",
+      "value": 9.0,
+      "included_allowance": 0,
+      "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
+      "note": "Essential 1 plan at $9/month including 10 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
     }
   ]
 }
