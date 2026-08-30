@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from html.parser import HTMLParser
@@ -16,6 +17,16 @@ from recommendations import validate_recommendation_catalog
 
 DIST = ROOT / "dist"
 TEMPLATE_TOKEN = re.compile(r"\{\{[^{}]+\}\}|__\w+__")
+
+# Mirrors build.py's derivation: the base path a GitHub Pages (or other subpath)
+# deployment was built with, taken from the same SITE_URL environment variable so
+# there is no second knob to keep in sync.
+SITE_URL = (os.environ.get("SITE_URL") or "http://localhost:8000").rstrip("/")
+BASE_PATH = urlparse(SITE_URL).path.rstrip("/")
+
+
+class MissingBasePathError(ValueError):
+    """A root-absolute link doesn't carry the expected BASE_PATH prefix."""
 
 
 class DocumentParser(HTMLParser):
@@ -66,6 +77,11 @@ def target_path(dist: Path, current: Path, href: str) -> tuple[Path | None, str 
     if not raw_path:
         return current, fragment
     if raw_path.startswith("/"):
+        if BASE_PATH:
+            if raw_path == BASE_PATH or raw_path.startswith(BASE_PATH + "/"):
+                raw_path = raw_path[len(BASE_PATH):] or "/"
+            else:
+                raise MissingBasePathError(href)
         target = dist / raw_path.lstrip("/")
     else:
         target = current.parent / raw_path
@@ -114,7 +130,14 @@ def check(dist: Path) -> list[str]:
 
     for current, parser in parsed_docs.items():
         for href in parser.links:
-            target, fragment = target_path(dist.resolve(), current, href)
+            try:
+                target, fragment = target_path(dist.resolve(), current, href)
+            except MissingBasePathError:
+                errors.append(
+                    f"{current.relative_to(dist.resolve())}: root-absolute link is missing "
+                    f"the expected base path {BASE_PATH!r}: {href}"
+                )
+                continue
             if target is None:
                 continue
             try:
