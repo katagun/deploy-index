@@ -566,6 +566,21 @@ def build_pricing_catalog(today: date | None = None) -> dict[str, Any]:
     }
 
 
+def single_plan_providers(rows: list[dict[str, Any]]) -> list[str]:
+    """Providers recorded at exactly one plan.
+
+    A workload total is only ever the cheapest plan we happened to record. Where a
+    vendor sells several qualifying tiers and only one was entered, the published
+    figure is a coverage artifact rather than that provider's floor — the shape of
+    every pricing error this dataset has shipped. Not an error in itself: some
+    vendors genuinely sell one tier. It is a prompt to go and check.
+    """
+    plans: dict[str, set[str]] = {}
+    for row in rows:
+        plans.setdefault(row.get("provider_slug", ""), set()).add(row.get("plan", ""))
+    return sorted(slug for slug, names in plans.items() if len(names) == 1)
+
+
 def main() -> int:
     rows = load_observations()
     metrics = load_metrics()
@@ -578,6 +593,12 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
     payload = build_pricing_catalog()
+    single = single_plan_providers(rows)
+    if single:
+        print(
+            f"Caution: {len(single)} provider(s) recorded at a single plan, so their totals cannot be "
+            f"known to be the cheapest available: {', '.join(single)}"
+        )
     stale = sum(1 for row in rows if is_stale(row, date.today()))
     print(
         f"Pricing valid: {len(rows)} rows across {len(payload['providers'])} providers "
