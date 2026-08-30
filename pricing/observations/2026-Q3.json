@@ -52,7 +52,8 @@
       "observed_on": "2026-08-29",
       "source_url": "https://supabase.com/pricing",
       "confidence": "high",
-      "note": "Pro plan disk size: 8 GB included per project, then $0.125 per GB."
+      "note": "Pro plan disk size: 8 GB included per project, then $0.125 per GB. Lineup checked 2026-08-30: the Free plan enters read-only mode above 500 MB, so Pro is the only plan that is both capacity-capable and cheaper than Team.",
+      "sole_plan_verified": true
     },
     {
       "provider_slug": "supabase",
@@ -186,10 +187,10 @@
       "value": 9.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 10
+        "storage_gib": 9.31
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Essential 1 plan at $9/month including 10 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+      "note": "Essential 1 plan at $9/month including 10 GB of storage; Essential tiers bundle storage with no separate per-GB charge. Vendor publishes '10 GB'; recorded as decimal converted to GiB (9.31)."
     },
     {
       "currency": "USD",
@@ -202,10 +203,10 @@
       "value": 5.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 1
+        "storage_gib": 0.93
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Essential 0 plan at $5/month including 1 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+      "note": "Essential 0 plan at $5/month including 1 GB of storage; Essential tiers bundle storage with no separate per-GB charge. Vendor publishes '1 GB'; recorded as decimal converted to GiB (0.93)."
     },
     {
       "currency": "USD",
@@ -218,10 +219,10 @@
       "value": 20.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 32
+        "storage_gib": 29.8
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Essential 2 plan at $20/month including 32 GB of storage; Essential tiers bundle storage with no separate per-GB charge."
+      "note": "Essential 2 plan at $20/month including 32 GB of storage; Essential tiers bundle storage with no separate per-GB charge. Vendor publishes '32 GB'; recorded as decimal converted to GiB (29.8)."
     },
     {
       "currency": "USD",
@@ -234,11 +235,11 @@
       "value": 50.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 64,
+        "storage_gib": 59.6,
         "memory_gib": 4
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Standard 0 plan at $50/month including 64 GB of storage and 4 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+      "note": "Standard 0 plan at $50/month including 64 GB of storage and 4 GB of memory; Standard tiers bundle storage with no separate per-GB charge. Vendor publishes '64 GB'; recorded as decimal converted to GiB (59.6)."
     },
     {
       "currency": "USD",
@@ -251,11 +252,11 @@
       "value": 200.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 256,
+        "storage_gib": 238.42,
         "memory_gib": 8
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Standard 2 plan at $200/month including 256 GB of storage and 8 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+      "note": "Standard 2 plan at $200/month including 256 GB of storage and 8 GB of memory; Standard tiers bundle storage with no separate per-GB charge. Vendor publishes '256 GB'; recorded as decimal converted to GiB (238.42)."
     },
     {
       "currency": "USD",
@@ -268,11 +269,11 @@
       "value": 400.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 512,
+        "storage_gib": 476.84,
         "memory_gib": 15
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Standard 3 plan at $400/month including 512 GB of storage and 15 GB of memory; Standard tiers bundle storage with no separate per-GB charge."
+      "note": "Standard 3 plan at $400/month including 512 GB of storage and 15 GB of memory; Standard tiers bundle storage with no separate per-GB charge. Vendor publishes '512 GB'; recorded as decimal converted to GiB (476.84)."
     },
     {
       "currency": "USD",
@@ -285,11 +286,11 @@
       "value": 350.0,
       "included_allowance": 0,
       "attributes": {
-        "storage_gib": 256,
+        "storage_gib": 238.42,
         "memory_gib": 8
       },
       "source_url": "https://elements.heroku.com/addons/heroku-postgresql",
-      "note": "Premium 2 plan at $350/month including 256 GB of storage and 8 GB of memory; Premium tiers bundle storage with no separate per-GB charge."
+      "note": "Premium 2 plan at $350/month including 256 GB of storage and 8 GB of memory; Premium tiers bundle storage with no separate per-GB charge. Vendor publishes '256 GB'; recorded as decimal converted to GiB (238.42)."
     },
     {
       "provider_slug": "turso",
@@ -354,7 +355,8 @@
       "observed_on": "2026-08-30",
       "source_url": "https://www.mongodb.com/pricing",
       "confidence": "medium",
-      "note": "M10 Dedicated cluster tier card: '$0.08/hour ... Starts at $56.94/month', confirmed with Storage 10 GB / RAM 2 GB / vCPUs 2 bundled at this tier (cross-checked against the Dedicated Cluster storage-range modal showing M10: 10-128 GB). $56.94/month is a derived monthly floor from the hourly rate, not a native flat monthly SKU, hence medium confidence. Storage-overage and egress rates are NOT recorded: MongoDB's own docs give no flat per-GB figure for either (storage overage docs say only 'charges for the full amount' with no rate; data-transfer docs give 'Out to Internet: $0.09 to $0.16' per GB as a range, confirmed live on https://www.mongodb.com/docs/atlas/billing/data-transfer-costs/)."
+      "note": "M10 Dedicated cluster tier card: '$0.08/hour ... Starts at $56.94/month', confirmed with Storage 10 GB / RAM 2 GB / vCPUs 2 bundled at this tier (cross-checked against the Dedicated Cluster storage-range modal showing M10: 10-128 GB). $56.94/month is a derived monthly floor from the hourly rate, not a native flat monthly SKU, hence medium confidence. Storage-overage and egress rates are NOT recorded: MongoDB's own docs give no flat per-GB figure for either (storage overage docs say only 'charges for the full amount' with no rate; data-transfer docs give 'Out to Internet: $0.09 to $0.16' per GB as a range, confirmed live on https://www.mongodb.com/docs/atlas/billing/data-transfer-costs/). Lineup checked 2026-08-30: Free (0.5 GB) and Flex (5 GB hard cap) cannot hold either workload's data, so they are excluded by capacity rather than price. Among tiers that can, M10 is the cheapest.",
+      "sole_plan_verified": true
     },
     {
       "provider_slug": "timescale-cloud",
@@ -367,7 +369,8 @@
       "observed_on": "2026-08-30",
       "source_url": "https://www.tigerdata.com/pricing",
       "confidence": "high",
-      "note": "Performance tier card: 'Storage priced at $0.177 / GB-month', metered from actual usage with no stated included allowance. Reached via a permanent redirect from https://www.timescale.com/pricing (Timescale has rebranded to Tiger Data / Tiger Cloud). plan_base_month is NOT recorded: the card's 'Compute starts at $30/month' is an hourly-metered floor for the smallest instance size, not a fixed recurring fee independent of usage, so entering it as plan_base_month would misrepresent it. egress_gib is NOT recorded: confirmed live via in-page text search that neither 'egress' nor 'transfer' appears anywhere on the page."
+      "note": "Performance tier card: 'Storage priced at $0.177 / GB-month', metered from actual usage with no stated included allowance. Reached via a permanent redirect from https://www.timescale.com/pricing (Timescale has rebranded to Tiger Data / Tiger Cloud). plan_base_month is NOT recorded: the card's 'Compute starts at $30/month' is an hourly-metered floor for the smallest instance size, not a fixed recurring fee independent of usage, so entering it as plan_base_month would misrepresent it. egress_gib is NOT recorded: confirmed live via in-page text search that neither 'egress' nor 'transfer' appears anywhere on the page. Lineup checked 2026-08-30: every input that differs between Performance and Scale favours Performance, whose storage rate is lower, so no other tier can win.",
+      "sole_plan_verified": true
     },
     {
       "provider_slug": "crunchy-bridge",
@@ -393,7 +396,8 @@
       "observed_on": "2026-08-30",
       "source_url": "https://www.crunchydata.com/pricing",
       "confidence": "medium",
-      "note": "'Storage costs are $0.10 per GB. For example, 100 GB would be $10 per month.' No included allowance is stated on this page for any instance tier, so included_allowance is recorded as 0; medium confidence because a minimum provisioned volume size is common for block-storage-backed Postgres and was not explicitly ruled out or confirmed via the pricing calculator."
+      "note": "'Storage costs are $0.10 per GB. For example, 100 GB would be $10 per month.' No included allowance is stated on this page for any instance tier, so included_allowance is recorded as 0; medium confidence because a minimum provisioned volume size is common for block-storage-backed Postgres and was not explicitly ruled out or confirmed via the pricing calculator. Lineup checked 2026-08-30: the tier ladder only buys compute, and Hobby-0 at $9 is unambiguously the cheapest row in the itemized table; storage is a flat per-GB rate across all tiers.",
+      "sole_plan_verified": true
     },
     {
       "provider_slug": "crunchy-bridge",
@@ -417,13 +421,13 @@
       "included_allowance": 0,
       "region": "us-east",
       "attributes": {
-        "storage_gib": 80,
+        "storage_gib": 74.51,
         "memory_gib": 4
       },
       "observed_on": "2026-08-30",
       "source_url": "https://aiven.io/pricing/postgresql",
       "confidence": "high",
-      "note": "Startup-4 sub-tier -- the specific SKU behind the headline 'STARTUP starting from $75/month' -- confirmed via the 'View 7 plans' breakdown: 'Startup-4 | 1 | 2 | 4GB | 80 - 400 GB | $0.10 | $75'. attributes.storage_gib records the floor of the 80-400 GB range, matching this dataset's convention for a range-bundled plan (see DigitalOcean's row). Aiven's FAQ recommends Startup as the minimum plan for production workloads."
+      "note": "Startup-4 sub-tier -- the specific SKU behind the headline 'STARTUP starting from $75/month' -- confirmed via the 'View 7 plans' breakdown: 'Startup-4 | 1 | 2 | 4GB | 80 - 400 GB | $0.10 | $75'. attributes.storage_gib records the floor of the 80-400 GB range, matching this dataset's convention for a range-bundled plan (see DigitalOcean's row). Aiven's FAQ recommends Startup as the minimum plan for production workloads. Vendor publishes '80 GB'; recorded as decimal converted to GiB (74.51)."
     },
     {
       "provider_slug": "aiven",
@@ -447,13 +451,13 @@
       "included_allowance": 0,
       "region": "us-east",
       "attributes": {
-        "storage_gib": 175,
+        "storage_gib": 162.98,
         "memory_gib": 8
       },
       "observed_on": "2026-08-30",
       "source_url": "https://aiven.io/pricing/postgresql",
       "confidence": "high",
-      "note": "Startup-8 sub-tier, confirmed via the 'View 7 plans' breakdown: 'Startup-8 | 1 | 4 | 8GB | 175 - 875 GB | $0.20 | $145'. Recorded specifically because it is the cheapest Aiven PostgreSQL tier whose floor storage allotment meets or exceeds 100 GiB -- Startup-4's 80 GB floor falls short, so recording only Startup-4 would have produced a coverage gap against the plan-with-100gib-storage shape workload (the exact failure mode this dataset has previously published as a $150 error)."
+      "note": "Startup-8 sub-tier, confirmed via the 'View 7 plans' breakdown: 'Startup-8 | 1 | 4 | 8GB | 175 - 875 GB | $0.20 | $145'. Recorded specifically because it is the cheapest Aiven PostgreSQL tier whose floor storage allotment meets or exceeds 100 GiB -- Startup-4's 80 GB floor falls short, so recording only Startup-4 would have produced a coverage gap against the plan-with-100gib-storage shape workload (the exact failure mode this dataset has previously published as a $150 error). Vendor publishes '175 GB'; recorded as decimal converted to GiB (162.98)."
     },
     {
       "provider_slug": "aiven",
@@ -548,6 +552,53 @@
       "source_url": "https://turso.tech/pricing",
       "confidence": "high",
       "note": "Scaler storage overage, quoted as '$0.50 / GB' beyond the 24GB included in the plan."
+    },
+    {
+      "provider_slug": "digitalocean-managed-postgresql",
+      "plan": "db-4vcpu-8gb",
+      "metric": "plan_base_month",
+      "value": 122.1,
+      "currency": "USD",
+      "included_allowance": 0,
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "source_url": "https://www.digitalocean.com/pricing/managed-databases",
+      "confidence": "high",
+      "attributes": {
+        "storage_gib": 140,
+        "memory_gib": 8,
+        "vcpu": 4
+      },
+      "note": "4 vCPU / 8 GiB plan at $122.10/month, storage range '140 GiB - 280 GiB'. DigitalOcean states GiB explicitly, so the 140 floor needs no unit conversion."
+    },
+    {
+      "provider_slug": "digitalocean-managed-postgresql",
+      "plan": "db-4vcpu-8gb",
+      "metric": "storage_gib_month",
+      "value": 0.215,
+      "currency": "USD",
+      "included_allowance": 140,
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "source_url": "https://www.digitalocean.com/pricing/managed-databases",
+      "confidence": "high",
+      "note": "Storage expansion beyond this plan's 140 GiB floor, quoted as '$0.215/GiB/mo, 10 GiB increments'."
+    },
+    {
+      "provider_slug": "upstash",
+      "plan": "fixed-500gb",
+      "metric": "plan_base_month",
+      "value": 1500.0,
+      "currency": "USD",
+      "included_allowance": 0,
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "source_url": "https://upstash.com/pricing",
+      "confidence": "high",
+      "attributes": {
+        "storage_gib": 465.66
+      },
+      "note": "Fixed 500GB tier at '$1500/month'. Vendor publishes '500 GB'; recorded as decimal converted to GiB (500 x 10^9 / 2^30 = 465.66). The cheaper Fixed 100GB tier was not used for the shape workload: '100 GB' is 93.13 GiB decimal and would not clear a 100 GiB threshold."
     }
   ]
 }
