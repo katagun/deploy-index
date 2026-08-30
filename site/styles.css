@@ -133,7 +133,7 @@
   .hero h1 { max-width: 800px; font-weight: 850; }
   .hero h1 span { color: transparent; background: linear-gradient(100deg, var(--accent), var(--accent-2) 55%, var(--accent-3)); -webkit-background-clip: text; background-clip: text; }
   .hero-lede { max-width: 700px; margin-top: 28px; color: var(--text-soft); font-size: clamp(1.05rem, 1.7vw, 1.25rem); line-height: 1.65; }
-  .hero-secondary { font-size: .92rem; }
+  .terminal-note { margin-top: 20px; color: var(--text-faint); font-size: .78rem; line-height: 1.6; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
   .button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 16px; border: 1px solid transparent; border-radius: 11px; font-weight: 750; font-size: .9rem; text-decoration: none; cursor: pointer; transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
   .button:hover { transform: translateY(-2px); }
@@ -160,13 +160,6 @@
   .terminal-output span { color: var(--accent); }
   .terminal-cursor { display: inline-block; width: 8px; height: 16px; margin-top: 22px; background: var(--accent); animation: blink 1.15s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-
-  .signal-strip { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface-soft); }
-  .signal-track { width: max-content; display: flex; align-items: center; gap: 26px; padding-block: 14px; animation: drift 55s linear infinite; }
-  .signal-track:hover { animation-play-state: paused; }
-  .signal-item { display: inline-flex; align-items: center; gap: 10px; color: var(--text-soft); font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
-  .signal-item::before { content: "◇"; color: var(--accent); }
-  @keyframes drift { to { transform: translateX(-50%); } }
 
   .catalog-section { padding-block: 120px 90px; }
   .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 460px); align-items: end; gap: 40px; margin-bottom: 44px; }

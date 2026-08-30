@@ -493,14 +493,6 @@ def main() -> int:
         f'<button class="category-chip" type="button" data-category="{esc(key)}" data-label="{esc(category_labels[key])}">{esc(category_labels[key])} <span>{category_counts[key]}</span></button>'
         for key in sorted(category_labels, key=lambda key: (-category_counts[key], category_labels[key]))
     )
-    signals_base = [
-        f"{len(providers)} catalog entries",
-        *[f"{category_labels[key]} · {category_counts[key]}" for key in sorted(category_counts, key=category_counts.get, reverse=True)[:10]],
-        "Weekly evidence review",
-        "Portable JSON",
-        "No affiliate ranking",
-    ]
-    signal_items = "".join(f'<span class="signal-item">{esc(value)}</span>' for value in signals_base * 2)
     index_template = (SITE / "index.html").read_text(encoding="utf-8")
     for token, value in {
         "{{TOTAL_COUNT}}": str(len(providers)),
@@ -509,7 +501,6 @@ def main() -> int:
         "{{OPEN_SOURCE_COUNT}}": str(open_source_count),
         "{{CATEGORY_BUTTONS}}": buttons,
         "{{PROVIDER_CARDS}}": cards,
-        "{{SIGNAL_ITEMS}}": signal_items,
     }.items():
         index_template = index_template.replace(token, value)
     index_page = render_base(

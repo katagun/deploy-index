@@ -1,32 +1,27 @@
 <section class="hero shell">
   <div class="hero-copy">
-    <div class="eyebrow"><span class="live-dot"></span> Open catalog · checked weekly</div>
+    <div class="eyebrow"><span class="live-dot"></span> Updated weekly</div>
     <h1>Every place to<br /><span>run code.</span></h1>
-    <p class="hero-lede">{{TOTAL_COUNT}} providers, platforms, and open-source projects — hyperscalers to VPS hosts, edge runtimes, GPU clouds, agent sandboxes.</p>
+    <p class="hero-lede">{{TOTAL_COUNT}} hosting platforms in one searchable list, from the hyperscalers down to a $4 VPS. Nobody paid to be here.</p>
     <div class="hero-actions">
-      <a class="button button-primary" href="/recommend/">Find a host <span aria-hidden="true">→</span></a>
-      <a class="text-button hero-secondary" href="#explorer">or browse all {{TOTAL_COUNT}}</a>
+      <a class="button button-primary" href="/recommend/">Help me choose <span aria-hidden="true">→</span></a>
+      <a class="button button-ghost" href="#explorer">Browse all {{TOTAL_COUNT}}</a>
     </div>
   </div>
-  <div class="hero-terminal" aria-label="Catalog overview">
+  <div class="hero-terminal" aria-label="What is in the catalog">
     <div class="terminal-bar"><span></span><span></span><span></span><code>deployindex/catalog</code></div>
     <div class="terminal-body">
-      <p><span class="prompt">$</span> catalog.stats()</p>
       <dl class="terminal-stats">
-        <div><dt>entries</dt><dd>{{TOTAL_COUNT}}</dd></div>
-        <div><dt>available</dt><dd>{{AVAILABLE_COUNT}}</dd></div>
+        <div><dt>platforms</dt><dd>{{TOTAL_COUNT}}</dd></div>
+        <div><dt>you can use today</dt><dd>{{AVAILABLE_COUNT}}</dd></div>
         <div><dt>categories</dt><dd>{{CATEGORY_COUNT}}</dd></div>
-        <div><dt>open_source</dt><dd>{{OPEN_SOURCE_COUNT}}</dd></div>
+        <div><dt>open source</dt><dd>{{OPEN_SOURCE_COUNT}}</dd></div>
       </dl>
-      <p class="terminal-output"><span>✓</span> every entry carries its sources<br /><span>✓</span> nothing is ever silently deleted<br /><span>✓</span> re-checked every Monday</p>
-      <span class="terminal-cursor" aria-hidden="true"></span>
+      <p class="terminal-note">The rest are sunset or archived. We keep them so old links still work.</p>
     </div>
   </div>
 </section>
 
-<section class="signal-strip" aria-label="Featured categories">
-  <div class="signal-track">{{SIGNAL_ITEMS}}</div>
-</section>
 
 <section class="catalog-section shell" id="explorer">
   <div class="section-heading">
@@ -94,14 +89,14 @@
 <section class="method-teaser shell">
   <div class="method-card">
     <div>
-      <p class="kicker">Trust model</p>
-      <h2>How entries<br />get here.</h2>
+      <p class="kicker">Why trust this</p>
+      <h2>Every entry<br />shows its work.</h2>
     </div>
     <div class="method-steps">
-      <div><span>01</span><h3>Discover</h3><p>Search official announcements, docs, and repositories for what is new.</p></div>
-      <div><span>02</span><h3>Verify</h3><p>Every claim needs a source URL. Existing entries get re-checked on rotation.</p></div>
-      <div><span>03</span><h3>Review</h3><p>Changes land as a pull request someone reads. A failed request never means a company is dead.</p></div>
+      <div><span>01</span><h3>Found</h3><p>A weekly search of official announcements, docs, and repositories.</p></div>
+      <div><span>02</span><h3>Sourced</h3><p>Every entry links to the official pages it came from. You can check them.</p></div>
+      <div><span>03</span><h3>Reviewed</h3><p>A person reads every change. A site being down is not proof a company died.</p></div>
     </div>
-    <a class="button button-ghost" href="/method/">How this works <span aria-hidden="true">→</span></a>
+    <a class="button button-ghost" href="/method/">Read the full method <span aria-hidden="true">→</span></a>
   </div>
 </section>
