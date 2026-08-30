@@ -1,9 +1,9 @@
 <section class="recommend-hero shell">
   <div>
-    <div class="eyebrow"><span class="live-dot"></span> Transparent matching · {{PROFILE_COUNT}} options</div>
-    <h1>Choose a host without reading <span>{{PROFILE_COUNT}} pricing pages.</span></h1>
-    <p class="hero-lede">Describe the workload, operating model, billing preference, and trade-offs you actually care about. The client-side engine scores the full catalog and explains every result.</p>
-    <div class="recommend-disclaimer"><strong>Discovery aid, not a price quote.</strong> Profiles use relative, reviewable traits. Always verify current prices, quotas, regions, support, compliance, and product status with the provider.</div>
+    <div class="eyebrow"><span class="live-dot"></span> {{PROFILE_COUNT}} options scored in your browser</div>
+    <h1>Answer a few questions.<br /><span>Get a shortlist.</span></h1>
+    <p class="hero-lede">Describe what you are deploying and what you care about. Every option in the catalog gets scored, and every result shows its reasoning.</p>
+    <div class="recommend-disclaimer"><strong>This narrows the field. It does not pick for you.</strong> Scores compare rough traits, not measurements — check the details that matter to you with the provider before committing.</div>
   </div>
   <div class="recommend-terminal" aria-label="How recommendation scoring works">
     <div class="terminal-bar"><span></span><span></span><span></span><code>deployindex/recommend</code></div>
@@ -12,7 +12,7 @@
       <div class="score-equation">
         <span>compatibility</span><b>+</b><span>requirements</span><b>+</b><span>weighted traits</span><b>−</b><span>trade-offs</span>
       </div>
-      <p class="terminal-output"><span>✓</span> deterministic in your browser<br /><span>✓</span> no sponsored placement<br /><span>✓</span> shareable configuration<br /><span>✓</span> inspectable profiles</p>
+      <p class="terminal-output"><span>✓</span> runs entirely in your browser<br /><span>✓</span> nobody paid to rank here<br /><span>✓</span> the URL holds your answers<br /><span>✓</span> the scoring is open to read</p>
     </div>
   </div>
 </section>
@@ -20,12 +20,12 @@
 <section class="recommend-shell shell" aria-labelledby="recommend-title">
   <div class="recommend-builder">
     <div class="section-heading compact-heading">
-      <div><p class="kicker">Recommendation builder</p><h2 id="recommend-title">Define the deployment shape.</h2></div>
-      <p>Start from a scenario or tune each variable. Results update immediately.</p>
+      <div><p class="kicker">Recommendation builder</p><h2 id="recommend-title">Describe what you are running.</h2></div>
+      <p>Start from a scenario, then adjust. Results update as you go.</p>
     </div>
 
     <div class="preset-panel" aria-labelledby="preset-title">
-      <div class="panel-label"><span>01</span><div><h3 id="preset-title">Start with a scenario</h3><p>Use a sensible baseline, then adjust it.</p></div></div>
+      <div class="panel-label"><span>01</span><div><h3 id="preset-title">Start with a scenario</h3><p>Pick the closest one and tweak from there.</p></div></div>
       <div class="preset-grid" id="recommend-presets">
         <button type="button" class="preset-button" data-preset="static-directory"><strong>Static directory</strong><span>Global, nearly free, no server</span></button>
         <button type="button" class="preset-button" data-preset="startup-saas"><strong>Low-ops SaaS</strong><span>API, data, previews, workers</span></button>
@@ -80,7 +80,7 @@
       </fieldset>
 
       <fieldset class="question-panel">
-        <legend><span>04</span><div><strong>Hard preferences</strong><small>Strong requirements receive larger bonuses or penalties.</small></div></legend>
+        <legend><span>04</span><div><strong>Hard preferences</strong><small>These count for more than the questions above.</small></div></legend>
         <div class="requirement-grid">
           <label class="check-card"><input type="checkbox" data-requirement="scaleToZero" /><span><strong>Scale to zero</strong><small>Avoid paying while idle.</small></span></label>
           <label class="check-card"><input type="checkbox" data-requirement="previewEnvironments" /><span><strong>Preview environments</strong><small>One environment per branch or pull request.</small></span></label>
@@ -119,14 +119,14 @@
     <p id="recommend-summary" class="recommend-summary">Loading the catalog profiles…</p>
     <div id="recommend-status" class="recommend-status" role="status" aria-live="polite"></div>
     <div id="recommend-results" class="recommend-results" aria-live="polite" aria-busy="true"></div>
-    <p class="recommend-footnote">Scores represent fit to this configuration—not absolute quality. A 79 can be a better real-world choice than an 89 after verifying price, region, support, and limits.</p>
+    <p class="recommend-footnote">A score is fit to these answers, not a quality rating. A 79 can beat an 89 once you check price, region, and limits for your case.</p>
   </aside>
 </section>
 
 <section class="variable-map shell" id="variable-map">
   <div class="section-heading">
-    <div><p class="kicker">Selection model</p><h2>Variables worth comparing.</h2></div>
-    <p>The first version uses the variables with enough catalog coverage to score honestly. The rest define the research roadmap.</p>
+    <div><p class="kicker">Selection model</p><h2>What else matters.</h2></div>
+    <p>The questionnaire covers what the catalog knows well enough to score. Everything below is what we still want to cover.</p>
   </div>
   <div class="variable-grid">
     <article><span>01</span><h3>Economics</h3><p>Free tier, minimum spend, billing unit, fixed vs metered billing, idle cost, egress, storage, build minutes, support cost, commitments, credits, and price predictability.</p></article>

@@ -71,7 +71,9 @@
         <ul>${workload.caveats.map((caveat) => `<li>${escapeHtml(caveat)}</li>`).join('')}</ul>
       </section>`).join('');
 
-      root.innerHTML = `<div class="compare-table-wrap"><table class="compare-table pricing-table">
+      const coverage = `<p class="pricing-coverage"><strong>${providers.length} ${providers.length === 1 ? 'platform is' : 'platforms are'} priced so far.</strong> This is a seed, not a survey of the field — the catalog lists many more database platforms than appear here. Missing rows mean nobody has recorded them yet, not that a platform is expensive or cheap.</p>`;
+
+      root.innerHTML = coverage + `<div class="compare-table-wrap"><table class="compare-table pricing-table">
           <caption class="sr-only">Estimated monthly cost by reference workload</caption>
           <thead><tr><th scope="col">Provider</th>${head}</tr></thead>
           <tbody>${body}</tbody>

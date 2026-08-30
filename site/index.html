@@ -1,11 +1,11 @@
 <section class="hero shell">
   <div class="hero-copy">
-    <div class="eyebrow"><span class="live-dot"></span> Open catalog · weekly research</div>
+    <div class="eyebrow"><span class="live-dot"></span> Open catalog · checked weekly</div>
     <h1>Every place to<br /><span>run code.</span></h1>
-    <p class="hero-lede">Explore {{TOTAL_COUNT}} cloud providers, platforms, products, and open-source projects—from hyperscalers and VPS hosts to edge runtimes, PaaS, GPU clouds, and agent sandboxes.</p>
+    <p class="hero-lede">{{TOTAL_COUNT}} providers, platforms, and open-source projects — hyperscalers to VPS hosts, edge runtimes, GPU clouds, agent sandboxes.</p>
     <div class="hero-actions">
-      <a class="button button-primary" href="/recommend/">Find my host <span aria-hidden="true">→</span></a>
-      <a class="button button-ghost" href="#explorer">Explore all {{TOTAL_COUNT}} options</a>
+      <a class="button button-primary" href="/recommend/">Find a host <span aria-hidden="true">→</span></a>
+      <a class="text-button hero-secondary" href="#explorer">or browse all {{TOTAL_COUNT}}</a>
     </div>
   </div>
   <div class="hero-terminal" aria-label="Catalog overview">
@@ -18,7 +18,7 @@
         <div><dt>categories</dt><dd>{{CATEGORY_COUNT}}</dd></div>
         <div><dt>open_source</dt><dd>{{OPEN_SOURCE_COUNT}}</dd></div>
       </dl>
-      <p class="terminal-output"><span>✓</span> schema valid<br /><span>✓</span> source-aware workflow<br /><span>✓</span> next scan: Monday</p>
+      <p class="terminal-output"><span>✓</span> every entry carries its sources<br /><span>✓</span> nothing is ever silently deleted<br /><span>✓</span> re-checked every Monday</p>
       <span class="terminal-cursor" aria-hidden="true"></span>
     </div>
   </div>
@@ -32,9 +32,9 @@
   <div class="section-heading">
     <div>
       <p class="kicker">Catalog explorer</p>
-      <h2>Find your deployment surface.</h2>
+      <h2>Find a host.</h2>
     </div>
-    <p>Filter by what the entry is, when it emerged, how it runs, and whether it remains available.</p>
+    <p>Filter by what it is, how it runs, and whether it is still available.</p>
   </div>
 
   <div class="explorer-panel">
@@ -85,8 +85,8 @@
   <div class="sr-only" id="compare-live" role="status" aria-live="polite"></div>
   <div class="empty-state" id="empty-state" hidden>
     <div class="empty-icon" aria-hidden="true">∅</div>
-    <h3>No deployment surface found.</h3>
-    <p>Try a broader query or remove one of the filters.</p>
+    <h3>Nothing matches that.</h3>
+    <p>Try a broader search, or drop one of the filters.</p>
     <button class="button button-primary" type="button" id="empty-reset">Reset explorer</button>
   </div>
 </section>
@@ -95,13 +95,13 @@
   <div class="method-card">
     <div>
       <p class="kicker">Trust model</p>
-      <h2>A bot researches.<br />A diff earns trust.</h2>
+      <h2>How entries<br />get here.</h2>
     </div>
     <div class="method-steps">
-      <div><span>01</span><h3>Discover</h3><p>Search official announcements, docs, repositories, and ecosystem signals.</p></div>
-      <div><span>02</span><h3>Verify</h3><p>Require source URLs, deduplicate domains, and rotate checks across existing entries.</p></div>
-      <div><span>03</span><h3>Review</h3><p>Create a weekly pull request. Never declare a company dead from one failed request.</p></div>
+      <div><span>01</span><h3>Discover</h3><p>Search official announcements, docs, and repositories for what is new.</p></div>
+      <div><span>02</span><h3>Verify</h3><p>Every claim needs a source URL. Existing entries get re-checked on rotation.</p></div>
+      <div><span>03</span><h3>Review</h3><p>Changes land as a pull request someone reads. A failed request never means a company is dead.</p></div>
     </div>
-    <a class="button button-ghost" href="/method/">Read the complete method <span aria-hidden="true">→</span></a>
+    <a class="button button-ghost" href="/method/">How this works <span aria-hidden="true">→</span></a>
   </div>
 </section>

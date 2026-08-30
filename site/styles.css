@@ -133,6 +133,7 @@
   .hero h1 { max-width: 800px; font-weight: 850; }
   .hero h1 span { color: transparent; background: linear-gradient(100deg, var(--accent), var(--accent-2) 55%, var(--accent-3)); -webkit-background-clip: text; background-clip: text; }
   .hero-lede { max-width: 700px; margin-top: 28px; color: var(--text-soft); font-size: clamp(1.05rem, 1.7vw, 1.25rem); line-height: 1.65; }
+  .hero-secondary { font-size: .92rem; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
   .button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 16px; border: 1px solid transparent; border-radius: 11px; font-weight: 750; font-size: .9rem; text-decoration: none; cursor: pointer; transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
   .button:hover { transform: translateY(-2px); }
@@ -555,6 +556,8 @@
   .row-superseded td { color: var(--text-faint); }
   .superseded-flag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 6px; background: var(--surface-soft); color: var(--text-faint); font-family: var(--mono); font-size: .62rem; }
   .price-missing small { display: block; margin-top: 3px; color: var(--text-faint); font-family: var(--mono); font-size: .62rem; }
+  .pricing-coverage { margin-bottom: 18px; padding: 13px 16px; border: 1px solid var(--line); border-left: 3px solid var(--accent-3); border-radius: var(--radius-sm); color: var(--text-soft); font-size: .85rem; line-height: 1.6; }
+  .pricing-coverage strong { color: var(--text); }
   .pricing-disclaimer { margin-top: 18px; color: var(--text-soft); font-size: .82rem; line-height: 1.6; }
   .workload-notes { margin-top: 46px; }
   .workload-note { margin-top: 24px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-soft); }

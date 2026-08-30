@@ -304,9 +304,9 @@ def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today
         )
     return (
         '<section class="detail-section full"><h2>Observed pricing</h2>'
-        "<p>Dated observations from this provider's official pricing pages. These are records, not quotes — "
-        "verify current pricing with the provider. Newest first: where a price has changed, the earlier "
-        "observation is kept and marked superseded rather than deleted.</p>"
+        "<p>Prices read from this provider's own pricing pages, on the dates shown. Newest first \u2014 when a "
+        "price changes the old row stays, marked superseded, so you can see the history. Check the provider "
+        "before relying on any of it.</p>"
         '<div class="compare-table-wrap"><table class="compare-table">'
         f'<caption class="sr-only">Observed pricing for {esc(name)}</caption>'
         "<thead><tr>"
@@ -359,7 +359,7 @@ def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: lis
           <p class="detail-best"><strong>Best fit:</strong> {esc(item['best_for'])}</p>
           <div class="detail-actions">
             <a class="button button-primary" href="{esc(item['url'])}" rel="noreferrer">Official website <span aria-hidden="true">↗</span></a>
-            <a class="button button-ghost" href="/?category={esc(item['primary_category'])}">Explore similar options</a>
+            <a class="button button-ghost" href="/?category={esc(item['primary_category'])}">See similar</a>
           </div>
         </div>
         <aside class="detail-panel">
@@ -376,13 +376,13 @@ def provider_page(item: dict, providers_by_slug: dict[str, dict], providers: lis
         </aside>
       </section>
       <div class="detail-grid">
-        <section class="detail-section"><h2>Capabilities</h2><p>High-level workload and platform primitives associated with this entry.</p><div class="detail-tags">{capability_tags}</div></section>
-        <section class="detail-section"><h2>Operating model</h2><p>Where the control plane and workload infrastructure are expected to run.</p><div class="detail-tags">{model_tags}</div></section>
-        <section class="detail-section"><h2>Categories</h2><p>Directory facets used for discovery rather than mutually exclusive classifications.</p><div class="detail-tags">{category_tags}</div></section>
+        <section class="detail-section"><h2>Capabilities</h2><p>What this platform can run and provide.</p><div class="detail-tags">{capability_tags}</div></section>
+        <section class="detail-section"><h2>Operating model</h2><p>Whose infrastructure the workload actually runs on.</p><div class="detail-tags">{model_tags}</div></section>
+        <section class="detail-section"><h2>Categories</h2><p>Tags for finding this entry. An entry can sit in several at once.</p><div class="detail-tags">{category_tags}</div></section>
         <section class="detail-section"><h2>Verification</h2><p><strong>{esc(verification_tone)}.</strong> Last verified: {esc(verified)}.</p>{warning}</section>
         {pricing_html}
-        <section class="detail-section full"><h2>Source trail</h2><p>Official pages and primary evidence used or queued for review. Pricing and feature claims should always include a retrieval date.</p><div class="source-list">{source_links}</div></section>
-        <section class="detail-section full"><h2>Related deployment surfaces</h2><p>Entries sharing a parent platform, category, or capability profile.</p><div class="related-grid">{related_markup}</div></section>
+        <section class="detail-section full"><h2>Source trail</h2><p>The official pages this record is based on. Check them before relying on anything here.</p><div class="source-list">{source_links}</div></section>
+        <section class="detail-section full"><h2>Similar options</h2><p>Entries that share a parent platform, a category, or a similar capability set.</p><div class="related-grid">{related_markup}</div></section>
       </div>
     </div>'''
     head = f'<script type="application/ld+json">{json_ld(item, category_labels)}</script>'
@@ -400,23 +400,23 @@ def method_page(total: int) -> str:
     main = f'''
     <section class="page-hero shell">
       <p class="kicker">Methodology</p>
-      <h1>Automation finds changes.<br />Evidence decides.</h1>
-      <p>DeployIndex starts with a broad inventory of {total} entries, then improves it through a weekly research-and-review loop. The system is designed to discover aggressively while publishing conservatively.</p>
+      <h1>How an entry<br />earns its place.</h1>
+      <p>DeployIndex started with a broad inventory of {total} entries and improves it every week. The research casts a wide net; what gets published is deliberately narrow.</p>
     </section>
     <div class="content-grid shell">
       <nav class="toc" aria-label="On this page"><strong>On this page</strong><a href="#scope">Scope</a><a href="#pipeline">Weekly pipeline</a><a href="#changes">Change policy</a><a href="#confidence">Confidence</a><a href="#data">Data model</a><a href="#operations">Operations</a></nav>
       <article class="prose">
-        <section id="scope"><h2>What belongs in the directory</h2><p>The unit of discovery is a <em>deployment surface</em>, not merely a company. The catalog therefore distinguishes:</p><ul><li><strong>Providers</strong>, such as AWS, DigitalOcean, or Cloudflare.</li><li><strong>Products</strong>, such as Cloud Run, Workers, App Platform, or Azure Container Apps.</li><li><strong>Open projects</strong>, such as Coolify, Dokku, Knative, or Agones.</li></ul><p>Entries are categorized by primary use while retaining multiple secondary facets. “All” is an evolving target, not a one-time completeness claim.</p></section>
-        <section id="pipeline"><h2>The weekly pipeline</h2><div class="pipeline"><div><div><h3>Snapshot</h3><p>Validate the current JSON catalog and choose a rotating batch of existing entries for re-verification.</p></div></div><div><div><h3>Discover</h3><p>Use web search across launch queries, official announcements, documentation, changelogs, and open-source ecosystems.</p></div></div><div><div><h3>Extract</h3><p>Request schema-constrained candidates, updates, status alerts, and source URLs. Unstructured prose never writes directly to the catalog.</p></div></div><div><div><h3>Verify</h3><p>Prefer first-party evidence, normalize domains, check URLs, detect duplicates, and reject incomplete or contradictory records.</p></div></div><div><div><h3>Propose</h3><p>Write a dated proposal and apply only low-risk metadata changes. New entries and material status changes remain explicit diffs.</p></div></div><div><div><h3>Review</h3><p>Open a pull request containing the proposal, catalog diff, source trail, validation results, and regenerated site.</p></div></div><div><div><h3>Publish</h3><p>Merge after review. Any static host can rebuild and deploy the generated files.</p></div></div></div><div class="callout"><strong>Design rule:</strong> the automation may be exhaustive in discovery, but it must be humble in publication.</div></section>
-        <section id="changes"><h2>Add, update, archive—never silently erase</h2><h3>Addition</h3><p>A new entry needs a canonical name, official URL, clear deployment relevance, entity type, primary category, and at least one primary source. Similar names and domains are deduplicated before proposal.</p><h3>Updates</h3><p>Low-risk changes include corrected URLs, added official sources, and verification timestamps. Pricing, availability, ownership, product scope, and launch dates require explicit evidence and a dated note.</p><h3>Removal and shutdown</h3><p>A failed request is not evidence that a company is dead. An entry becomes <code>sunset</code> or <code>archived</code> only after official documentation, a first-party announcement, or multiple corroborating signals are reviewed. Archived entries remain addressable so links and historical comparisons do not disappear.</p></section>
-        <section id="confidence"><h2>Confidence states</h2><ul><li><code>seed</code>: part of the broad initial inventory and awaiting source-by-source review.</li><li><code>low</code>: plausible, but material fields still need stronger evidence.</li><li><code>medium</code>: supported by reliable sources, with some incomplete fields.</li><li><code>high</code>: recently checked against primary sources and internally consistent.</li></ul><p>Confidence applies to the directory record—not to the reliability or quality of the hosting company.</p></section>
-        <section id="data"><h2>Portable data by default</h2><p>The source of truth is <code>catalog/providers.json</code>, validated by the deterministic checks in <code>scripts/validate.py</code>; a descriptive JSON Schema is published at <code>catalog/schema.json</code> and kept enum-synchronized by a unit test. The site generator produces static HTML and a public JSON endpoint. This keeps the catalog inspectable, forkable, and deployable without a proprietary database.</p><div class="code-block">{{\n  "slug": "fly-io",\n  "entity_type": "provider",\n  "primary_category": "managed-containers",\n  "categories": ["managed-containers", "edge-compute", "paas"],\n  "status": "active",\n  "source_urls": ["https://fly.io/"]\n}}</div></section>
-        <section id="operations"><h2>Operating safeguards</h2><ul><li>Use read-only web research credentials and a spend cap for the model API.</li><li>Run the workflow with least-privilege GitHub permissions: repository contents and pull requests only.</li><li>Respect robots directives and avoid high-rate crawling; this is research, not indiscriminate scraping.</li><li>Do not publish affiliate rankings as neutral recommendations.</li><li>Run schema validation, duplicate checks, static build, and link checks before every merge.</li><li>Keep generated claims paraphrased and preserve source URLs rather than copying marketing text.</li></ul><p>The weekly researcher uses OpenAI's Responses API with web search and structured output. It can be replaced by another search provider because the proposal schema is independent of the model.</p></section>
+        <section id="scope"><h2>What counts as an entry</h2><p>The unit of discovery is a <em>deployment surface</em>, not merely a company. The catalog therefore distinguishes:</p><ul><li><strong>Providers</strong>, such as AWS, DigitalOcean, or Cloudflare.</li><li><strong>Products</strong>, such as Cloud Run, Workers, App Platform, or Azure Container Apps.</li><li><strong>Open projects</strong>, such as Coolify, Dokku, Knative, or Agones.</li></ul><p>Each entry has one primary category and any number of secondary ones. “Every place to run code” is what we are aiming at, not something we claim to have finished.</p></section>
+        <section id="pipeline"><h2>The weekly pipeline</h2><div class="pipeline"><div><div><h3>Snapshot</h3><p>Validate the current JSON catalog and choose a rotating batch of existing entries for re-verification.</p></div></div><div><div><h3>Discover</h3><p>Use web search across launch queries, official announcements, documentation, changelogs, and open-source ecosystems.</p></div></div><div><div><h3>Extract</h3><p>Request schema-constrained candidates, updates, status alerts, and source URLs. Unstructured prose never writes directly to the catalog.</p></div></div><div><div><h3>Verify</h3><p>Prefer first-party evidence, normalize domains, check URLs, detect duplicates, and reject incomplete or contradictory records.</p></div></div><div><div><h3>Propose</h3><p>Write a dated proposal and apply only low-risk metadata changes. New entries and material status changes remain explicit diffs.</p></div></div><div><div><h3>Review</h3><p>Open a pull request containing the proposal, catalog diff, source trail, validation results, and regenerated site.</p></div></div><div><div><h3>Publish</h3><p>Merge after review. Any static host can rebuild and deploy the generated files.</p></div></div></div><div class="callout"><strong>The rule:</strong> search as widely as you like, publish only what a person has checked.</div></section>
+        <section id="changes"><h2>Nothing gets silently erased</h2><h3>Addition</h3><p>A new entry needs a canonical name, official URL, clear deployment relevance, entity type, primary category, and at least one primary source. Similar names and domains are deduplicated before proposal.</p><h3>Updates</h3><p>Low-risk changes include corrected URLs, added official sources, and verification timestamps. Pricing, availability, ownership, product scope, and launch dates require explicit evidence and a dated note.</p><h3>Removal and shutdown</h3><p>A failed request is not evidence that a company is dead. An entry becomes <code>sunset</code> or <code>archived</code> only after official documentation, a first-party announcement, or multiple corroborating signals are reviewed. Archived entries remain addressable so links and historical comparisons do not disappear.</p></section>
+        <section id="confidence"><h2>Confidence states</h2><ul><li><code>seed</code>: part of the broad initial inventory and awaiting source-by-source review.</li><li><code>low</code>: plausible, but material fields still need stronger evidence.</li><li><code>medium</code>: supported by reliable sources, with some incomplete fields.</li><li><code>high</code>: recently checked against primary sources and internally consistent.</li></ul><p>Confidence describes how well sourced our record is. It says nothing about whether the company is any good.</p></section>
+        <section id="data"><h2>Take the data with you</h2><p>The source of truth is <code>catalog/providers.json</code>, validated by the deterministic checks in <code>scripts/validate.py</code>; a descriptive JSON Schema is published at <code>catalog/schema.json</code> and kept enum-synchronized by a unit test. The site generator produces static HTML and a public JSON endpoint. This keeps the catalog inspectable, forkable, and deployable without a proprietary database.</p><div class="code-block">{{\n  "slug": "fly-io",\n  "entity_type": "provider",\n  "primary_category": "managed-containers",\n  "categories": ["managed-containers", "edge-compute", "paas"],\n  "status": "active",\n  "source_urls": ["https://fly.io/"]\n}}</div></section>
+        <section id="operations"><h2>How this is run</h2><ul><li>Use read-only web research credentials and a spend cap for the model API.</li><li>Run the workflow with least-privilege GitHub permissions: repository contents and pull requests only.</li><li>Respect robots directives and avoid high-rate crawling; this is research, not indiscriminate scraping.</li><li>Do not publish affiliate rankings as neutral recommendations.</li><li>Run schema validation, duplicate checks, static build, and link checks before every merge.</li><li>Keep generated claims paraphrased and preserve source URLs rather than copying marketing text.</li></ul><p>The weekly researcher uses OpenAI's Responses API with web search and structured output. It can be replaced by another search provider because the proposal schema is independent of the model.</p></section>
       </article>
     </div>'''
     return render_base(
         title="Methodology — DeployIndex",
-        description="How DeployIndex discovers, verifies, updates, and archives hosting platforms through a weekly evidence-aware workflow.",
+        description="How entries get found, checked, corrected, and archived here \u2014 and why nothing is ever silently deleted.",
         path="/method/",
         main=main,
         body_class="method-page",
@@ -514,7 +514,7 @@ def main() -> int:
         index_template = index_template.replace(token, value)
     index_page = render_base(
         title="DeployIndex — Every place to run code",
-        description="Explore cloud providers, PaaS products, edge runtimes, GPU clouds, backend platforms, and self-hosted deployment projects.",
+        description="A searchable catalog of places to run code: cloud providers, PaaS, edge runtimes, GPU clouds, databases, and self-hosted projects.",
         path="/",
         main=index_template,
         scripts='<script src="/assets/app.js" defer></script>',
@@ -525,7 +525,7 @@ def main() -> int:
     recommend_template = (SITE / "recommend.html").read_text(encoding="utf-8").replace("{{PROFILE_COUNT}}", str(len(recommendation_catalog["profiles"])))
     write(DIST / "recommend" / "index.html", render_base(
         title="Hosting recommendation engine — DeployIndex",
-        description="Match workloads, billing preferences, operational expertise, networking, state, and strategic priorities against the complete DeployIndex catalog.",
+        description="Answer a few questions about what you are deploying and get a scored shortlist from the whole catalog, with the reasoning shown.",
         path="/recommend/",
         main=recommend_template,
         scripts='<script src="/assets/recommendation-engine.js" defer></script><script src="/assets/recommend.js" defer></script>',
@@ -533,8 +533,8 @@ def main() -> int:
     ))
 
     write(DIST / "compare" / "index.html", render_base(
-        title="Compare deployment surfaces — DeployIndex",
-        description="Side-by-side comparison of up to four catalog entries: identity, capabilities, operating models, and qualitative recommendation traits.",
+        title="Compare hosting options — DeployIndex",
+        description="Put two to four hosting options side by side: what each one is, what it supports, and how they compare.",
         path="/compare/",
         main=(SITE / "compare.html").read_text(encoding="utf-8"),
         scripts='<script src="/assets/compare.js" defer></script>',
@@ -543,7 +543,7 @@ def main() -> int:
 
     write(DIST / "pricing" / "index.html", render_base(
         title="Database pricing — DeployIndex",
-        description="Dated database hosting prices from official pricing pages, compared through published reference workloads.",
+        description="Database hosting prices read from official pricing pages, with the date on every figure.",
         path="/pricing/",
         main=(SITE / "pricing.html").read_text(encoding="utf-8"),
         scripts='<script src="/assets/pricing.js" defer></script>',
@@ -578,13 +578,13 @@ def main() -> int:
         title="Catalog API — DeployIndex",
         description="Machine-readable DeployIndex catalog and JSON Schema.",
         path="/catalog/",
-        main='''<section class="page-hero shell"><p class="kicker">Catalog API</p><h1>Portable by design.</h1><p>Use the complete JSON catalog, validation schema, or generated summary statistics.</p><div class="hero-actions"><a class="button button-primary" href="/catalog/providers.json">providers.json</a><a class="button button-ghost" href="/catalog/schema.json">schema.json</a><a class="button button-ghost" href="/catalog/stats.json">stats.json</a><a class="button button-ghost" href="/catalog/recommendations.json">recommendations.json</a></div></section>''',
+        main='''<section class="page-hero shell"><p class="kicker">Catalog API</p><h1>Take the data.</h1><p>The whole catalog, its schema, and the generated summaries — free to use, no key needed.</p><div class="hero-actions"><a class="button button-primary" href="/catalog/providers.json">providers.json</a><a class="button button-ghost" href="/catalog/schema.json">schema.json</a><a class="button button-ghost" href="/catalog/stats.json">stats.json</a><a class="button button-ghost" href="/catalog/recommendations.json">recommendations.json</a></div></section>''',
     ))
     write(DIST / "404.html", render_base(
         title="Not found — DeployIndex",
         description="The requested DeployIndex page was not found.",
         path="/404.html",
-        main='''<section class="not-found shell"><div><code>HTTP 404</code><h1>Deployment surface not found.</h1><p>The record may have moved, been archived, or never existed.</p><a class="button button-primary" href="/">Return to catalog</a></div></section>''',
+        main='''<section class="not-found shell"><div><code>HTTP 404</code><h1>That page is not here.</h1><p>It may have moved, been archived, or never existed.</p><a class="button button-primary" href="/">Return to catalog</a></div></section>''',
     ))
 
     manifest = {

@@ -1,6 +1,6 @@
 {
-  "methodology": "Qualitative profiles are derived from catalog categories and capabilities, then sharpened by small reviewable overrides for widely used platforms. Scores model relative fit rather than universal quality.",
-  "disclaimer": "Recommendations are qualitative discovery aids, not price quotes or purchasing advice. Verify current prices, quotas, regions, compliance, support, and product status with the provider.",
+  "methodology": "Profiles are derived from each entry's categories and capabilities, then corrected by hand for widely used platforms. Scores describe fit to your answers, not how good a platform is.",
+  "disclaimer": "These are discovery aids for narrowing a list, not price quotes or purchasing advice. Check current prices, quotas, regions, compliance, support, and product status with the provider.",
   "dimensions": {
     "expertise_required": "Relative operational and platform expertise required, from 1 (beginner) to 5 (specialist).",
     "cost_floor": "Relative minimum viable starting cost, from 1 (very low) to 5 (high).",
@@ -12,30 +12,259 @@
     "enterprise_readiness": "Relative governance, networking, and enterprise-operating fit, from 1 to 5."
   },
   "overrides": {
-    "cloudflare-workers": {"workloads": ["static-site", "frontend-app"], "artifacts": ["git-source"], "billing_models": ["free-entry"], "traffic": ["global"], "free_entry": true, "expertise_required": 2, "cost_floor": 1, "cost_predictability": 3, "global_reach": 5, "maturity": 5, "enterprise_readiness": 4},
-    "cloudflare-pages": {"billing_models": ["free-entry"], "free_entry": true, "cost_floor": 1, "global_reach": 5, "maturity": 4},
-    "github-pages": {"billing_models": ["free-entry"], "free_entry": true, "cost_floor": 1, "cost_predictability": 5, "portability": 5, "maturity": 5},
-    "vercel": {"billing_models": ["free-entry"], "free_entry": true, "cost_floor": 1, "expertise_required": 1, "global_reach": 5, "maturity": 5},
-    "netlify": {"billing_models": ["free-entry"], "free_entry": true, "scale_to_zero": true, "cost_floor": 1, "expertise_required": 1, "global_reach": 5, "maturity": 5},
-    "railway": {"expertise_required": 2, "cost_floor": 2, "cost_predictability": 3, "maturity": 4, "global_reach": 3},
-    "render": {"expertise_required": 2, "cost_floor": 2, "cost_predictability": 4, "maturity": 5, "global_reach": 3},
-    "northflank": {"expertise_required": 3, "cost_floor": 3, "control": 4, "portability": 4, "maturity": 4, "global_reach": 4, "enterprise_readiness": 5},
-    "fly-io": {"artifacts": ["docker-image"], "traffic": ["global"], "protocols": ["tcp", "udp"], "expertise_required": 4, "cost_floor": 2, "control": 4, "portability": 4, "global_reach": 5, "maturity": 5},
-    "bunny-magic-containers": {"traffic": ["global"], "protocols": ["tcp", "udp"], "expertise_required": 3, "cost_floor": 2, "control": 4, "portability": 4, "global_reach": 5, "maturity": 2},
-    "google-cloud-run": {"artifacts": ["docker-image"], "billing_models": ["free-entry"], "free_entry": true, "expertise_required": 3, "cost_floor": 1, "global_reach": 4, "enterprise_readiness": 5},
-    "azure-container-apps": {"artifacts": ["docker-image"], "expertise_required": 4, "cost_floor": 2, "global_reach": 4, "enterprise_readiness": 5},
-    "digitalocean-app-platform": {"expertise_required": 2, "cost_floor": 2, "cost_predictability": 4, "maturity": 4},
-    "heroku": {"expertise_required": 1, "cost_floor": 3, "cost_predictability": 4, "maturity": 5, "portability": 3},
-    "aws": {"maturity": 5, "global_reach": 5, "enterprise_readiness": 5},
-    "azure": {"maturity": 5, "global_reach": 5, "enterprise_readiness": 5},
-    "google-cloud": {"maturity": 5, "global_reach": 5, "enterprise_readiness": 5},
-    "coolify": {"artifacts": ["docker-compose"], "private_networking": true, "expertise_required": 4, "cost_floor": 2, "cost_predictability": 5, "control": 5, "portability": 5, "maturity": 4},
-    "dokploy": {"artifacts": ["docker-compose"], "private_networking": true, "preview_environments": true, "expertise_required": 4, "cost_floor": 2, "cost_predictability": 5, "control": 5, "portability": 5, "maturity": 3},
-    "northflank-byoc": {"billing_models": ["byoc-infrastructure"], "expertise_required": 4, "control": 5, "portability": 4, "global_reach": 4, "enterprise_readiness": 5},
-    "ravion": {"billing_models": ["byoc-infrastructure"], "expertise_required": 4, "control": 5, "portability": 5, "enterprise_readiness": 5},
-    "defang": {"billing_models": ["byoc-infrastructure"], "artifacts": ["docker-compose"], "expertise_required": 3, "control": 4, "portability": 5, "enterprise_readiness": 3},
-    "modal": {"billing_models": ["free-entry"], "state_options": ["object-storage"], "free_entry": true, "expertise_required": 2, "cost_floor": 2, "global_reach": 4, "maturity": 4},
-    "runpod": {"state_options": ["object-storage"], "expertise_required": 3, "cost_floor": 3, "global_reach": 4, "maturity": 4},
-    "e2b": {"workloads": ["agent-sandbox"], "expertise_required": 2, "cost_floor": 2, "maturity": 3}
+    "cloudflare-workers": {
+      "workloads": [
+        "static-site",
+        "frontend-app"
+      ],
+      "artifacts": [
+        "git-source"
+      ],
+      "billing_models": [
+        "free-entry"
+      ],
+      "traffic": [
+        "global"
+      ],
+      "free_entry": true,
+      "expertise_required": 2,
+      "cost_floor": 1,
+      "cost_predictability": 3,
+      "global_reach": 5,
+      "maturity": 5,
+      "enterprise_readiness": 4
+    },
+    "cloudflare-pages": {
+      "billing_models": [
+        "free-entry"
+      ],
+      "free_entry": true,
+      "cost_floor": 1,
+      "global_reach": 5,
+      "maturity": 4
+    },
+    "github-pages": {
+      "billing_models": [
+        "free-entry"
+      ],
+      "free_entry": true,
+      "cost_floor": 1,
+      "cost_predictability": 5,
+      "portability": 5,
+      "maturity": 5
+    },
+    "vercel": {
+      "billing_models": [
+        "free-entry"
+      ],
+      "free_entry": true,
+      "cost_floor": 1,
+      "expertise_required": 1,
+      "global_reach": 5,
+      "maturity": 5
+    },
+    "netlify": {
+      "billing_models": [
+        "free-entry"
+      ],
+      "free_entry": true,
+      "scale_to_zero": true,
+      "cost_floor": 1,
+      "expertise_required": 1,
+      "global_reach": 5,
+      "maturity": 5
+    },
+    "railway": {
+      "expertise_required": 2,
+      "cost_floor": 2,
+      "cost_predictability": 3,
+      "maturity": 4,
+      "global_reach": 3
+    },
+    "render": {
+      "expertise_required": 2,
+      "cost_floor": 2,
+      "cost_predictability": 4,
+      "maturity": 5,
+      "global_reach": 3
+    },
+    "northflank": {
+      "expertise_required": 3,
+      "cost_floor": 3,
+      "control": 4,
+      "portability": 4,
+      "maturity": 4,
+      "global_reach": 4,
+      "enterprise_readiness": 5
+    },
+    "fly-io": {
+      "artifacts": [
+        "docker-image"
+      ],
+      "traffic": [
+        "global"
+      ],
+      "protocols": [
+        "tcp",
+        "udp"
+      ],
+      "expertise_required": 4,
+      "cost_floor": 2,
+      "control": 4,
+      "portability": 4,
+      "global_reach": 5,
+      "maturity": 5
+    },
+    "bunny-magic-containers": {
+      "traffic": [
+        "global"
+      ],
+      "protocols": [
+        "tcp",
+        "udp"
+      ],
+      "expertise_required": 3,
+      "cost_floor": 2,
+      "control": 4,
+      "portability": 4,
+      "global_reach": 5,
+      "maturity": 2
+    },
+    "google-cloud-run": {
+      "artifacts": [
+        "docker-image"
+      ],
+      "billing_models": [
+        "free-entry"
+      ],
+      "free_entry": true,
+      "expertise_required": 3,
+      "cost_floor": 1,
+      "global_reach": 4,
+      "enterprise_readiness": 5
+    },
+    "azure-container-apps": {
+      "artifacts": [
+        "docker-image"
+      ],
+      "expertise_required": 4,
+      "cost_floor": 2,
+      "global_reach": 4,
+      "enterprise_readiness": 5
+    },
+    "digitalocean-app-platform": {
+      "expertise_required": 2,
+      "cost_floor": 2,
+      "cost_predictability": 4,
+      "maturity": 4
+    },
+    "heroku": {
+      "expertise_required": 1,
+      "cost_floor": 3,
+      "cost_predictability": 4,
+      "maturity": 5,
+      "portability": 3
+    },
+    "aws": {
+      "maturity": 5,
+      "global_reach": 5,
+      "enterprise_readiness": 5
+    },
+    "azure": {
+      "maturity": 5,
+      "global_reach": 5,
+      "enterprise_readiness": 5
+    },
+    "google-cloud": {
+      "maturity": 5,
+      "global_reach": 5,
+      "enterprise_readiness": 5
+    },
+    "coolify": {
+      "artifacts": [
+        "docker-compose"
+      ],
+      "private_networking": true,
+      "expertise_required": 4,
+      "cost_floor": 2,
+      "cost_predictability": 5,
+      "control": 5,
+      "portability": 5,
+      "maturity": 4
+    },
+    "dokploy": {
+      "artifacts": [
+        "docker-compose"
+      ],
+      "private_networking": true,
+      "preview_environments": true,
+      "expertise_required": 4,
+      "cost_floor": 2,
+      "cost_predictability": 5,
+      "control": 5,
+      "portability": 5,
+      "maturity": 3
+    },
+    "northflank-byoc": {
+      "billing_models": [
+        "byoc-infrastructure"
+      ],
+      "expertise_required": 4,
+      "control": 5,
+      "portability": 4,
+      "global_reach": 4,
+      "enterprise_readiness": 5
+    },
+    "ravion": {
+      "billing_models": [
+        "byoc-infrastructure"
+      ],
+      "expertise_required": 4,
+      "control": 5,
+      "portability": 5,
+      "enterprise_readiness": 5
+    },
+    "defang": {
+      "billing_models": [
+        "byoc-infrastructure"
+      ],
+      "artifacts": [
+        "docker-compose"
+      ],
+      "expertise_required": 3,
+      "control": 4,
+      "portability": 5,
+      "enterprise_readiness": 3
+    },
+    "modal": {
+      "billing_models": [
+        "free-entry"
+      ],
+      "state_options": [
+        "object-storage"
+      ],
+      "free_entry": true,
+      "expertise_required": 2,
+      "cost_floor": 2,
+      "global_reach": 4,
+      "maturity": 4
+    },
+    "runpod": {
+      "state_options": [
+        "object-storage"
+      ],
+      "expertise_required": 3,
+      "cost_floor": 3,
+      "global_reach": 4,
+      "maturity": 4
+    },
+    "e2b": {
+      "workloads": [
+        "agent-sandbox"
+      ],
+      "expertise_required": 2,
+      "cost_floor": 2,
+      "maturity": 3
+    }
   }
 }
