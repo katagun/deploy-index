@@ -728,14 +728,39 @@ class ShapeWorkloadSeedDataTests(unittest.TestCase):
         self.assertNotEqual(result["plan"], "premium-2")
         self.assertLess(result["monthly_usd"], 350.00)
 
-    def test_new_shape_workload_reports_insufficient_data_for_digitalocean(self) -> None:
-        rows = load_observations()
+    def test_under_provisioned_plans_yield_insufficient_data_with_a_reason(self) -> None:
+        """Asserts the rule, not a coverage state.
+
+        This previously pinned DigitalOcean to insufficient_data, which was only
+        true while its sole recorded plan was too small. Recording a larger plan
+        made it compute, and a test that fails because the data got better teaches
+        people to edit the assertion instead of reading it. Synthetic rows keep the
+        rule under test regardless of what the dataset happens to contain.
+        """
         workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
-        provider_rows = [row for row in rows if row["provider_slug"] == "digitalocean-managed-postgresql"]
-        result = compute_workload(workload, provider_rows, date.today())
+        rows = [
+            make_row(provider_slug="neon", plan="small", metric="plan_base_month",
+                     value=15.0, attributes={"storage_gib": 10}),
+            make_row(provider_slug="neon", plan="medium", metric="plan_base_month",
+                     value=40.0, attributes={"storage_gib": 99.9}),
+        ]
+        result = compute_workload(workload, rows, date(2026, 8, 30))
         self.assertEqual(result["status"], "insufficient_data", result)
-        self.assertIn("reason", result)
-        self.assertTrue(result["reason"])
+        self.assertIn("at least 100", result["reason"])
+
+    def test_recording_a_large_enough_plan_makes_a_provider_computable(self) -> None:
+        """The other half of the same rule: capacity, not identity, decides."""
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
+        rows = [
+            make_row(provider_slug="neon", plan="small", metric="plan_base_month",
+                     value=15.0, attributes={"storage_gib": 10}),
+            make_row(provider_slug="neon", plan="large", metric="plan_base_month",
+                     value=120.0, attributes={"storage_gib": 140}),
+        ]
+        result = compute_workload(workload, rows, date(2026, 8, 30))
+        self.assertEqual(result["status"], "ok", result)
+        self.assertEqual(result["plan"], "large")
+        self.assertAlmostEqual(result["monthly_usd"], 120.0, places=2)
 
 
 from pricing import build_pricing_catalog  # noqa: E402
