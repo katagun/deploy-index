@@ -13,6 +13,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # The README promises "Python 3.11 or newer", so 3.11 has to be exercised.
+        # Testing only on 3.12 let a 3.11-only SyntaxError (a backslash inside an
+        # f-string expression, legal from 3.12 via PEP 701) reach main unnoticed.
+        python-version: ["3.11", "3.12"]
     env:
       SITE_URL: https://example.invalid
       REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
@@ -20,7 +27,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"

@@ -294,8 +294,11 @@ def pricing_section(slug: str, name: str, rows: list[dict], metrics: dict, today
             flags += '<span class="superseded-flag">superseded</span>'
         elif is_stale(row, today):
             flags += '<span class="superseded-flag">stale</span>'
+        # Hoisted out of the f-string: a backslash inside an f-string expression is a
+        # SyntaxError before Python 3.12, and this project supports 3.11 onward.
+        row_attr = ' class="row-superseded"' if superseded else ''
         items.append(
-            f'<tr{" class=\"row-superseded\"" if superseded else ""}>'
+            f'<tr{row_attr}>'
             f'<td>{esc(row["plan"])}</td><td>{esc(row["metric"])}</td>'
             f'<td>{esc(row["value"])} <small>{esc(unit)}</small></td>'
             f'<td>{esc(row["included_allowance"])}</td>'
