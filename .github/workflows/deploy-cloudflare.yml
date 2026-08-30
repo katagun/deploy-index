@@ -1,8 +1,13 @@
 name: Deploy static site to Cloudflare Workers
 
 on:
-  push:
-    branches: [main]
+  # Superseded by deploy-pages.yml. The push trigger is disabled so the two
+  # deploy workflows do not race on every merge; this one requires SITE_URL,
+  # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, none of which are set.
+  # Re-enable the push trigger (and remove deploy-pages.yml) to go back to
+  # Cloudflare, or delete this workflow once Pages is settled.
+  #   push:
+  #     branches: [main]
   workflow_dispatch:
 
 concurrency:
