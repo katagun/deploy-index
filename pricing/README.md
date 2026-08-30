@@ -5,6 +5,17 @@ because exact prices are unstable and require dated, sourced, auditable rows —
 provider record. See `docs/superpowers/specs/2026-08-29-database-pricing-design.md` for the full design
 rationale and `docs/superpowers/plans/2026-08-29-database-pricing-foundation.md` for what shipped.
 
+## A note on GB and GiB
+
+Metrics and attributes are named `*_gib` and the workloads compare in GiB, but most vendors
+publish "GB" without saying whether they mean 10^9 or 2^30 bytes. The two differ by about 7%,
+which is usually irrelevant — a plan advertising 256 GB clears a 100 GiB threshold either way.
+
+It matters at the boundary. Prisma's Business plan publishes "100GB" against a 100 GiB
+threshold: decimal, that is 93.13 GiB and does not qualify; binary, it qualifies exactly.
+Where a reading decides an answer, record the conservative one and say so in the row's note.
+Never let an ambiguous unit produce a claim the source cannot support.
+
 **Current scope:** database hosting only, 5 providers (Neon, Supabase, PlanetScale, DigitalOcean Managed Postgres, Heroku Postgres), `USD` /
 `us-east` only. The design envisions ~12 providers and a hyperscaler baseline; only the foundation
 and a hand-entered seed shipped so far. The model-assisted research scan described in the spec does

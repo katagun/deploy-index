@@ -8,11 +8,12 @@
       "line_items": [
         {"metric": "plan_base_month", "quantity": 1, "optional": true},
         {"metric": "storage_gib_month", "quantity": 100},
-        {"metric": "egress_gib", "quantity": 50}
+        {"metric": "egress_gib", "quantity": 50, "optional": true}
       ],
       "caveats": [
         "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
         "That omission cuts one way: a provider that folds compute into a fixed plan fee (Supabase, PlanetScale) has that compute counted, while a provider that meters compute separately (Neon, billed per CU-hour) has none of it counted and looks cheaper than it would on a like-for-like basis.",
+        "Egress is optional: where a provider has no recorded egress_gib row, this figure excludes egress entirely. It does not mean egress is free — it means either the provider bundles it at no separate charge (recorded as a $0 rate with a source) or no per-GB rate has been published. Do not read a figure with no egress row as proof egress is included.",
         "Excludes support plans, committed-use discounts, and negotiated enterprise pricing.",
         "Excludes backups beyond default retention and cross-region transfer."
       ]
@@ -24,11 +25,12 @@
       "line_items": [
         {"metric": "plan_base_month", "quantity": 1, "optional": true},
         {"metric": "storage_gib_month", "quantity": 10},
-        {"metric": "egress_gib", "quantity": 5}
+        {"metric": "egress_gib", "quantity": 5, "optional": true}
       ],
       "caveats": [
         "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
         "That omission cuts one way: a provider that folds compute into a fixed plan fee (Supabase, PlanetScale) has that compute counted, while a provider that meters compute separately (Neon, billed per CU-hour) has none of it counted and looks cheaper than it would on a like-for-like basis.",
+        "Egress is optional: where a provider has no recorded egress_gib row, this figure excludes egress entirely. It does not mean egress is free — it means either the provider bundles it at no separate charge (recorded as a $0 rate with a source) or no per-GB rate has been published. Do not read a figure with no egress row as proof egress is included.",
         "At this scale included allowances often absorb the storage and egress entirely, leaving only the plan fee — or nothing at all where there is no plan fee.",
         "Excludes support plans and committed-use discounts."
       ]
