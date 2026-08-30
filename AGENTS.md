@@ -46,7 +46,10 @@ Run `make test` before claiming work complete.
 ## Pricing rules
 
 - No pricing row without a dated, HTTPS, official-source read on the date recorded. Rows are append-only — a price change is a new row with a later `observed_on`, never an edit.
-- `insufficient_data` always beats a partial sum; never approximate a missing line item.
+- `insufficient_data` always beats a partial sum; never approximate a missing line item. A $0.00
+  total is the most misleading partial sum there is.
+- Record every plan that could win a workload, not just one. Every wrong figure this dataset has
+  published came from a single-plan recording; `scripts/pricing.py` cautions when a provider has one.
 - Prices never feed recommender scoring. `cost_floor` stays a qualitative band.
 
 ## UI and security
