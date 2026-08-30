@@ -515,12 +515,38 @@
       "included_allowance": 0,
       "region": "us-east",
       "attributes": {
-        "storage_gib": 100
+        "storage_gib": 93.13
       },
       "observed_on": "2026-08-30",
       "source_url": "https://www.prisma.io/pricing",
       "confidence": "high",
-      "note": "Business plan: '$129/month', comparison table 'Storage included | 100 GB' with no storage-overage figure listed for Business (unlike Starter's $2.00/GB and Pro's $1.50/GB). Recorded as the cheapest Prisma Postgres tier meeting the plan-with-100gib-storage shape workload's 100 GiB threshold."
+      "note": "Business plan: '$129/month', comparison table 'Storage included | 100GB'. The page does not state whether GB is decimal or binary; recorded as decimal (100 x 10^9 bytes = 93.13 GiB), the conservative reading. Under a binary reading this plan would provide exactly 100 GiB."
+    },
+    {
+      "provider_slug": "turso",
+      "plan": "scaler",
+      "metric": "plan_base_month",
+      "value": 24.92,
+      "currency": "USD",
+      "included_allowance": 0,
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "source_url": "https://turso.tech/pricing",
+      "confidence": "high",
+      "note": "Scaler plan base fee, quoted as '$24.92/month' with '24GB' storage included."
+    },
+    {
+      "provider_slug": "turso",
+      "plan": "scaler",
+      "metric": "storage_gib_month",
+      "value": 0.5,
+      "currency": "USD",
+      "included_allowance": 24,
+      "region": "us-east",
+      "observed_on": "2026-08-30",
+      "source_url": "https://turso.tech/pricing",
+      "confidence": "high",
+      "note": "Scaler storage overage, quoted as '$0.50 / GB' beyond the 24GB included in the plan."
     }
   ]
 }
