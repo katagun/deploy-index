@@ -356,19 +356,6 @@
       "note": "M10 Dedicated cluster tier card: '$0.08/hour ... Starts at $56.94/month', confirmed with Storage 10 GB / RAM 2 GB / vCPUs 2 bundled at this tier (cross-checked against the Dedicated Cluster storage-range modal showing M10: 10-128 GB). $56.94/month is a derived monthly floor from the hourly rate, not a native flat monthly SKU, hence medium confidence. Storage-overage and egress rates are NOT recorded: MongoDB's own docs give no flat per-GB figure for either (storage overage docs say only 'charges for the full amount' with no rate; data-transfer docs give 'Out to Internet: $0.09 to $0.16' per GB as a range, confirmed live on https://www.mongodb.com/docs/atlas/billing/data-transfer-costs/)."
     },
     {
-      "provider_slug": "cockroachdb-cloud",
-      "plan": "basic",
-      "metric": "storage_gib_month",
-      "value": 0.5,
-      "currency": "USD",
-      "included_allowance": 10,
-      "region": "us-east",
-      "observed_on": "2026-08-30",
-      "source_url": "https://www.cockroachlabs.com/docs/cockroachcloud/plan-your-cluster-basic",
-      "confidence": "high",
-      "note": "CockroachDB Basic pricing table: '1 GiB storage | $0.50', with 'the first 10 GiB storage free per month' per the /pricing/ plan comparison. No plan_base_month row is recorded: Basic 'Starts at $0 / month' with no fixed fee. Compute/IOPS/backups/data-transfer on Basic are billed via a composite 'Request Units' metric ('1M Request Units | $0.20') that does not map onto this dataset's vocabulary (no single existing metric represents compute+IOPS+backups+egress bundled together) and is intentionally not recorded rather than forced into an inexact fit."
-    },
-    {
       "provider_slug": "timescale-cloud",
       "plan": "performance",
       "metric": "storage_gib_month",
