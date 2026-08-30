@@ -20,13 +20,18 @@ class PricingDatasetTests(unittest.TestCase):
             self.assertTrue(definition.get("unit"), f"{name} needs a unit")
             self.assertTrue(definition.get("description"), f"{name} needs a description")
 
-    def test_workloads_declare_explicit_line_items(self) -> None:
+    def test_workloads_declare_explicit_line_items_or_a_shape(self) -> None:
         workloads = load_workloads()["workloads"]
         self.assertTrue(workloads)
         metrics = load_metrics()["metrics"]
         for workload in workloads:
             self.assertTrue(workload["id"])
             self.assertTrue(workload["caveats"])
+            if "shape" in workload:
+                self.assertTrue(workload["shape"])
+                for key in workload["shape"]:
+                    self.assertTrue(key.startswith("min_"), f"{workload['id']}: {key!r} is not a min_ key")
+                continue
             self.assertTrue(workload["line_items"])
             for item in workload["line_items"]:
                 self.assertIn(item["metric"], metrics)
@@ -159,6 +164,27 @@ class ObservationValidationTests(unittest.TestCase):
         errors = validate_observations({"not": "a list"}, self.metrics, self.catalog, today=date(2026, 8, 29))
         self.assertEqual(errors, ["rows must be a list"])
 
+    def test_row_with_valid_attributes_is_accepted(self) -> None:
+        errors = validate_observations(
+            [make_row(metric="plan_base_month", attributes={"storage_gib": 10, "memory_gib": 1})],
+            self.metrics, self.catalog, today=date(2026, 8, 29),
+        )
+        self.assertEqual(errors, [])
+
+    def test_attributes_value_must_be_non_negative(self) -> None:
+        self.assert_error(make_row(attributes={"storage_gib": -1}), "attributes")
+
+    def test_attributes_value_must_be_finite(self) -> None:
+        self.assert_error(make_row(attributes={"storage_gib": float("nan")}), "attributes")
+        self.assert_error(make_row(attributes={"storage_gib": float("inf")}), "attributes")
+
+    def test_attributes_key_must_be_lowercase_snake_case(self) -> None:
+        self.assert_error(make_row(attributes={"StorageGiB": 10}), "snake_case")
+        self.assert_error(make_row(attributes={"storage-gib": 10}), "snake_case")
+
+    def test_attributes_must_be_an_object(self) -> None:
+        self.assert_error(make_row(attributes=["storage_gib"]), "attributes")
+
 
 from pricing import compute_workload, is_stale  # noqa: E402
 
@@ -229,6 +255,55 @@ class WorkloadComputationTests(unittest.TestCase):
             "line_items": [{"metric": "storage_gib_month", "quantity": 100}],
             "caveats": ["test"],
         }], load_metrics()), [])
+
+    def test_workload_declaring_both_line_items_and_shape_is_rejected(self) -> None:
+        errors = validate_workloads([{
+            "id": "both",
+            "label": "Both",
+            "shape": {"min_storage_gib": 100},
+            "line_items": [{"metric": "storage_gib_month", "quantity": 100}],
+            "assumptions": {"storage_gib": 100},
+            "caveats": ["test"],
+        }], load_metrics())
+        self.assertTrue(any("exactly one" in error for error in errors), errors)
+
+    def test_workload_declaring_neither_line_items_nor_shape_is_rejected(self) -> None:
+        errors = validate_workloads([{
+            "id": "neither",
+            "label": "Neither",
+            "assumptions": {},
+            "caveats": ["test"],
+        }], load_metrics())
+        self.assertTrue(any("exactly one" in error for error in errors), errors)
+
+    def test_shape_key_must_be_min_prefixed_snake_case(self) -> None:
+        errors = validate_workloads([{
+            "id": "bad-shape-key",
+            "label": "Bad shape key",
+            "shape": {"storage_gib": 100},
+            "assumptions": {},
+            "caveats": ["test"],
+        }], load_metrics())
+        self.assertTrue(any("min_" in error for error in errors), errors)
+
+    def test_shape_workload_is_accepted_when_valid(self) -> None:
+        self.assertEqual(validate_workloads([{
+            "id": "shape-ok",
+            "label": "Shape ok",
+            "shape": {"min_storage_gib": 100},
+            "assumptions": {"storage_gib": 100},
+            "caveats": ["test"],
+        }], load_metrics()), [])
+
+    def test_shape_workload_assumption_must_match_a_shape_attribute(self) -> None:
+        errors = validate_workloads([{
+            "id": "shape-bad-assumption",
+            "label": "Shape bad assumption",
+            "shape": {"min_storage_gib": 100},
+            "assumptions": {"memory_gib": 4},
+            "caveats": ["test"],
+        }], load_metrics())
+        self.assertTrue(any("memory_gib" in error for error in errors), errors)
 
     def test_absent_optional_line_item_contributes_zero(self) -> None:
         """Correct only because `plan_base_month` is genuinely optional.
@@ -390,6 +465,91 @@ class WorkloadComputationTests(unittest.TestCase):
         self.assertTrue(is_stale(make_row(observed_on=(TODAY - timedelta(days=91)).isoformat()), TODAY))
 
 
+SHAPE_WORKLOAD = {
+    "id": "shape-test-workload",
+    "label": "Shape test workload",
+    "shape": {"min_storage_gib": 100},
+    "assumptions": {"storage_gib": 100},
+    "caveats": ["test"],
+}
+
+
+def make_plan_row(**overrides) -> dict:
+    return make_row(metric="plan_base_month", included_allowance=0, **overrides)
+
+
+class ShapeWorkloadComputationTests(unittest.TestCase):
+    """Golden cases for shape matching, per the spec's compute and VMs section."""
+
+    def test_cheapest_qualifying_plan_wins(self) -> None:
+        rows = [
+            make_plan_row(plan="small", value=50.0, attributes={"storage_gib": 150}),
+            make_plan_row(plan="big", value=30.0, attributes={"storage_gib": 200}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "big")
+        self.assertAlmostEqual(result["monthly_usd"], 30.0, places=2)
+
+    def test_under_provisioned_plan_is_never_selected(self) -> None:
+        rows = [
+            make_plan_row(plan="tiny", value=5.0, attributes={"storage_gib": 10}),
+            make_plan_row(plan="ok-plan", value=40.0, attributes={"storage_gib": 100}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "ok-plan")
+
+    def test_exact_boundary_qualifies(self) -> None:
+        rows = [make_plan_row(plan="exact", value=12.0, attributes={"storage_gib": 100})]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "exact")
+
+    def test_ties_break_deterministically_by_plan_name(self) -> None:
+        rows = [
+            make_plan_row(plan="zeta", value=40.0, attributes={"storage_gib": 120}),
+            make_plan_row(plan="alpha", value=40.0, attributes={"storage_gib": 150}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["plan"], "alpha")
+
+    def test_no_qualifying_plan_yields_insufficient_data_with_reason(self) -> None:
+        rows = [make_plan_row(plan="small", value=10.0, attributes={"storage_gib": 10})]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+        self.assertEqual(result["missing_metrics"], [])
+        self.assertIn("100", result["reason"])
+        self.assertIn("storage", result["reason"])
+
+    def test_plan_lacking_attributes_never_qualifies(self) -> None:
+        rows = [make_plan_row(plan="no-attrs", value=1.0)]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_stale_rows_are_excluded_from_shape_matching(self) -> None:
+        old = (TODAY - timedelta(days=120)).isoformat()
+        rows = [make_plan_row(plan="stale", value=1.0, attributes={"storage_gib": 500}, observed_on=old)]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_plans_are_never_mixed_across_currency_or_region(self) -> None:
+        rows = [
+            make_plan_row(plan="eur-plan", value=1.0, attributes={"storage_gib": 500}, currency="EUR"),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["status"], "insufficient_data")
+
+    def test_plans_considered_counts_plans_with_fresh_rows(self) -> None:
+        rows = [
+            make_plan_row(plan="a", value=10.0, attributes={"storage_gib": 10}),
+            make_plan_row(plan="b", value=40.0, attributes={"storage_gib": 200}),
+        ]
+        result = compute_workload(SHAPE_WORKLOAD, rows, TODAY)
+        self.assertEqual(result["plans_considered"], 2)
+
+
 class SeedDataTests(unittest.TestCase):
     def test_repository_observations_are_valid(self) -> None:
         rows = load_observations()
@@ -404,6 +564,43 @@ class SeedDataTests(unittest.TestCase):
             self.assertTrue(provider_rows, f"{slug} needs observation rows")
             result = compute_workload(workload, provider_rows, date.today())
             self.assertEqual(result["status"], "ok", f"{slug}: {result}")
+
+
+class ShapeWorkloadSeedDataTests(unittest.TestCase):
+    """The shape-matching extension must not disturb the existing line-item workloads."""
+
+    def test_existing_workloads_produce_unaffected_figures(self) -> None:
+        rows = load_observations()
+        workloads = {w["id"]: w for w in load_workloads()["workloads"]}
+        expected = {
+            "neon": {"storage-egress-100gib": 35.00, "storage-egress-10gib": 3.50},
+            "planetscale": {"storage-egress-100gib": 18.65, "storage-egress-10gib": 5.00},
+            "supabase": {"storage-egress-100gib": 36.50, "storage-egress-10gib": 25.25},
+        }
+        for slug, by_workload in expected.items():
+            provider_rows = [row for row in rows if row["provider_slug"] == slug]
+            for workload_id, expected_total in by_workload.items():
+                result = compute_workload(workloads[workload_id], provider_rows, date.today())
+                self.assertEqual(result["status"], "ok", f"{slug}/{workload_id}: {result}")
+                self.assertAlmostEqual(result["monthly_usd"], expected_total, places=2, msg=f"{slug}/{workload_id}")
+
+    def test_new_shape_workload_picks_heroku_premium_2(self) -> None:
+        rows = load_observations()
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
+        provider_rows = [row for row in rows if row["provider_slug"] == "heroku-postgres"]
+        result = compute_workload(workload, provider_rows, date.today())
+        self.assertEqual(result["status"], "ok", result)
+        self.assertEqual(result["plan"], "premium-2")
+        self.assertAlmostEqual(result["monthly_usd"], 350.00, places=2)
+
+    def test_new_shape_workload_reports_insufficient_data_for_digitalocean(self) -> None:
+        rows = load_observations()
+        workload = next(w for w in load_workloads()["workloads"] if w["id"] == "plan-with-100gib-storage")
+        provider_rows = [row for row in rows if row["provider_slug"] == "digitalocean-managed-postgresql"]
+        result = compute_workload(workload, provider_rows, date.today())
+        self.assertEqual(result["status"], "insufficient_data", result)
+        self.assertIn("reason", result)
+        self.assertTrue(result["reason"])
 
 
 from pricing import build_pricing_catalog  # noqa: E402

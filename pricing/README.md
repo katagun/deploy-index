@@ -104,9 +104,12 @@ inexact fit is worse than `insufficient_data`.
 
 ## Reference workloads and computation
 
-`workloads.json` declares fixed-quantity `line_items`, each an `{metric, quantity}` pair (optionally
-`"optional": true` for a component like `plan_base_month` that some plans genuinely do not have —
-Neon's Launch plan has no monthly minimum, so no base-fee row exists and zero is the true
+A workload prices its cost one of two ways — every workload declares **exactly one** of `line_items`
+or `shape`; declaring both or neither is a validation error.
+
+`workloads.json` can declare fixed-quantity `line_items`, each an `{metric, quantity}` pair
+(optionally `"optional": true` for a component like `plan_base_month` that some plans genuinely do
+not have — Neon's Launch plan has no monthly minimum, so no base-fee row exists and zero is the true
 contribution).
 
 **A workload may only publish an assumption it actually prices.** `/pricing/` renders `assumptions`
@@ -141,6 +144,32 @@ uniformly. An inexact fit is worse than an honest omission.
   missing metric names — never a partial sum.
 - Every result carries `plans_considered`: how many distinct plans had any fresh row. `1` means
   there was no comparison to win, and the surfaces say so.
+
+### Shape workloads
+
+A workload can instead declare `shape`, an object mapping `min_<attribute>` keys to numbers, e.g.
+`{"min_storage_gib": 100}`. This answers a different question than `line_items` does: not "what does
+this fixed set of metered quantities cost", but "what is the cheapest plan that provides at least
+this much capacity" — the question DigitalOcean Managed Postgres and Heroku Postgres actually need,
+since they sell plans with bundled storage rather than metering it per GB. `assumptions` on a shape
+workload is validated against the shape itself (every assumption key must have a matching `min_<key>`
+entry), not against `ASSUMPTION_METRICS`, since no line item is priced.
+
+An observation row can carry an optional `attributes` object describing what a *plan* provides, e.g.
+`{"storage_gib": 10, "memory_gib": 1}` on a `plan_base_month` row. Keys must be lowercase snake_case
+and values finite non-negative numbers. Rows without `attributes` are unaffected and can never satisfy
+a shape.
+
+`compute_workload()` costs a shape workload by, within each `(currency, region)` group, finding each
+plan's latest `plan_base_month` row and checking whether its `attributes` satisfy every `min_X` in the
+shape. A plan with no `plan_base_month` row, or none with `attributes`, never qualifies. Among
+qualifying plans the cheapest wins; ties break on plan name. As with `line_items`, stale rows are
+excluded and plans, currencies, and regions are never mixed.
+
+The result contract for `ok` is identical to a `line_items` result. For `insufficient_data`, a shape
+result carries an optional `reason` string (e.g. "no recorded plan provides at least 100 GiB of
+storage") in place of a useful `missing_metrics` list — `missing_metrics` stays present as an empty
+list so consumers that read it unconditionally do not break.
 
 **`insufficient_data` beats a partial sum, always.** A partial total is silently, confidently too
 low, which is exactly how comparison sites mislead. If you cannot find an official, dated source for
@@ -181,6 +210,7 @@ to approximate.
 - `/catalog/pricing.json` — the published payload (`build_pricing_catalog()`): metrics, workloads,
   computed results per provider, the raw rows, and the disclaimer. An `ok` result carries `plan`,
   `currency`, `region`, `monthly_usd`, `plans_considered`, and the `sources` it was derived from; an
-  `insufficient_data` result carries `missing_metrics` and `plans_considered`. It is serialized with
+  `insufficient_data` result carries `missing_metrics` and `plans_considered`, and — for a shape
+  workload that found no qualifying plan — an optional `reason` string. It is serialized with
   `allow_nan=False`, so a non-finite figure fails the build rather than emitting the bare token
   `Infinity`, which Python's `json.loads` accepts but no browser does.
