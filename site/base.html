@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#080b12" />
   <meta name="color-scheme" content="dark light" />
+  <!-- Hosts that support response headers get the stronger policy from site/_headers
+       (it can also set frame-ancestors, which a meta policy cannot). GitHub Pages
+       serves no custom headers, so this meta policy is what actually protects the
+       page there. Keep the two in sync. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; form-action 'self'; img-src 'self' data:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'" />
   <title>{{TITLE}}</title>
   <meta name="description" content="{{DESCRIPTION}}" />
   <meta name="generator" content="DeployIndex zero-dependency static generator" />

@@ -172,24 +172,23 @@ python3 scripts/build.py
 
 Deploy `dist/`.
 
-### Recommended: Cloudflare Workers Static Assets
+### GitHub Pages (what this repo deploys to)
 
-The repository includes `wrangler.jsonc`, `_headers`, and `.github/workflows/deploy-cloudflare.yml`.
+`.github/workflows/deploy-pages.yml` builds and publishes on every push to `main`. It derives `SITE_URL` from the Pages URL itself, so a project site served from a subpath (`owner.github.io/repo`) works without configuration — the build prefixes every asset and link accordingly.
 
-For a local/manual deployment:
+One manual step is needed once: set **Settings → Pages → Source** to "GitHub Actions".
+
+Pages does not support custom response headers, so `site/_headers` has no effect there. The security headers that matter are also emitted as a `<meta http-equiv>` policy in every page; `_headers` still applies on hosts that read it, and adds `frame-ancestors`, which a meta policy cannot express.
+
+### Cloudflare Workers Static Assets
+
+Still supported, and `wrangler.jsonc`, `site/_headers`, and `.github/workflows/deploy-cloudflare.yml` are kept for it — but its push trigger is disabled so it does not race the Pages deploy. To use it instead, re-enable that trigger, remove `deploy-pages.yml`, and add secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` plus a repository variable `SITE_URL`.
 
 ```bash
 export SITE_URL=https://your-domain.com
 python3 scripts/build.py
 npx wrangler@4 deploy
 ```
-
-For GitHub Actions, add:
-
-- secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`;
-- repository variable `SITE_URL` with the canonical production origin.
-
-Connect the custom domain in the Cloudflare Workers dashboard after the first deployment. Static assets are uploaded from `dist/`; there is no Worker application code or database requirement.
 
 ### Vercel
 

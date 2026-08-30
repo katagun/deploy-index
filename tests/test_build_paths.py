@@ -167,3 +167,42 @@ class PagesSubpathTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ContentSecurityPolicyTests(unittest.TestCase):
+    """The site sets its policy twice: response headers for hosts that support them,
+    and a meta policy for GitHub Pages, which does not. They must not drift apart,
+    and neither may forbid the inline style attributes the cards and score rings use.
+    """
+
+    def test_meta_and_header_policies_agree_on_every_shared_directive(self) -> None:
+        headers = (ROOT / "site" / "_headers").read_text(encoding="utf-8")
+        header_line = next(
+            line.split("Content-Security-Policy:", 1)[1].strip()
+            for line in headers.splitlines()
+            if "Content-Security-Policy:" in line
+        )
+        base = (ROOT / "site" / "base.html").read_text(encoding="utf-8")
+        meta_policy = base.split('http-equiv="Content-Security-Policy" content="', 1)[1].split('"', 1)[0]
+
+        def directives(policy: str) -> dict[str, str]:
+            out = {}
+            for part in policy.split(";"):
+                part = part.strip()
+                if part:
+                    name, _, value = part.partition(" ")
+                    out[name] = value.strip()
+            return out
+
+        header_directives = directives(header_line)
+        meta_directives = directives(meta_policy)
+        for name, value in meta_directives.items():
+            self.assertIn(name, header_directives, f"{name} is in the meta policy but not the headers")
+            self.assertEqual(value, header_directives[name], f"{name} differs between the two policies")
+
+    def test_inline_style_attributes_are_permitted(self) -> None:
+        # provider cards carry style="--card-hue:N" and score rings style="--score:N";
+        # a bare style-src 'self' blocks both and silently breaks the layout.
+        for path in (ROOT / "site" / "_headers", ROOT / "site" / "base.html"):
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("style-src 'self' 'unsafe-inline'", text, f"{path.name} would block inline style attributes")
