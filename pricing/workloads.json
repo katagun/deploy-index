@@ -4,11 +4,25 @@
     {
       "id": "storage-egress-100gib",
       "label": "Storage & egress · 100 GiB storage, 50 GiB egress",
-      "assumptions": {"storage_gib": 100, "egress_gib_month": 50},
+      "assumptions": {
+        "storage_gib": 100,
+        "egress_gib_month": 50
+      },
       "line_items": [
-        {"metric": "plan_base_month", "quantity": 1, "optional": true},
-        {"metric": "storage_gib_month", "quantity": 100},
-        {"metric": "egress_gib", "quantity": 50, "optional": true}
+        {
+          "metric": "plan_base_month",
+          "quantity": 1,
+          "optional": true
+        },
+        {
+          "metric": "storage_gib_month",
+          "quantity": 100
+        },
+        {
+          "metric": "egress_gib",
+          "quantity": 50,
+          "optional": true
+        }
       ],
       "caveats": [
         "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
@@ -21,11 +35,25 @@
     {
       "id": "storage-egress-10gib",
       "label": "Storage & egress · 10 GiB storage, 5 GiB egress",
-      "assumptions": {"storage_gib": 10, "egress_gib_month": 5},
+      "assumptions": {
+        "storage_gib": 10,
+        "egress_gib_month": 5
+      },
       "line_items": [
-        {"metric": "plan_base_month", "quantity": 1, "optional": true},
-        {"metric": "storage_gib_month", "quantity": 10},
-        {"metric": "egress_gib", "quantity": 5, "optional": true}
+        {
+          "metric": "plan_base_month",
+          "quantity": 1,
+          "optional": true
+        },
+        {
+          "metric": "storage_gib_month",
+          "quantity": 10
+        },
+        {
+          "metric": "egress_gib",
+          "quantity": 5,
+          "optional": true
+        }
       ],
       "caveats": [
         "Metered compute is NOT priced here. This figure covers only a plan's fixed fee, storage, and egress — it is not the cost of running a database.",
@@ -38,11 +66,56 @@
     {
       "id": "plan-with-100gib-storage",
       "label": "Cheapest plan with 100 GiB storage",
-      "shape": {"min_storage_gib": 100},
-      "assumptions": {"storage_gib": 100},
+      "shape": {
+        "min_storage_gib": 100
+      },
+      "assumptions": {
+        "storage_gib": 100
+      },
       "caveats": [
         "This compares plan fees only — it excludes metered compute and egress.",
         "It can only consider plans whose included storage has been recorded; a provider offering a qualifying plan that has not been observed yet will show as insufficient data, not as expensive."
+      ]
+    },
+    {
+      "id": "block-storage-500gib-ssd",
+      "label": "Block storage · 500 GiB SSD volume",
+      "assumptions": {
+        "block_storage_gib": 500
+      },
+      "line_items": [
+        {
+          "metric": "block_storage_gib_month",
+          "quantity": 500
+        }
+      ],
+      "caveats": [
+        "Only SSD-class general-purpose volume types are compared; HDD and archival tiers (AWS st1/sc1, Azure Standard HDD, GCP Standard PD) are excluded — a cheap cold-HDD rate winning against an SSD-only provider would be a false comparison, not a cheap one.",
+        "This figure assumes the performance baseline included with the volume and excludes provisioned IOPS or throughput bought beyond it. Where the vendor states a free baseline (AWS gp3: 3,000 IOPS/125 MB/s; Azure Premium SSD v2: 3,000 IOPS/125 MB/s; GCP Hyperdisk Balanced: 3,000 IOPS/140 MBps), that baseline is what's priced here — a workload needing more pays additional metered charges not reflected in this total.",
+        "Fixed-tier bucketed disk products (e.g. Azure Premium SSD P-series, Standard SSD E-series) are not recorded under this metric: they are sold as discrete disk-size SKUs rather than a continuous per-GiB rate, and a derived rate would misrepresent how they're actually billed.",
+        "Prices are region-dependent; figures are for us-east or the closest selectable equivalent — see each row's note for the exact region read.",
+        "Excludes snapshots, data transfer, compute, and any charge other than provisioned volume capacity — this prices an attached block volume only, not a virtual machine or the compute needed to use it."
+      ]
+    },
+    {
+      "id": "snapshot-storage-100gib",
+      "label": "Snapshot storage · 100 GiB retained",
+      "assumptions": {
+        "snapshot_gib": 100
+      },
+      "line_items": [
+        {
+          "metric": "snapshot_gib_month",
+          "quantity": 100
+        }
+      ],
+      "caveats": [
+        "Prices 100 GiB of retained snapshot data, not a backup schedule: AWS, Azure, and GCP bill snapshots incrementally on changed blocks, so what a given backup schedule actually retains depends on a churn rate no vendor publishes. This is not 'the cost of daily snapshots.'",
+        "Compares standard snapshot tiers only. Archive and cold tiers are cheaper per GiB-month but carry retrieval charges and minimum retention periods, so a monthly rate alone understates them and would not be comparable with a standard tier.",
+        "Where a provider publishes multiple snapshot storage tiers (e.g. AWS/GCP Standard vs. Archive), the cheapest recorded tier is shown; a cheaper archive-class tier can carry retrieval fees and a minimum retention period not reflected in this monthly figure — see the provider's rows for details.",
+        "DigitalOcean's page states a flat per-GiB snapshot rate but does not say whether it is a full copy or an incremental delta; it is recorded as published, without assuming either.",
+        "Prices are region-dependent; figures are for us-east or the closest selectable equivalent — see each row's note for the exact region read.",
+        "Excludes compute and the source volume's own capacity charge — this prices retained snapshot storage only."
       ]
     }
   ]
