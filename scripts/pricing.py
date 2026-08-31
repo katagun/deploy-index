@@ -70,6 +70,8 @@ ASSUMPTION_METRICS = {
     "memory_gib": "memory_gib_hour",
     "read_ops_million": "read_ops_million",
     "write_ops_million": "write_ops_million",
+    "block_storage_gib": "block_storage_gib_month",
+    "snapshot_gib": "snapshot_gib_month",
 }
 
 

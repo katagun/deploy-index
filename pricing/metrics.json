@@ -9,6 +9,8 @@
     "egress_gib": {"unit": "USD per GiB", "description": "Charge per gibibyte of outbound data transfer to the public internet."},
     "read_ops_million": {"unit": "USD per million reads", "description": "Charge per million read operations, for providers billing by operation."},
     "write_ops_million": {"unit": "USD per million writes", "description": "Charge per million write operations, for providers billing by operation."},
-    "backup_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of backup storage per month beyond any included retention."}
+    "backup_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of backup storage per month beyond any included retention."},
+    "block_storage_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of persistent block-volume capacity per month, assuming the performance baseline (IOPS/throughput) included with the volume type. Excludes provisioned IOPS or throughput bought beyond that baseline."},
+    "snapshot_gib_month": {"unit": "USD per GiB-month", "description": "Charge per gibibyte of retained block-volume snapshot storage per month. Providers typically bill snapshots incrementally on changed blocks rather than as a full copy of the source volume."}
   }
 }
