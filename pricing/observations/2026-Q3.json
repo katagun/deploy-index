@@ -617,7 +617,7 @@
       "provider_slug": "amazon-ebs",
       "plan": "gp2",
       "metric": "block_storage_gib_month",
-      "value": 0.10,
+      "value": 0.1,
       "currency": "USD",
       "included_allowance": 0,
       "region": "us-east",
@@ -666,19 +666,6 @@
       "note": "EBS Snapshots Storage Pricing, live table: 'Standard $0.05/GB-month'. Same page-wide 'GB = 1024^3 bytes' convention as volume pricing, so no conversion needed. Billed incrementally: 'For each incremental snapshot, only the changed part of your Amazon EBS volume is saved.' Restoring from Standard is free."
     },
     {
-      "provider_slug": "amazon-ebs",
-      "plan": "archive",
-      "metric": "snapshot_gib_month",
-      "value": 0.0125,
-      "currency": "USD",
-      "included_allowance": 0,
-      "region": "us-east",
-      "observed_on": "2026-08-30",
-      "source_url": "https://aws.amazon.com/ebs/pricing/",
-      "confidence": "high",
-      "note": "EBS Snapshots Storage Pricing, live table: 'Archive $0.0125/GB-month'. Cheaper than Standard tier but carries a 90-day minimum retention period and a retrieval fee ($0.03/GB) to restore -- verbatim: 'There is a 90-day minimum retention period for snapshots stored in EBS Snapshots Archive.' Restoring from Standard, by contrast, is free. Recorded as its own plan per the multi-plan rule; the retention/retrieval tradeoff is not reflected in this monthly figure -- see the snapshot-storage-100gib workload's caveats."
-    },
-    {
       "provider_slug": "gcp-persistent-disk",
       "plan": "balanced-pd",
       "metric": "block_storage_gib_month",
@@ -718,19 +705,6 @@
       "note": "Standard snapshot storage, live table under the same us-east4 region selection: 'Standard snapshot storage $0.05 / 1 gibibyte month'. Billed incrementally: 'Standard snapshots only incur charges for the total size of the snapshots ... only the changed part ... is saved.'"
     },
     {
-      "provider_slug": "gcp-persistent-disk",
-      "plan": "archive",
-      "metric": "snapshot_gib_month",
-      "value": 0.019,
-      "currency": "USD",
-      "included_allowance": 0,
-      "region": "us-east",
-      "observed_on": "2026-08-30",
-      "source_url": "https://cloud.google.com/compute/disks-image-pricing",
-      "confidence": "high",
-      "note": "Archive snapshot storage, same live table: 'Archive snapshot storage $0.019 / 1 gibibyte month'. Cheaper than Standard tier but archive retrieval costs extra ('Archive snapshot retrieval $0.019 / 1 gibibyte'). Recorded as its own plan per the multi-plan rule; wins this workload, and the retrieval tradeoff is not reflected in this monthly figure -- see the snapshot-storage-100gib workload's caveats."
-    },
-    {
       "provider_slug": "azure-managed-disks",
       "plan": "premium-ssd-v2",
       "metric": "block_storage_gib_month",
@@ -760,7 +734,7 @@
       "provider_slug": "digitalocean-volumes",
       "plan": "volumes-block-storage",
       "metric": "block_storage_gib_month",
-      "value": 0.10,
+      "value": 0.1,
       "currency": "USD",
       "included_allowance": 0,
       "region": "us-east",
