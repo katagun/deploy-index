@@ -11,6 +11,7 @@ from typing import Any
 from catalog import ROOT, load_catalog
 
 OVERRIDES_PATH = ROOT / "catalog" / "recommendation-overrides.json"
+NON_RECOMMENDABLE_CATEGORIES = {"block-storage"}
 
 WORKLOADS = {
     "static-site", "frontend-app", "web-api", "background-worker", "container-service",
@@ -182,6 +183,8 @@ def build_recommendation_catalog(catalog: dict[str, Any], overrides: dict[str, A
     overrides = overrides or load_overrides()
     profiles = []
     for item in catalog["providers"]:
+        if item["primary_category"] in NON_RECOMMENDABLE_CATEGORIES:
+            continue
         profile = _profile(item)
         override = overrides.get("overrides", {}).get(item["slug"], {})
         for field, value in override.items():
@@ -203,7 +206,10 @@ def validate_recommendation_catalog(payload: dict[str, Any], catalog: dict[str, 
     if set(payload["dimensions"]) != NUMERIC: errors.append("recommendation dimensions are incomplete")
     by_slug = {item["slug"]: item for item in catalog["providers"]}
     profiles = payload.get("profiles", [])
-    if len(profiles) != len(by_slug): errors.append("recommendations need exactly one profile per catalog entry")
+    recommendable = {slug for slug, item in by_slug.items()
+                     if item["primary_category"] not in NON_RECOMMENDABLE_CATEGORIES}
+    if len(profiles) != len(recommendable):
+        errors.append("recommendations need exactly one profile per recommendable catalog entry")
     seen: set[str] = set()
     allowed_lists = {"workloads": WORKLOADS, "artifacts": ARTIFACTS, "billing_models": BILLING_MODELS, "traffic": TRAFFIC, "protocols": PROTOCOLS, "state_options": STATE}
     identity = ("name", "entity_type", "primary_category", "status", "availability", "open_source", "featured", "summary", "best_for", "url", "operating_models")

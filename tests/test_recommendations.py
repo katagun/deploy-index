@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from catalog import load_catalog  # noqa: E402
 from recommendations import (  # noqa: E402
     BOOLEANS,
+    NON_RECOMMENDABLE_CATEGORIES,
     NUMERIC,
     build_recommendation_catalog,
     validate_recommendation_catalog,
@@ -25,7 +26,10 @@ class RecommendationProfileTests(unittest.TestCase):
 
     def test_recommendation_catalog_is_valid_and_complete(self) -> None:
         self.assertEqual(validate_recommendation_catalog(self.payload, self.catalog), [])
-        self.assertEqual(len(self.payload["profiles"]), len(self.catalog["providers"]))
+        # Not every catalog entry is a deployment target -- see NonRecommendableCategoryTests.
+        recommendable = [e for e in self.catalog["providers"]
+                         if e["primary_category"] not in NON_RECOMMENDABLE_CATEGORIES]
+        self.assertEqual(len(self.payload["profiles"]), len(recommendable))
 
     def test_every_profile_has_bounded_traits(self) -> None:
         for profile in self.payload["profiles"]:
@@ -79,3 +83,29 @@ class RecommendationProfileTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NonRecommendableCategoryTests(unittest.TestCase):
+    """Some catalog entries are not places to deploy anything. A block storage
+    volume attaches to a server; it cannot host a workload, so the recommender
+    must not offer it as an answer to 'where should I run this'.
+    """
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.catalog = load_catalog()
+        cls.payload = build_recommendation_catalog(cls.catalog)
+
+    def test_block_storage_entries_get_no_profile(self) -> None:
+        slugs = {p["slug"] for p in self.payload["profiles"]}
+        storage = [e["slug"] for e in self.catalog["providers"]
+                   if e["primary_category"] == "block-storage"]
+        self.assertTrue(storage, "expected block-storage entries in the catalog")
+        for slug in storage:
+            self.assertNotIn(slug, slugs, f"{slug} must not be recommendable")
+
+    def test_every_other_entry_still_has_exactly_one_profile(self) -> None:
+        recommendable = [e for e in self.catalog["providers"]
+                         if e["primary_category"] != "block-storage"]
+        self.assertEqual(len(self.payload["profiles"]), len(recommendable))
+        self.assertEqual(validate_recommendation_catalog(self.payload, self.catalog), [])

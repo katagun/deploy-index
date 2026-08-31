@@ -22,7 +22,8 @@
     "managed-wordpress": "Managed web & WordPress",
     "developer-sandbox": "Developer & agent sandbox",
     "game-hosting": "Game hosting",
-    "decentralized-hosting": "Decentralized hosting"
+    "decentralized-hosting": "Decentralized hosting",
+    "block-storage": "Block storage"
   },
   "providers": [
     {
@@ -396,6 +397,37 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "slug": "amazon-ebs",
+      "name": "Amazon EBS",
+      "url": "https://aws.amazon.com/ebs/",
+      "entity_type": "product",
+      "parent_slug": "aws",
+      "primary_category": "block-storage",
+      "categories": [
+        "block-storage"
+      ],
+      "capabilities": [
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "Amazon's block storage service, providing persistent volumes that attach to EC2 instances, in several types tuned for throughput, IOPS, or cost.",
+      "best_for": "Persistent disks for AWS compute, where volume type and provisioned IOPS are chosen per workload.",
+      "source_urls": [
+        "https://aws.amazon.com/ebs/"
+      ],
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
     },
     {
       "slug": "aws-ecs-express",
@@ -1234,6 +1266,37 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "slug": "azure-managed-disks",
+      "name": "Azure Managed Disks",
+      "url": "https://azure.microsoft.com/en-us/products/storage/disks",
+      "entity_type": "product",
+      "parent_slug": "azure",
+      "primary_category": "block-storage",
+      "categories": [
+        "block-storage"
+      ],
+      "capabilities": [
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "Azure's managed block storage for virtual machines, spanning HDD, standard SSD, premium SSD, and ultra tiers.",
+      "best_for": "Virtual machine disks on Azure where the platform handles storage account management and replication.",
+      "source_urls": [
+        "https://azure.microsoft.com/en-us/products/storage/disks"
+      ],
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
     },
     {
       "slug": "azure-playfab",
@@ -3179,6 +3242,37 @@
       "change_note": "Added from the official product page; the company was already cataloged but this separately selectable database product was not."
     },
     {
+      "slug": "digitalocean-volumes",
+      "name": "DigitalOcean Volumes",
+      "url": "https://www.digitalocean.com/products/block-storage",
+      "entity_type": "product",
+      "parent_slug": "digitalocean",
+      "primary_category": "block-storage",
+      "categories": [
+        "block-storage"
+      ],
+      "capabilities": [
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "DigitalOcean's block storage volumes, attachable to Droplets and resizable independently of the server they serve.",
+      "best_for": "Adding persistent capacity to a Droplet without moving to a larger server plan.",
+      "source_urls": [
+        "https://www.digitalocean.com/products/block-storage"
+      ],
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+    },
+    {
       "slug": "diploi",
       "name": "Diploi",
       "url": "https://diploi.com/",
@@ -4717,6 +4811,37 @@
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
     },
     {
+      "slug": "gcp-persistent-disk",
+      "name": "Google Persistent Disk",
+      "url": "https://cloud.google.com/persistent-disk",
+      "entity_type": "product",
+      "parent_slug": "google-cloud",
+      "primary_category": "block-storage",
+      "categories": [
+        "block-storage"
+      ],
+      "capabilities": [
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "Google Cloud's network-attached block storage for Compute Engine and GKE, offered in standard, balanced, and SSD variants.",
+      "best_for": "Durable volumes for Google Cloud workloads that must outlive the instance they attach to.",
+      "source_urls": [
+        "https://cloud.google.com/persistent-disk"
+      ],
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+    },
+    {
       "slug": "granite-cloud",
       "name": "Granite",
       "url": "https://granite.so/",
@@ -5020,6 +5145,37 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
+    },
+    {
+      "slug": "hetzner-volumes",
+      "name": "Hetzner Volumes",
+      "url": "https://docs.hetzner.com/cloud/volumes/overview",
+      "entity_type": "product",
+      "parent_slug": "hetzner-cloud",
+      "primary_category": "block-storage",
+      "categories": [
+        "block-storage"
+      ],
+      "capabilities": [
+        "persistent-storage"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "established",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "Hetzner Cloud's block storage volumes, attachable to cloud servers and billed per GB with capacity independent of the server.",
+      "best_for": "Cheap persistent capacity for Hetzner Cloud servers, where price per GB matters more than tunable IOPS.",
+      "source_urls": [
+        "https://docs.hetzner.com/cloud/volumes/overview"
+      ],
+      "last_verified": "2026-08-30",
+      "confidence": "high",
+      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
     },
     {
       "slug": "hostgator",
