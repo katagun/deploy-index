@@ -1,0 +1,515 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-09-28",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "pocketbase",
+    "servers-com",
+    "amazon-ebs",
+    "zeet",
+    "kamatera",
+    "heroku-postgres",
+    "internet-computer",
+    "codespaces",
+    "bunny-edge-scripting",
+    "netlify",
+    "azure-playfab",
+    "tensordock",
+    "oracle-cloud",
+    "back4app-containers",
+    "linode-kubernetes",
+    "kinsta",
+    "shuttle",
+    "knative",
+    "netlify-functions",
+    "neocities",
+    "appwrite-sites",
+    "back4app",
+    "val-town",
+    "supabase-edge-functions",
+    "pagely",
+    "greengeeks",
+    "aws-elastic-beanstalk",
+    "vultr-kubernetes",
+    "hugging-face-inference-endpoints",
+    "lambda",
+    "dokku",
+    "google-gke",
+    "cloud-foundry",
+    "planetscale",
+    "granite-cloud",
+    "elestio",
+    "inmotion-hosting",
+    "amazon-eks",
+    "upstash",
+    "digitalocean-kubernetes",
+    "appwrite",
+    "upsun",
+    "turso",
+    "ibm-cloud",
+    "digitalocean-functions"
+  ],
+  "summary": "Weekly scan for 2026-09-28. WebFetch worked for most official pages this run (unlike the modest-result expectation in the runbook), so verification and discovery both relied on first-party fetches rather than search snippets alone. Verification: reviewed all 45 rotation-batch items by fetching each provider's own page; 42 succeeded and are listed in checked_active (most confirm ongoing active operation with no shutdown signals; a few pages loaded but had no explicit status language, and are marked low confidence). 3 items (oracle-cloud, vultr-kubernetes, inmotion-hosting) returned HTTP 403 from their official domains and could not be verified this run, so they are omitted from checked_active. Two material, first-party-confirmed findings are reported as status_alerts for manual review: Heroku's Feb 2026 'sustaining engineering' shift (no new features, no new Enterprise contracts, self-serve unaffected) and a lower-confidence signal that Granite may now be generally available rather than in preview. One identity update is proposed: linode-kubernetes's canonical URL now 301-redirects to akamai.com. Separately, aws-app-runner's existing 'sunset' status in the catalog was independently corroborated against AWS's own apprunner-availability-change documentation page and needs no change. Discovery searches across the query families surfaced two new-candidate proposals: Docker Sandboxes (Docker's new cloud AI-agent sandbox product, confirmed first-party, medium confidence) and Zoho Catalyst Slate (a frontend hosting product, confirmed first-party but with unclear GA/preview status, low confidence). No hard deletions, pricing, or identity/status changes were applied automatically; all such items are left for human review as required.",
+  "new_candidates": [
+    {
+      "slug": "docker-sandboxes",
+      "name": "Docker Sandboxes",
+      "url": "https://www.docker.com/products/docker-sandboxes/",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "MicroVM-isolated code execution",
+        "AI coding agent sandboxes",
+        "Local-to-cloud portability",
+        "Sub-second cold starts"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "Docker Sandboxes is Docker's isolated MicroVM environment for running AI coding agents (Claude, Codex, Copilot and others) safely, usable locally or extended to Docker-managed cloud infrastructure via a single CLI.",
+      "best_for": "Teams running AI coding agents that need secure, fast-booting sandboxed execution without managing their own isolation infrastructure, moving seamlessly from a laptop to the cloud.",
+      "source_urls": [
+        "https://www.docker.com/products/docker-sandboxes/",
+        "https://www.docker.com/press-release/cloud-sandboxes-extending-secure-ai-agent-isolation-beyond-the-laptop/"
+      ],
+      "confidence": "medium",
+      "change_note": "New candidate: Docker Cloud Sandboxes, announced September 24, 2026 at WeAreDevelopers North America; confirmed on Docker's own product page and press release."
+    },
+    {
+      "slug": "catalyst-slate",
+      "name": "Catalyst Slate",
+      "url": "https://catalyst.zoho.com/slate",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "frontend-hosting",
+      "categories": [
+        "frontend-hosting"
+      ],
+      "capabilities": [
+        "Git-based deploys",
+        "Framework auto-detection",
+        "Preview deployments",
+        "Global CDN"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "summary": "Catalyst Slate is Zoho's frontend hosting product for deploying modern JavaScript frameworks (React, Next.js, Vue, Angular, Nuxt) with Git-based deploys, free SSL, preview environments and a global CDN, integrated with the wider Zoho Catalyst backend platform.",
+      "best_for": "Teams already using or considering Zoho Catalyst's backend services who want integrated frontend hosting without per-seat pricing.",
+      "source_urls": [
+        "https://catalyst.zoho.com/slate",
+        "https://catalyst.zoho.com/blog/know-catalyst-frontend-deployment-with-catalyst-slate.html"
+      ],
+      "confidence": "low",
+      "change_note": "New candidate found via 2026 Vercel-alternative research roundups and confirmed on Zoho's own product page; the page does not explicitly state GA vs. preview status, so confidence is low."
+    }
+  ],
+  "updates": [
+    {
+      "slug": "linode-kubernetes",
+      "patch": {
+        "name": null,
+        "url": "https://www.akamai.com/products/kubernetes",
+        "entity_type": null,
+        "parent_slug_action": "keep",
+        "parent_slug": null,
+        "primary_category": null,
+        "categories": null,
+        "capabilities": null,
+        "operating_models": null,
+        "era": null,
+        "open_source": null,
+        "launch_year_action": "keep",
+        "launch_year": null,
+        "summary": null,
+        "best_for": null
+      },
+      "source_urls": [
+        "https://www.akamai.com/products/kubernetes"
+      ],
+      "rationale": "linode.com/products/kubernetes/ now issues a 301 redirect to akamai.com/products/kubernetes, where the product is branded 'LKE: Managed Kubernetes Engine' under Akamai Cloud. The catalog's parent_slug (akamai-cloud) is already correct; only the canonical product URL appears to have moved. This is an identity field change, so per policy it will not be auto-applied and needs manual review.",
+      "confidence": "medium"
+    }
+  ],
+  "status_alerts": [
+    {
+      "slug": "heroku",
+      "proposed_status": "transitioning",
+      "proposed_availability": "general",
+      "effective_date": "2026-02-06",
+      "rationale": "Heroku's own blog post 'An Update on Heroku' (heroku.com/blog, Feb 6 2026, by SVP/GM Nitin Bhat) confirms Salesforce moved Heroku into a 'sustaining engineering' model: no new feature development and no new Enterprise Account contracts are offered going forward. Self-serve credit-card customers (existing and new) are explicitly unaffected in pricing, billing or day-to-day service, and core platform functionality (apps, pipelines, teams, add-ons) continues operating normally. This is a material, first-party-confirmed scope change worth recording even though the self-serve product line stays generally available; recommend human review of status/availability wording.",
+      "source_urls": [
+        "https://www.heroku.com/blog/an-update-on-heroku/"
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "granite-cloud",
+      "proposed_status": "active",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "granite.so's current homepage shows live paid pricing tiers (Hobby/Advanced/Professional) with immediate self-serve signup and no beta/preview disclaimers, which suggests the product may have moved from preview to general availability since it was last verified as 'preview'. This is inferred from marketing copy rather than an explicit GA announcement, so confidence is low and a human reviewer should confirm before applying.",
+      "source_urls": [
+        "https://granite.so/"
+      ],
+      "confidence": "low"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "pocketbase",
+      "source_urls": [
+        "https://pocketbase.io/"
+      ],
+      "note": "Homepage shows current v0.40.4, active docs and SDKs; no discontinuation signals.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "servers-com",
+      "source_urls": [
+        "https://www.servers.com/"
+      ],
+      "note": "Live site operating as 'Servers.com by Nexcess' with active data centers and products listed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-ebs",
+      "source_urls": [
+        "https://aws.amazon.com/ebs/"
+      ],
+      "note": "Official AWS product page active with current pricing, tutorials and sign-up flow.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zeet",
+      "source_urls": [
+        "https://zeet.co/"
+      ],
+      "note": "Homepage shows a recent product launch callout and active demo/trial CTAs; no shutdown language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kamatera",
+      "source_urls": [
+        "https://www.kamatera.com/"
+      ],
+      "note": "Homepage lists a recent new-datacenter blog post and active 30-day trial offer.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "heroku-postgres",
+      "source_urls": [
+        "https://www.heroku.com/postgres"
+      ],
+      "note": "Official Heroku Postgres page active, describes current pgvector/AI feature support.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "internet-computer",
+      "source_urls": [
+        "https://internetcomputer.org/"
+      ],
+      "note": "Official site shows live network metrics and recent 2026 product announcements (Caffeine, cloud engines).",
+      "confidence": "medium"
+    },
+    {
+      "slug": "codespaces",
+      "source_urls": [
+        "https://github.com/features/codespaces"
+      ],
+      "note": "Official GitHub Codespaces product page active with current FAQ and pricing.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "bunny-edge-scripting",
+      "source_urls": [
+        "https://bunny.net/edge-scripting/"
+      ],
+      "note": "Official bunny.net page active, current pricing and 119 edge locations listed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "netlify",
+      "source_urls": [
+        "https://www.netlify.com/"
+      ],
+      "note": "Official homepage last-updated September 28, 2026, describing current product lineup.",
+      "confidence": "high"
+    },
+    {
+      "slug": "azure-playfab",
+      "source_urls": [
+        "https://playfab.com/",
+        "https://developer.microsoft.com/en-us/games/products/playfab/"
+      ],
+      "note": "playfab.com now 301-redirects to Microsoft's developer.microsoft.com page; PlayFab remains active there with a GDC 2026 feature mention.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "tensordock",
+      "source_urls": [
+        "https://www.tensordock.com/"
+      ],
+      "note": "Official homepage active with current GPU/CPU cloud offerings and a recent product update note.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "back4app-containers",
+      "source_urls": [
+        "https://www.back4app.com/container-as-a-service-caas"
+      ],
+      "note": "Official product page active describing current container deployment features.",
+      "confidence": "low"
+    },
+    {
+      "slug": "linode-kubernetes",
+      "source_urls": [
+        "https://www.linode.com/products/kubernetes/",
+        "https://www.akamai.com/products/kubernetes"
+      ],
+      "note": "linode.com/products/kubernetes/ now 301-redirects to akamai.com/products/kubernetes; product active under Akamai branding as 'LKE: Managed Kubernetes Engine'. See related update proposal for the canonical URL change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kinsta",
+      "source_urls": [
+        "https://kinsta.com/"
+      ],
+      "note": "Official homepage active with current changelog entry and usage stats.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "shuttle",
+      "source_urls": [
+        "https://www.shuttle.dev/"
+      ],
+      "note": "Official homepage active with blog posts dated November/December 2025 and current community stats.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "knative",
+      "source_urls": [
+        "https://knative.dev/"
+      ],
+      "note": "Official project site reachable, describes Knative as a CNCF graduated project; no explicit recent-activity date found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "netlify-functions",
+      "source_urls": [
+        "https://www.netlify.com/platform/core/functions/"
+      ],
+      "note": "Official docs page last-updated September 28, 2026, describing current Functions capabilities.",
+      "confidence": "high"
+    },
+    {
+      "slug": "neocities",
+      "source_urls": [
+        "https://neocities.org/"
+      ],
+      "note": "Official homepage active with live usage counters and a linked status page.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "appwrite-sites",
+      "source_urls": [
+        "https://appwrite.io/products/sites"
+      ],
+      "note": "Official product page active showing live deployment/build examples.",
+      "confidence": "low"
+    },
+    {
+      "slug": "back4app",
+      "source_urls": [
+        "https://www.back4app.com/"
+      ],
+      "note": "Official homepage active listing current product suite and recent AI/MCP feature launches.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "val-town",
+      "source_urls": [
+        "https://www.val.town/"
+      ],
+      "note": "Official homepage reachable and describes current product features; no explicit status statement found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "supabase-edge-functions",
+      "source_urls": [
+        "https://supabase.com/edge-functions"
+      ],
+      "note": "Official docs page reachable and describes current Edge Functions feature set; no explicit status statement found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "pagely",
+      "source_urls": [
+        "https://pagely.com/"
+      ],
+      "note": "Official homepage active with current pricing and blog content dated into 2026.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "greengeeks",
+      "source_urls": [
+        "https://www.greengeeks.com/"
+      ],
+      "note": "Official homepage active with current pricing and customer counts; no disruption notices.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-elastic-beanstalk",
+      "source_urls": [
+        "https://aws.amazon.com/elasticbeanstalk/"
+      ],
+      "note": "Official AWS docs describe current Standard/Cluster deployment modes; no deprecation notice found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "hugging-face-inference-endpoints",
+      "source_urls": [
+        "https://endpoints.huggingface.co/"
+      ],
+      "note": "huggingface.co/inference-endpoints now 301-redirects to endpoints.huggingface.co, which is active with current product description; no rename found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "lambda",
+      "source_urls": [
+        "https://lambda.ai/"
+      ],
+      "note": "Official homepage (lambda.ai) active, dated September 24, 2026, describing current GPU cluster offerings.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "dokku",
+      "source_urls": [
+        "https://dokku.com/"
+      ],
+      "note": "Official site shows current release v0.38.30 with install instructions.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "google-gke",
+      "source_urls": [
+        "https://cloud.google.com/kubernetes-engine"
+      ],
+      "note": "Official product page reachable; fetched content was truncated so only limited confirmation was possible.",
+      "confidence": "low"
+    },
+    {
+      "slug": "cloud-foundry",
+      "source_urls": [
+        "https://www.cloudfoundry.org/"
+      ],
+      "note": "Official site active, references a September 2026 Cloud Foundry Summit and current commit/contributor counts.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "planetscale",
+      "source_urls": [
+        "https://planetscale.com/"
+      ],
+      "note": "Official homepage reachable, references SLA commitments and a status page; no explicit incident or shutdown language.",
+      "confidence": "low"
+    },
+    {
+      "slug": "granite-cloud",
+      "source_urls": [
+        "https://granite.so/"
+      ],
+      "note": "Official homepage active with live paid pricing tiers and 2026 blog posts; see related status alert on possible preview-to-general availability change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "elestio",
+      "source_urls": [
+        "https://elest.io/"
+      ],
+      "note": "Official homepage active with current pricing and a linked status page; no disruption notices.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-eks",
+      "source_urls": [
+        "https://aws.amazon.com/eks/"
+      ],
+      "note": "Official AWS product page reachable and describes current EKS Auto Mode feature.",
+      "confidence": "low"
+    },
+    {
+      "slug": "upstash",
+      "source_urls": [
+        "https://upstash.com/"
+      ],
+      "note": "Official homepage active with live usage counters and linked status/latency pages.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-kubernetes",
+      "source_urls": [
+        "https://www.digitalocean.com/products/kubernetes"
+      ],
+      "note": "Official product page active, references recent DOKS multi-cluster management updates.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "appwrite",
+      "source_urls": [
+        "https://appwrite.io/"
+      ],
+      "note": "Official homepage active, references an 'Appwrite 2.0' announcement and current usage metrics.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "upsun",
+      "source_urls": [
+        "https://upsun.com/"
+      ],
+      "note": "Official homepage active describing current Upsun Dispatch/Cloud product lines and free trials.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "turso",
+      "source_urls": [
+        "https://turso.tech/"
+      ],
+      "note": "Official homepage reachable and describes current product features; no explicit status statement found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "digitalocean-functions",
+      "source_urls": [
+        "https://www.digitalocean.com/products/functions"
+      ],
+      "note": "Official product page reachable; no explicit status statement found beyond a linked status page.",
+      "confidence": "low"
+    },
+    {
+      "slug": "ibm-cloud",
+      "source_urls": [
+        "https://www.ibm.com/cloud"
+      ],
+      "note": "Official homepage reachable and links to IBM's own cloud.ibm.com/status page; no explicit status statement found in the fetched content.",
+      "confidence": "low"
+    }
+  ]
+}

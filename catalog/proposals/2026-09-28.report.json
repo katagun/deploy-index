@@ -1,0 +1,105 @@
+{
+  "added": [
+    "docker-sandboxes"
+  ],
+  "updated": {
+    "linode-kubernetes": [
+      "source_urls"
+    ]
+  },
+  "verified": [
+    "pocketbase",
+    "servers-com",
+    "amazon-ebs",
+    "zeet",
+    "kamatera",
+    "heroku-postgres",
+    "internet-computer",
+    "codespaces",
+    "bunny-edge-scripting",
+    "netlify",
+    "azure-playfab",
+    "tensordock",
+    "linode-kubernetes",
+    "kinsta",
+    "shuttle",
+    "netlify-functions",
+    "neocities",
+    "back4app",
+    "pagely",
+    "greengeeks",
+    "aws-elastic-beanstalk",
+    "hugging-face-inference-endpoints",
+    "lambda",
+    "dokku",
+    "cloud-foundry",
+    "granite-cloud",
+    "elestio",
+    "upstash",
+    "digitalocean-kubernetes",
+    "appwrite",
+    "upsun"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "catalyst-slate"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "back4app-containers"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "knative"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "appwrite-sites"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "val-town"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "supabase-edge-functions"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "google-gke"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "planetscale"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "amazon-eks"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "turso"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "digitalocean-functions"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "ibm-cloud"
+    }
+  ],
+  "identity_changes_not_applied": [
+    {
+      "slug": "linode-kubernetes",
+      "fields": [
+        "url"
+      ]
+    }
+  ],
+  "status_alerts_not_applied": [
+    "heroku",
+    "granite-cloud"
+  ]
+}
