@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_name": "DeployIndex",
-  "generated_on": "2026-08-23",
+  "generated_on": "2026-09-28",
   "methodology": "Seed inventory. Entries become verified through reviewed weekly research proposals.",
   "category_labels": {
     "hyperscale-cloud": "Hyperscale cloud",
@@ -425,9 +425,9 @@
       "source_urls": [
         "https://aws.amazon.com/ebs/"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-09-28",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "Official AWS product page active with current pricing, tutorials and sign-up flow."
     },
     {
       "slug": "aws-ecs-express",
@@ -780,9 +780,9 @@
       "source_urls": [
         "https://appwrite.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active, references an 'Appwrite 2.0' announcement and current usage metrics."
     },
     {
       "slug": "appwrite-sites",
@@ -1087,9 +1087,9 @@
       "source_urls": [
         "https://aws.amazon.com/elasticbeanstalk/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official AWS docs describe current Standard/Cluster deployment modes; no deprecation notice found."
     },
     {
       "slug": "aws-lambda",
@@ -1326,11 +1326,12 @@
       "summary": "Backend services, multiplayer servers, analytics, identity, and live operations for games.",
       "best_for": "Realtime multiplayer servers, matchmaking, and geographically distributed sessions.",
       "source_urls": [
-        "https://playfab.com/"
+        "https://playfab.com/",
+        "https://developer.microsoft.com/en-us/games/products/playfab/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Linked to its parent provider Microsoft Azure, which already exists in the catalog."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "playfab.com now 301-redirects to Microsoft's developer.microsoft.com page; PlayFab remains active there with a GDC 2026 feature mention."
     },
     {
       "slug": "azure-static-web-apps",
@@ -1400,9 +1401,9 @@
       "source_urls": [
         "https://www.back4app.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active listing current product suite and recent AI/MCP feature launches."
     },
     {
       "slug": "back4app-containers",
@@ -1715,9 +1716,9 @@
       "source_urls": [
         "https://bunny.net/edge-scripting/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official bunny.net page active, current pricing and 119 edge locations listed."
     },
     {
       "slug": "bunny-magic-containers",
@@ -2133,9 +2134,9 @@
       "source_urls": [
         "https://www.cloudfoundry.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official site active, references a September 2026 Cloud Foundry Summit and current commit/contributor counts."
     },
     {
       "slug": "cloudcannon",
@@ -3204,9 +3205,9 @@
       "source_urls": [
         "https://www.digitalocean.com/products/kubernetes"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official product page active, references recent DOKS multi-cluster management updates."
     },
     {
       "entity_type": "product",
@@ -3309,6 +3310,41 @@
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
     },
     {
+      "slug": "docker-sandboxes",
+      "name": "Docker Sandboxes",
+      "url": "https://www.docker.com/products/docker-sandboxes/",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "MicroVM-isolated code execution",
+        "AI coding agent sandboxes",
+        "Local-to-cloud portability",
+        "Sub-second cold starts"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "featured": false,
+      "summary": "Docker Sandboxes is Docker's isolated MicroVM environment for running AI coding agents (Claude, Codex, Copilot and others) safely, usable locally or extended to Docker-managed cloud infrastructure via a single CLI.",
+      "best_for": "Teams running AI coding agents that need secure, fast-booting sandboxed execution without managing their own isolation infrastructure, moving seamlessly from a laptop to the cloud.",
+      "source_urls": [
+        "https://www.docker.com/products/docker-sandboxes/",
+        "https://www.docker.com/press-release/cloud-sandboxes-extending-secure-ai-agent-isolation-beyond-the-laptop/"
+      ],
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "New candidate: Docker Cloud Sandboxes, announced September 24, 2026 at WeAreDevelopers North America; confirmed on Docker's own product page and press release."
+    },
+    {
       "slug": "dokku",
       "name": "Dokku",
       "url": "https://dokku.com/",
@@ -3338,9 +3374,9 @@
       "source_urls": [
         "https://dokku.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official site shows current release v0.38.30 with install instructions."
     },
     {
       "slug": "dokploy",
@@ -3638,9 +3674,9 @@
       "source_urls": [
         "https://elest.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with current pricing and a linked status page; no disruption notices."
     },
     {
       "slug": "encore-cloud",
@@ -4390,9 +4426,9 @@
       "source_urls": [
         "https://github.com/features/codespaces"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official GitHub Codespaces product page active with current FAQ and pricing."
     },
     {
       "slug": "github-pages",
@@ -4871,9 +4907,9 @@
       "source_urls": [
         "https://granite.so/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with live paid pricing tiers and 2026 blog posts; see related status alert on possible preview-to-general availability change."
     },
     {
       "slug": "greengeeks",
@@ -4904,9 +4940,9 @@
       "source_urls": [
         "https://www.greengeeks.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with current pricing and customer counts; no disruption notices."
     },
     {
       "slug": "hasura-cloud",
@@ -5101,7 +5137,7 @@
       "open_source": false,
       "launch_year": null,
       "featured": false,
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-09-28",
       "confidence": "high",
       "slug": "heroku-postgres",
       "name": "Heroku Postgres",
@@ -5111,7 +5147,7 @@
       "source_urls": [
         "https://www.heroku.com/postgres"
       ],
-      "change_note": "Added from the official product page; Heroku was cataloged as a platform but its database product was not."
+      "change_note": "Official Heroku Postgres page active, describes current pgvector/AI feature support."
     },
     {
       "slug": "hetzner-cloud",
@@ -5349,11 +5385,12 @@
       "summary": "Managed, autoscaling, and optionally private endpoints for deploying models from the Hugging Face ecosystem.",
       "best_for": "Model inference, training, batch compute, and bursty GPU workloads.",
       "source_urls": [
-        "https://huggingface.co/inference-endpoints"
+        "https://huggingface.co/inference-endpoints",
+        "https://endpoints.huggingface.co/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "huggingface.co/inference-endpoints now 301-redirects to endpoints.huggingface.co, which is active with current product description; no rename found."
     },
     {
       "slug": "hugging-face-spaces",
@@ -5599,9 +5636,9 @@
       "source_urls": [
         "https://internetcomputer.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official site shows live network metrics and recent 2026 product announcements (Caffeine, cloud engines)."
     },
     {
       "slug": "ionos-cloud",
@@ -5665,9 +5702,9 @@
       "source_urls": [
         "https://www.kamatera.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Homepage lists a recent new-datacenter blog post and active 30-day trial offer."
     },
     {
       "slug": "kinsta",
@@ -5698,9 +5735,9 @@
       "source_urls": [
         "https://kinsta.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with current changelog entry and usage stats."
     },
     {
       "slug": "knative",
@@ -5882,9 +5919,9 @@
       "source_urls": [
         "https://lambda.ai/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage (lambda.ai) active, dated September 24, 2026, describing current GPU cluster offerings."
     },
     {
       "slug": "lambda-cloud",
@@ -6131,11 +6168,12 @@
       "summary": "Linode Kubernetes Engine is the managed Kubernetes offering associated with Akamai Cloud.",
       "best_for": "Teams standardizing on Kubernetes without running the control plane themselves.",
       "source_urls": [
-        "https://www.linode.com/products/kubernetes/"
+        "https://www.linode.com/products/kubernetes/",
+        "https://www.akamai.com/products/kubernetes"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "linode.com/products/kubernetes/ now 301-redirects to akamai.com/products/kubernetes; product active under Akamai branding as 'LKE: Managed Kubernetes Engine'. See related update proposal for the canonical URL change."
     },
     {
       "slug": "liquid-web",
@@ -6421,9 +6459,9 @@
       "source_urls": [
         "https://neocities.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with live usage counters and a linked status page."
     },
     {
       "slug": "neon",
@@ -6495,9 +6533,9 @@
       "source_urls": [
         "https://www.netlify.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "high",
+      "change_note": "Official homepage last-updated September 28, 2026, describing current product lineup."
     },
     {
       "slug": "netlify-functions",
@@ -6529,9 +6567,9 @@
       "source_urls": [
         "https://www.netlify.com/platform/core/functions/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "high",
+      "change_note": "Official docs page last-updated September 28, 2026, describing current Functions capabilities."
     },
     {
       "slug": "nexcess",
@@ -7099,9 +7137,9 @@
       "source_urls": [
         "https://pagely.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with current pricing and blog content dated into 2026."
     },
     {
       "slug": "pantheon",
@@ -7370,9 +7408,9 @@
       "source_urls": [
         "https://pocketbase.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Homepage shows current v0.40.4, active docs and SDKs; no discontinuation signals."
     },
     {
       "slug": "porter",
@@ -8277,9 +8315,9 @@
       "source_urls": [
         "https://www.servers.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Live site operating as 'Servers.com by Nexcess' with active data centers and products listed."
     },
     {
       "slug": "sevalla",
@@ -8348,9 +8386,9 @@
       "source_urls": [
         "https://www.shuttle.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with blog posts dated November/December 2025 and current community stats."
     },
     {
       "slug": "siteground",
@@ -8795,9 +8833,9 @@
       "source_urls": [
         "https://www.tensordock.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with current GPU/CPU cloud offerings and a recent product update note."
     },
     {
       "slug": "timescale-cloud",
@@ -9028,9 +9066,9 @@
       "source_urls": [
         "https://upstash.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active with live usage counters and linked status/latency pages."
     },
     {
       "slug": "upsun",
@@ -9063,9 +9101,9 @@
       "source_urls": [
         "https://upsun.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Official homepage active describing current Upsun Dispatch/Cloud product lines and free trials."
     },
     {
       "slug": "val-town",
@@ -9551,9 +9589,9 @@
       "source_urls": [
         "https://zeet.co/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-09-28",
+      "confidence": "medium",
+      "change_note": "Homepage shows a recent product launch callout and active demo/trial CTAs; no shutdown language."
     },
     {
       "slug": "zerops",
