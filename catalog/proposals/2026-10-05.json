@@ -1,0 +1,474 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-10-05",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "appwrite",
+    "openmetal",
+    "amazon-ebs",
+    "defang",
+    "hetzner-cloud",
+    "digitalocean-managed-postgresql",
+    "fleek",
+    "replit",
+    "deno-deploy",
+    "aws-amplify-hosting",
+    "agones",
+    "modal",
+    "aws",
+    "back4app-containers",
+    "alibaba-ack",
+    "pressable",
+    "scalingo",
+    "zaneops",
+    "google-cloud-functions",
+    "firebase-hosting",
+    "oracle-cloud",
+    "azure-playfab",
+    "wordpress-com",
+    "salad",
+    "wasmer-edge",
+    "bunny-edge-scripting",
+    "kubero",
+    "digitalocean",
+    "scalingo-postgresql",
+    "bentoml",
+    "planetscale",
+    "fireworks-ai",
+    "e2b",
+    "dreamcompute",
+    "cloud-66",
+    "leapcell",
+    "phoenixnap",
+    "lambda-cloud",
+    "github",
+    "lambda",
+    "pocketbase",
+    "genesis-cloud",
+    "apache-openwhisk",
+    "firebase",
+    "wp-engine"
+  ],
+  "summary": "WebFetch successfully reached first-party pages this run (not blocked as the standard playbook assumes), so verification is based on direct reads, not search snippets alone. Re-checked all 45 rotation-batch providers via WebFetch: 40 confirmed active on their own pages (listed in checked_active). openmetal.io repeatedly returned truncated content and could not be confirmed; oracle.com/cloud, genesis-cloud, and dreamcompute's page returned blocked/inconclusive responses (403/503, or no mention of the named product) and are left unconfirmed rather than treated as evidence of any change. Two status alerts are raised, each backed by a first-party redirect plus corroborating reporting: fleek.xyz now 301s to fleek.sh, which shows only a vague relaunch placeholder, and hathora.dev now 301s to gamefabric.com following Hathora's acquisition by Fireworks AI and the wind-down of its game-hosting business. Two new candidates are proposed from discovery searches and confirmed by directly reading their official sites: SwiftWave (self-hosted open-source PaaS) and General Compute (ASIC-first inference cloud). No metadata updates were proposed because verified entries already matched the catalog (e.g. google-cloud-functions is already named 'Google Cloud Run functions').",
+  "new_candidates": [
+    {
+      "slug": "swiftwave",
+      "name": "SwiftWave",
+      "url": "https://swiftwave.org/",
+      "entity_type": "project",
+      "parent_slug": null,
+      "primary_category": "self-hosted-paas",
+      "categories": [
+        "self-hosted-paas"
+      ],
+      "capabilities": [
+        "containers",
+        "git-deploy",
+        "docker-compose",
+        "ssl-automation"
+      ],
+      "operating_models": [
+        "self-hosted"
+      ],
+      "era": "modern",
+      "status": "active",
+      "availability": "general",
+      "open_source": true,
+      "launch_year": null,
+      "summary": "A self-hosted, lightweight open-source PaaS for deploying apps from Git, Docker images, or source onto any server, with an app store and SSL automation.",
+      "best_for": "Developers who want a Heroku/Vercel-like deploy experience on their own VPS or bare metal without vendor lock-in.",
+      "source_urls": [
+        "https://swiftwave.org/",
+        "https://github.com/swiftwave-org/swiftwave"
+      ],
+      "confidence": "medium",
+      "change_note": "New candidate discovered via self-hosted-PaaS discovery search; confirmed active and open source by reading swiftwave.org and its GitHub repository (906 stars, active develop branch) directly."
+    },
+    {
+      "slug": "general-compute",
+      "name": "General Compute",
+      "url": "https://generalcompute.com/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "inference",
+        "openai-compatible-api",
+        "dedicated-racks"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "modern",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "An inference cloud running purpose-built accelerator silicon (SambaNova, Cerebras, Positron, d-Matrix) with a self-serve, OpenAI-compatible API aimed at low-latency agent workloads.",
+      "best_for": "Teams needing sub-300ms time-to-first-token inference for agentic workloads without managing heterogeneous accelerator hardware themselves.",
+      "source_urls": [
+        "https://generalcompute.com/"
+      ],
+      "confidence": "medium",
+      "change_note": "New candidate discovered via GPU/AI-cloud discovery search; confirmed active and described directly by reading the official generalcompute.com site, including its self-serve API and hardware model."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [
+    {
+      "slug": "fleek",
+      "proposed_status": "sunset",
+      "proposed_availability": "discontinued",
+      "effective_date": "2026-01-31",
+      "rationale": "fleek.xyz now 301-redirects to fleek.sh, whose own page reads only 'We've been building something new. We're excited to share more soon' with no working hosting product visible. This first-party redirect/placeholder is corroborated by IPFS's own docs case study (docs.ipfs.tech/case-studies/fleek/), which states Fleek's IPFS hosting service was discontinued on January 31, 2026 and is 'preserved for historical purposes', and by the IPFS blog's 2026 Fleek migration post describing Fleek's pivot to AI and the resulting migration of hosted sites to other pinning providers.",
+      "source_urls": [
+        "https://fleek.xyz/",
+        "https://fleek.sh/",
+        "https://docs.ipfs.tech/case-studies/fleek/",
+        "https://blog.ipfs.tech/2026-fleek-migration/"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "hathora",
+      "proposed_status": "sunset",
+      "proposed_availability": "discontinued",
+      "effective_date": "2026-05-05",
+      "rationale": "hathora.dev (the catalog's canonical URL) now 301-redirects to gamefabric.com, with no trace of the original game-hosting product at that domain. This first-party redirect corroborates multiple reports (SiliconANGLE, PCWorld, TechSpot) that Fireworks AI acquired Hathora around March 3-4, 2026 as a talent/infrastructure acquisition, froze new provisioning immediately, and fully shut down the game-hosting service on May 5, 2026, with customers transitioned to Nitrado via GameFabric.",
+      "source_urls": [
+        "https://hathora.dev/",
+        "https://gamefabric.com/",
+        "https://siliconangle.com/2026/03/09/fireworks-ai-bets-hathora-acquisition-power-next-phase-real-time-ai"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "appwrite",
+      "source_urls": [
+        "https://appwrite.io/"
+      ],
+      "note": "Official site confirms active development; homepage announces an Appwrite 2.0 release and current product lineup.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-ebs",
+      "source_urls": [
+        "https://aws.amazon.com/ebs/"
+      ],
+      "note": "Official AWS product page is live with current pricing, free-tier and sign-up links; no change from catalog.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "google-cloud-functions",
+      "source_urls": [
+        "https://cloud.google.com/functions"
+      ],
+      "note": "Official page confirms the product is now presented as 'Cloud Run functions', matching the catalog's existing name; still active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "github.com loads normally with current product/solutions content; service is active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean",
+      "source_urls": [
+        "https://www.digitalocean.com/"
+      ],
+      "note": "Official homepage is current and lists active product lineup (GPU Droplets, Kubernetes, App Platform, databases); no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "hetzner-cloud",
+      "source_urls": [
+        "https://www.hetzner.com/cloud/"
+      ],
+      "note": "Official Hetzner Cloud page is live with current pricing and data center list; confirms general availability.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "modal",
+      "source_urls": [
+        "https://modal.com/"
+      ],
+      "note": "Official site is current, describing active inference, training and sandbox products with a live free tier.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "pocketbase",
+      "source_urls": [
+        "https://pocketbase.io/"
+      ],
+      "note": "Official site shows current version v0.40.4 and active docs/SDK links; project is maintained.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "apache-openwhisk",
+      "source_urls": [
+        "https://openwhisk.apache.org/"
+      ],
+      "note": "Official Apache site is live and describes current runtime support; no shutdown or archival notice present.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "agones",
+      "source_urls": [
+        "https://agones.dev/"
+      ],
+      "note": "Official site lists recent releases through 1.61.0 and an active development branch; CNCF sandbox project remains active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "planetscale",
+      "source_urls": [
+        "https://planetscale.com/"
+      ],
+      "note": "Official site is current and describes active Vitess/Postgres products including a newly launched Neki sharded Postgres offering.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-managed-postgresql",
+      "source_urls": [
+        "https://www.digitalocean.com/products/managed-databases-postgresql"
+      ],
+      "note": "Official product page confirms the Advanced Edition for PostgreSQL is generally available with current pricing.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "defang",
+      "source_urls": [
+        "https://defang.io/"
+      ],
+      "note": "Official site shows an 'All Systems Operational' status link and describes current Station/Deploy/Forge products; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "replit",
+      "source_urls": [
+        "https://replit.com/"
+      ],
+      "note": "Official homepage is current, describing active AI app-builder product and pricing tiers.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "deno-deploy",
+      "source_urls": [
+        "https://deno.com/deploy"
+      ],
+      "note": "Official page states the redesigned Deno Deploy is 'Now Generally Available' with expanded framework support.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-amplify-hosting",
+      "source_urls": [
+        "https://aws.amazon.com/amplify/hosting/"
+      ],
+      "note": "Official AWS page is live with a working console link and no deprecation notice; active and generally available.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws",
+      "source_urls": [
+        "https://aws.amazon.com/"
+      ],
+      "note": "Official homepage is current (references re:Invent 2026) and confirms AWS remains an active Amazon subsidiary.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "back4app-containers",
+      "source_urls": [
+        "https://www.back4app.com/container-as-a-service-caas"
+      ],
+      "note": "Official product page is live with current CTAs and feature descriptions; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "alibaba-ack",
+      "source_urls": [
+        "https://www.alibabacloud.com/product/kubernetes"
+      ],
+      "note": "Official product page is live describing current Dedicated/Managed/Serverless Kubernetes tiers; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "pressable",
+      "source_urls": [
+        "https://pressable.com/"
+      ],
+      "note": "Official site confirms active operation as an Automattic hosting lab, including a recently introduced 'Pressable MCP' feature.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "scalingo",
+      "source_urls": [
+        "https://scalingo.com/"
+      ],
+      "note": "Official site is current (page dated October 1, 2026) describing active PaaS/DBaaS offerings and pricing.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zaneops",
+      "source_urls": [
+        "https://zaneops.dev/"
+      ],
+      "note": "Official docs site is live and describes the current self-hosted deployment platform; active open-source project.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "firebase-hosting",
+      "source_urls": [
+        "https://firebase.google.com/products/hosting"
+      ],
+      "note": "Official Firebase page is current with free-tier details and active documentation links.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "wordpress-com",
+      "source_urls": [
+        "https://wordpress.com/hosting/"
+      ],
+      "note": "Official site confirms active operation by Automattic Inc. with current plan tiers.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "salad",
+      "source_urls": [
+        "https://salad.com/"
+      ],
+      "note": "Official site is current, describing active distributed GPU products (AI Gateway, Container Engine, Community Cloud) and live customer references.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "wasmer-edge",
+      "source_urls": [
+        "https://wasmer.io/products/edge"
+      ],
+      "note": "Official product page is live and operational, though its own wording ('be among the first to deploy') leaves general-availability status ambiguous; no change proposed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kubero",
+      "source_urls": [
+        "https://www.kubero.dev/"
+      ],
+      "note": "Official site is live describing the current open-source self-hosted PaaS and its community channels; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "scalingo-postgresql",
+      "source_urls": [
+        "https://scalingo.com/databases/postgresql"
+      ],
+      "note": "Official product page confirms the managed PostgreSQL offering is current with live plan tiers.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "bentoml",
+      "source_urls": [
+        "https://www.bentoml.com/"
+      ],
+      "note": "Official site is current, describing both the open-source BentoML project and the managed Bento Inference Platform; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fireworks-ai",
+      "source_urls": [
+        "https://fireworks.ai/"
+      ],
+      "note": "Official site is current (dated 2026) describing active training/inference products and model catalog; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "e2b",
+      "source_urls": [
+        "https://e2b.dev/"
+      ],
+      "note": "Official site is current describing active sandbox/managed/BYOC/self-hosted offerings; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloud-66",
+      "source_urls": [
+        "https://www.cloud66.com/"
+      ],
+      "note": "Official site confirms active multi-cloud deployment product operating since 2012; no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "leapcell",
+      "source_urls": [
+        "https://leapcell.io/"
+      ],
+      "note": "Official site is live describing the current serverless PaaS product and free-tier terms; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "phoenixnap",
+      "source_urls": [
+        "https://phoenixnap.com/"
+      ],
+      "note": "Official site confirms active bare-metal cloud and dedicated-server operations with current data center footprint.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "lambda-cloud",
+      "source_urls": [
+        "https://lambda.ai/service/gpu-cloud"
+      ],
+      "note": "Official product page is live with current GPU pricing and self-serve instance launch; active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "lambda",
+      "source_urls": [
+        "https://lambda.ai/"
+      ],
+      "note": "Official homepage is current, describing active GPU cluster and instance products under the Lambda/Lambda AI brand.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "firebase",
+      "source_urls": [
+        "https://firebase.google.com/"
+      ],
+      "note": "Official site confirms Firebase remains active and Google-owned, with recent generative-AI feature additions.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "wp-engine",
+      "source_urls": [
+        "https://wpengine.com/"
+      ],
+      "note": "Official site is live and describes current managed WordPress hosting products and scale (5 million sites); no status change observed on this page.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-playfab",
+      "source_urls": [
+        "https://playfab.com/"
+      ],
+      "note": "playfab.com now redirects to Microsoft's developer.microsoft.com PlayFab product page, confirming the product remains active under Microsoft; matches catalog's existing ownership.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "bunny-edge-scripting",
+      "source_urls": [
+        "https://bunny.net/edge-scripting/"
+      ],
+      "note": "Official product page is live describing current edge-scripting features (119 edge locations, TypeScript support) and a free-trial signup; active.",
+      "confidence": "medium"
+    }
+  ]
+}

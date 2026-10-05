@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_name": "DeployIndex",
-  "generated_on": "2026-08-23",
+  "generated_on": "2026-10-05",
   "methodology": "Seed inventory. Entries become verified through reviewed weekly research proposals.",
   "category_labels": {
     "hyperscale-cloud": "Hyperscale cloud",
@@ -155,9 +155,9 @@
       "source_urls": [
         "https://agones.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site lists recent releases through 1.61.0 and an active development branch; CNCF sandbox project remains active."
     },
     {
       "slug": "aiven",
@@ -394,9 +394,9 @@
       "source_urls": [
         "https://www.alibabacloud.com/product/kubernetes"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official product page is live describing current Dedicated/Managed/Serverless Kubernetes tiers; active."
     },
     {
       "slug": "amazon-ebs",
@@ -425,9 +425,9 @@
       "source_urls": [
         "https://aws.amazon.com/ebs/"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-05",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "Official AWS product page is live with current pricing, free-tier and sign-up links; no change from catalog."
     },
     {
       "slug": "aws-ecs-express",
@@ -643,9 +643,9 @@
       "source_urls": [
         "https://aws.amazon.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official homepage is current (references re:Invent 2026) and confirms AWS remains an active Amazon subsidiary."
     },
     {
       "slug": "anyscale",
@@ -712,9 +712,9 @@
       "source_urls": [
         "https://openwhisk.apache.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official Apache site is live and describes current runtime support; no shutdown or archival notice present."
     },
     {
       "slug": "apply-build",
@@ -780,9 +780,9 @@
       "source_urls": [
         "https://appwrite.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms active development; homepage announces an Appwrite 2.0 release and current product lineup."
     },
     {
       "slug": "appwrite-sites",
@@ -1019,9 +1019,9 @@
       "source_urls": [
         "https://aws.amazon.com/amplify/hosting/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official AWS page is live with a working console link and no deprecation notice; active and generally available."
     },
     {
       "slug": "aws-app-runner",
@@ -1328,9 +1328,9 @@
       "source_urls": [
         "https://playfab.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Linked to its parent provider Microsoft Azure, which already exists in the catalog."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "playfab.com now redirects to Microsoft's developer.microsoft.com PlayFab product page, confirming the product remains active under Microsoft; matches catalog's existing ownership."
     },
     {
       "slug": "azure-static-web-apps",
@@ -1435,9 +1435,9 @@
       "source_urls": [
         "https://www.back4app.com/container-as-a-service-caas"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official product page is live with current CTAs and feature descriptions; active."
     },
     {
       "slug": "backendless",
@@ -1648,9 +1648,9 @@
       "source_urls": [
         "https://www.bentoml.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current, describing both the open-source BentoML project and the managed Bento Inference Platform; active."
     },
     {
       "slug": "bluehost",
@@ -1715,9 +1715,9 @@
       "source_urls": [
         "https://bunny.net/edge-scripting/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official product page is live describing current edge-scripting features (119 edge locations, TypeScript support) and a free-trial signup; active."
     },
     {
       "slug": "bunny-magic-containers",
@@ -2098,9 +2098,9 @@
       "source_urls": [
         "https://www.cloud66.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms active multi-cloud deployment product operating since 2012; no status change."
     },
     {
       "slug": "cloud-foundry",
@@ -3029,9 +3029,9 @@
       "source_urls": [
         "https://defang.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site shows an 'All Systems Operational' status link and describes current Station/Deploy/Forge products; active."
     },
     {
       "slug": "deno-deploy",
@@ -3065,9 +3065,9 @@
       "source_urls": [
         "https://deno.com/deploy"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official page states the redesigned Deno Deploy is 'Now Generally Available' with expanded framework support."
     },
     {
       "slug": "digitalocean",
@@ -3099,9 +3099,9 @@
       "source_urls": [
         "https://www.digitalocean.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Added the databases capability: DigitalOcean offers managed database clusters."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official homepage is current and lists active product lineup (GPU Droplets, Kubernetes, App Platform, databases); no status change."
     },
     {
       "slug": "digitalocean-app-platform",
@@ -3229,7 +3229,7 @@
       "open_source": false,
       "launch_year": null,
       "featured": false,
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-05",
       "confidence": "high",
       "slug": "digitalocean-managed-postgresql",
       "name": "DigitalOcean Managed Databases for PostgreSQL",
@@ -3239,7 +3239,7 @@
       "source_urls": [
         "https://www.digitalocean.com/products/managed-databases-postgresql"
       ],
-      "change_note": "Added from the official product page; the company was already cataloged but this separately selectable database product was not."
+      "change_note": "Official product page confirms the Advanced Edition for PostgreSQL is generally available with current pricing."
     },
     {
       "slug": "digitalocean-volumes",
@@ -3472,9 +3472,9 @@
       "source_urls": [
         "https://e2b.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current describing active sandbox/managed/BYOC/self-hosted offerings; active."
     },
     {
       "slug": "easypanel",
@@ -3880,9 +3880,9 @@
       "source_urls": [
         "https://firebase.google.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Added database-platform facet so the entry is discoverable under database hosting."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms Firebase remains active and Google-owned, with recent generative-AI feature additions."
     },
     {
       "slug": "firebase-app-hosting",
@@ -3951,9 +3951,9 @@
       "source_urls": [
         "https://firebase.google.com/products/hosting"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official Firebase page is current with free-tier details and active documentation links."
     },
     {
       "slug": "fireworks-ai",
@@ -3984,9 +3984,9 @@
       "source_urls": [
         "https://fireworks.ai/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current (dated 2026) describing active training/inference products and model catalog; active."
     },
     {
       "slug": "fission",
@@ -4260,6 +4260,39 @@
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
     },
     {
+      "slug": "general-compute",
+      "name": "General Compute",
+      "url": "https://generalcompute.com/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "inference",
+        "openai-compatible-api",
+        "dedicated-racks"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "modern",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "featured": false,
+      "summary": "An inference cloud running purpose-built accelerator silicon (SambaNova, Cerebras, Positron, d-Matrix) with a self-serve, OpenAI-compatible API aimed at low-latency agent workloads.",
+      "best_for": "Teams needing sub-300ms time-to-first-token inference for agentic workloads without managing heterogeneous accelerator hardware themselves.",
+      "source_urls": [
+        "https://generalcompute.com/"
+      ],
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "New candidate discovered via GPU/AI-cloud discovery search; confirmed active and described directly by reading the official generalcompute.com site, including its self-serve API and hardware model."
+    },
+    {
       "slug": "genesis-cloud",
       "name": "Genesis Cloud",
       "url": "https://www.genesiscloud.com/",
@@ -4356,9 +4389,9 @@
       "source_urls": [
         "https://github.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "github.com loads normally with current product/solutions content; service is active."
     },
     {
       "slug": "codespaces",
@@ -4772,9 +4805,9 @@
       "source_urls": [
         "https://cloud.google.com/functions"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official page confirms the product is now presented as 'Cloud Run functions', matching the catalog's existing name; still active."
     },
     {
       "slug": "google-gke",
@@ -5142,9 +5175,9 @@
       "source_urls": [
         "https://www.hetzner.com/cloud/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official Hetzner Cloud page is live with current pricing and data center list; confirms general availability."
     },
     {
       "slug": "hetzner-volumes",
@@ -5846,9 +5879,9 @@
       "source_urls": [
         "https://www.kubero.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is live describing the current open-source self-hosted PaaS and its community channels; active."
     },
     {
       "slug": "lambda",
@@ -5882,9 +5915,9 @@
       "source_urls": [
         "https://lambda.ai/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official homepage is current, describing active GPU cluster and instance products under the Lambda/Lambda AI brand."
     },
     {
       "slug": "lambda-cloud",
@@ -5916,9 +5949,9 @@
       "source_urls": [
         "https://lambda.ai/service/gpu-cloud"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official product page is live with current GPU pricing and self-serve instance launch; active."
     },
     {
       "slug": "laravel-cloud",
@@ -6028,9 +6061,9 @@
       "source_urls": [
         "https://leapcell.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is live describing the current serverless PaaS product and free-tier terms; active."
     },
     {
       "slug": "leaseweb",
@@ -6252,9 +6285,9 @@
       "source_urls": [
         "https://modal.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current, describing active inference, training and sandbox products with a live free tier."
     },
     {
       "slug": "mongodb-atlas",
@@ -7235,9 +7268,9 @@
       "source_urls": [
         "https://phoenixnap.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms active bare-metal cloud and dedicated-server operations with current data center footprint."
     },
     {
       "slug": "piku",
@@ -7301,9 +7334,9 @@
       "source_urls": [
         "https://planetscale.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current and describes active Vitess/Postgres products including a newly launched Neki sharded Postgres offering."
     },
     {
       "slug": "platform-sh",
@@ -7370,9 +7403,9 @@
       "source_urls": [
         "https://pocketbase.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site shows current version v0.40.4 and active docs/SDK links; project is maintained."
     },
     {
       "slug": "porter",
@@ -7440,9 +7473,9 @@
       "source_urls": [
         "https://pressable.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms active operation as an Automattic hosting lab, including a recently introduced 'Pressable MCP' feature."
     },
     {
       "slug": "prisma-postgres",
@@ -7833,9 +7866,9 @@
       "source_urls": [
         "https://replit.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official homepage is current, describing active AI app-builder product and pricing tiers."
     },
     {
       "slug": "replit-deployments",
@@ -8037,9 +8070,9 @@
       "source_urls": [
         "https://salad.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current, describing active distributed GPU products (AI Gateway, Container Engine, Community Cloud) and live customer references."
     },
     {
       "slug": "scaleway",
@@ -8176,9 +8209,9 @@
       "source_urls": [
         "https://scalingo.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is current (page dated October 1, 2026) describing active PaaS/DBaaS offerings and pricing."
     },
     {
       "entity_type": "product",
@@ -8200,7 +8233,7 @@
       "open_source": false,
       "launch_year": null,
       "featured": false,
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-05",
       "confidence": "high",
       "slug": "scalingo-postgresql",
       "name": "Scalingo for PostgreSQL",
@@ -8210,7 +8243,7 @@
       "source_urls": [
         "https://scalingo.com/databases/postgresql"
       ],
-      "change_note": "Added from the official product page during a review of PostgreSQL hosting coverage."
+      "change_note": "Official product page confirms the managed PostgreSQL offering is current with live plan tiers."
     },
     {
       "slug": "seenode",
@@ -8626,6 +8659,41 @@
       "last_verified": null,
       "confidence": "seed",
       "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+    },
+    {
+      "slug": "swiftwave",
+      "name": "SwiftWave",
+      "url": "https://swiftwave.org/",
+      "entity_type": "project",
+      "parent_slug": null,
+      "primary_category": "self-hosted-paas",
+      "categories": [
+        "self-hosted-paas"
+      ],
+      "capabilities": [
+        "containers",
+        "git-deploy",
+        "docker-compose",
+        "ssl-automation"
+      ],
+      "operating_models": [
+        "self-hosted"
+      ],
+      "era": "modern",
+      "status": "active",
+      "availability": "general",
+      "open_source": true,
+      "launch_year": null,
+      "featured": false,
+      "summary": "A self-hosted, lightweight open-source PaaS for deploying apps from Git, Docker images, or source onto any server, with an app store and SSL automation.",
+      "best_for": "Developers who want a Heroku/Vercel-like deploy experience on their own VPS or bare metal without vendor lock-in.",
+      "source_urls": [
+        "https://swiftwave.org/",
+        "https://github.com/swiftwave-org/swiftwave"
+      ],
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "New candidate discovered via self-hosted-PaaS discovery search; confirmed active and open source by reading swiftwave.org and its GitHub repository (906 stars, active develop branch) directly."
     },
     {
       "slug": "tembo",
@@ -9343,9 +9411,9 @@
       "source_urls": [
         "https://wasmer.io/products/edge"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official product page is live and operational, though its own wording ('be among the first to deploy') leaves general-availability status ambiguous; no change proposed."
     },
     {
       "slug": "wordpress-com",
@@ -9377,9 +9445,9 @@
       "source_urls": [
         "https://wordpress.com/hosting/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site confirms active operation by Automattic Inc. with current plan tiers."
     },
     {
       "slug": "wp-engine",
@@ -9410,9 +9478,9 @@
       "source_urls": [
         "https://wpengine.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official site is live and describes current managed WordPress hosting products and scale (5 million sites); no status change observed on this page."
     },
     {
       "slug": "xano",
@@ -9479,9 +9547,9 @@
       "source_urls": [
         "https://zaneops.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-05",
+      "confidence": "medium",
+      "change_note": "Official docs site is live and describes the current self-hosted deployment platform; active open-source project."
     },
     {
       "slug": "zeabur",
