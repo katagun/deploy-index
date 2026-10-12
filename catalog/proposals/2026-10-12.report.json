@@ -1,0 +1,65 @@
+{
+  "added": [],
+  "updated": {},
+  "verified": [
+    "pocketbase",
+    "digitalocean-volumes",
+    "nullstone",
+    "turso",
+    "spheron",
+    "github",
+    "akamai-edgeworkers",
+    "azure-static-web-apps",
+    "edgegap",
+    "cudo-compute",
+    "azure-container-apps",
+    "amazon-eks",
+    "pressable",
+    "railway",
+    "caprover",
+    "aws-lambda",
+    "github-pages",
+    "scalingo",
+    "alibaba-ack",
+    "uncloud",
+    "crunchy-bridge",
+    "qoddi",
+    "skyhook",
+    "aruba-cloud",
+    "backendless",
+    "code-capsules",
+    "linode-kubernetes",
+    "modal",
+    "cloudsigma",
+    "beam",
+    "exoscale",
+    "dreamhost",
+    "fission",
+    "cloudflare-sandbox",
+    "anyscale",
+    "gitlab"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "gmi-cloud"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "dbos-cloud"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "tembo"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "openfaas"
+    }
+  ],
+  "identity_changes_not_applied": [],
+  "status_alerts_not_applied": [
+    "crunchy-bridge",
+    "ona"
+  ]
+}
