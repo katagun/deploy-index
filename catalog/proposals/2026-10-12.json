@@ -1,0 +1,434 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-10-12",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "pocketbase",
+    "leaseweb",
+    "digitalocean-volumes",
+    "nullstone",
+    "infomaniak-cloud",
+    "turso",
+    "spheron",
+    "github",
+    "akamai-edgeworkers",
+    "azure-static-web-apps",
+    "edgegap",
+    "cudo-compute",
+    "oracle-cloud",
+    "azure-container-apps",
+    "amazon-eks",
+    "pressable",
+    "railway",
+    "caprover",
+    "aws-lambda",
+    "github-pages",
+    "dbos-cloud",
+    "scalingo",
+    "alibaba-ack",
+    "uncloud",
+    "crunchy-bridge",
+    "qoddi",
+    "tembo",
+    "skyhook",
+    "aruba-cloud",
+    "backendless",
+    "code-capsules",
+    "linode-kubernetes",
+    "modal",
+    "cloudsigma",
+    "beam",
+    "ona",
+    "genesis-cloud",
+    "google-app-engine",
+    "exoscale",
+    "dreamhost",
+    "fission",
+    "cloudflare-sandbox",
+    "anyscale",
+    "gitlab",
+    "openfaas"
+  ],
+  "summary": "WebFetch worked this run, so verification leans on direct first-party reads, not search snippets. Of the 45-slug batch, 39 were fetched from their own official page (checked_active), all consistent with active/general; dbos-cloud, tembo, openfaas marked low-confidence there (weak freshness signals). Six slugs omitted as unverifiable: leaseweb/infomaniak-cloud rendered near-empty content; oracle-cloud/genesis-cloud returned HTTP 403/503; google-app-engine's fetch was truncated. Two status_alerts, both from first-party pages read directly: crunchy-bridge/Crunchy Data (Snowflake's press release plus Crunchy Data's site now linking its privacy policy to Snowflake's; medium, no closing date found) and ona (ona.com states 'Part of OpenAI', dated June 11 2026 post; high). Neither applied automatically; both need review. Two redirects noted, not identity changes: linode.com/products/kubernetes now redirects to akamai.com/products/kubernetes (matches existing akamai-cloud parent), gitlab.com redirects to about.gitlab.com. Discovery searches (AI sandboxes, GPU/inference, serverless containers, shutdowns) mostly surfaced early-stage/already-cataloged entrants; one new candidate, GMI Cloud (GPU/inference provider), verified on its own site, proposed at low confidence. No other discovery hit had both a confirmed official URL read directly and a clear, non-duplicate identity.",
+  "new_candidates": [
+    {
+      "slug": "gmi-cloud",
+      "name": "GMI Cloud",
+      "url": "https://www.gmicloud.ai/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "gpu",
+        "model-inference",
+        "bare-metal",
+        "autoscaling"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "summary": "A GPU cloud and inference provider offering dedicated bare-metal NVIDIA GPU clusters alongside a serverless, pay-as-you-go model-serving API.",
+      "best_for": "Teams needing both dedicated GPU capacity and scale-to-zero inference APIs without switching providers.",
+      "source_urls": [
+        "https://www.gmicloud.ai/"
+      ],
+      "confidence": "low",
+      "change_note": "New candidate discovered via discovery search for GPU/AI cloud launches; verified directly on the official site, which describes bare-metal H100/H200 GPU clusters and a serverless inference API. Launch year and company background not stated on the page, so left unset; confidence kept low pending further verification."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [
+    {
+      "slug": "crunchy-bridge",
+      "proposed_status": "active",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "Snowflake announced its intent to acquire Crunchy Data (maker of Crunchy Bridge) on June 2, 2025, per Snowflake's own press release. Crunchy Data's own current site (crunchydata.com) now links its footer 'Privacy Notice' to Snowflake's privacy policy page, a first-party signal consistent with the acquisition having taken effect, though no dated first-party announcement of deal closing or any Crunchy Bridge rebrand/shutdown was found. Service itself still presents as active and orderable. Flagging the ownership change for manual review rather than altering status/identity automatically.",
+      "source_urls": [
+        "https://www.crunchydata.com/",
+        "https://www.crunchydata.com/products/crunchy-bridge",
+        "https://www.snowflake.com/en/news/press-releases/snowflake-acquires-crunchy-data-to-bring-enterprise-ready-postgres-offering-to-the-ai-data-cloud/"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "ona",
+      "proposed_status": "active",
+      "proposed_availability": "general",
+      "effective_date": "2026-06-11",
+      "rationale": "Ona's own site (ona.com) currently carries the header 'Part of OpenAI' and a blog post dated June 11, 2026 titled 'Ona is joining OpenAI'. The product continues to operate under the Ona name and the sign-in flow still points at gitpod.io (Ona's known predecessor brand, already reflected in the catalog summary). This is a first-party-confirmed acquisition by OpenAI; flagging for review rather than changing identity/parent fields automatically, since entity/ownership changes require manual review.",
+      "source_urls": [
+        "https://ona.com/"
+      ],
+      "confidence": "high"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "pocketbase",
+      "source_urls": [
+        "https://pocketbase.io/"
+      ],
+      "note": "Official site live, current release shown as v0.40.5, footer copyright through 2026; no shutdown or status notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-volumes",
+      "source_urls": [
+        "https://www.digitalocean.com/products/block-storage"
+      ],
+      "note": "Official product page presents Volumes block storage as a current, orderable product with live pricing and sign-up; no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "nullstone",
+      "source_urls": [
+        "https://nullstone.io/"
+      ],
+      "note": "Official site shows active app, docs, GitHub, Slack and forum links; no shutdown, acquisition, or status notice found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "turso",
+      "source_urls": [
+        "https://turso.tech/"
+      ],
+      "note": "Official site presents Turso Cloud as a current hosted platform with live docs, blog, pricing and API spec; no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "spheron",
+      "source_urls": [
+        "https://spheron.network/"
+      ],
+      "note": "Official site shows an active GPU marketplace with live pricing, dashboard, API and blog posts dated through 2026; no shutdown or acquisition notice for Spheron itself.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "Official homepage loads normally with current navigation and 2026 copyright; service is active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "akamai-edgeworkers",
+      "source_urls": [
+        "https://www.akamai.com/products/serverless-computing-edgeworkers"
+      ],
+      "note": "Official Akamai product page is current (2026 copyright), offers a free trial, and shows no deprecation or end-of-life notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-static-web-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/app-service/static"
+      ],
+      "note": "Official Microsoft product page presents Static Web Apps as active with current features and pricing; Next.js hybrid support is marked Preview, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "edgegap",
+      "source_urls": [
+        "https://edgegap.com/"
+      ],
+      "note": "Official site dated October 12, 2026, with recent news (Nintendo Switch 2 approval) and active sign-up/docs; no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cudo-compute",
+      "source_urls": [
+        "https://www.cudocompute.com/"
+      ],
+      "note": "Official site shows 'All Systems Operational', 2026 copyright, and a newly announced product (CUDO AI Observatory); no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-container-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/container-apps"
+      ],
+      "note": "Official Microsoft product page is current, promoting a new Sandboxes feature and Gartner recognition; no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-eks",
+      "source_urls": [
+        "https://aws.amazon.com/eks/"
+      ],
+      "note": "Official AWS product page is current (2026 copyright) describing EKS Auto Mode, Hybrid Nodes, and Outposts/Anywhere support; no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "pressable",
+      "source_urls": [
+        "https://pressable.com/"
+      ],
+      "note": "Official site is current (2026 copyright), advertises a new 'Pressable MCP' product, and describes itself as an Automattic hosting lab built on WP Cloud; no shutdown/acquisition notice beyond the already-known Automattic relationship.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "railway",
+      "source_urls": [
+        "https://railway.com/"
+      ],
+      "note": "Official site is current with live plans, status page, and changelog links; no shutdown, acquisition, or rebrand notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "caprover",
+      "source_urls": [
+        "https://caprover.com/"
+      ],
+      "note": "Official site shows 2026 copyright, OpenCollective-funded maintenance, and active GitHub/docs/Slack links; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-lambda",
+      "source_urls": [
+        "https://aws.amazon.com/lambda/"
+      ],
+      "note": "Official AWS product page is current (2026 copyright) describing Lambda Functions, MicroVMs, and Managed Instances; no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github-pages",
+      "source_urls": [
+        "https://pages.github.com/"
+      ],
+      "note": "Official product page is current with standard setup instructions and GitHub Status link; no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "dbos-cloud",
+      "source_urls": [
+        "https://www.dbos.dev/"
+      ],
+      "note": "Fetched official site; a secondary header still lists 'DBOS Cloud' with a deploy tagline, but primary navigation and footer product lists emphasize DBOS Transact and DBOS Conductor instead. No explicit shutdown notice was found, but the reduced prominence is worth a human look.",
+      "confidence": "low"
+    },
+    {
+      "slug": "scalingo",
+      "source_urls": [
+        "https://scalingo.com/"
+      ],
+      "note": "Official site published October 6, 2026 with live sign-up, pricing, demo booking, and changelog; no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "alibaba-ack",
+      "source_urls": [
+        "https://www.alibabacloud.com/product/kubernetes"
+      ],
+      "note": "Official Alibaba Cloud product page is current with live console/pricing/docs links and a Health Dashboard; no deprecation notice (some linked blog/case-study content is older, 2018-2020).",
+      "confidence": "medium"
+    },
+    {
+      "slug": "uncloud",
+      "source_urls": [
+        "https://uncloud.run/"
+      ],
+      "note": "Official site shows active GitHub community (5.2K+ stars), a production deployment case study (Radboud University, April 2026), and a 'coming soon' Uncloud Hub; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "crunchy-bridge",
+      "source_urls": [
+        "https://www.crunchydata.com/products/crunchy-bridge",
+        "https://www.crunchydata.com/"
+      ],
+      "note": "Official crunchydata.com pages are live and present Crunchy Bridge as a current, orderable product (Postgres 15-17 support, live pricing). Note: the site's Privacy Notice link now points to Snowflake's privacy policy, consistent with Snowflake's announced acquisition of Crunchy Data — see status_alerts.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "qoddi",
+      "source_urls": [
+        "https://qoddi.com/"
+      ],
+      "note": "Official site is current (2026 copyright), promotes a new AI Inference product, and links to a platform status page; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "tembo",
+      "source_urls": [
+        "https://tembo.io/"
+      ],
+      "note": "Official site presents the product in the present tense with current integrations, SOC 2 Type I badge, and a trust portal; no explicit date or shutdown notice found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "skyhook",
+      "source_urls": [
+        "https://www.skyhook.io/"
+      ],
+      "note": "Official site is current (2026 copyright) with live status/changelog/docs links, SOC 2 badge, and CNCF Silver membership; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aruba-cloud",
+      "source_urls": [
+        "https://www.arubacloud.com/"
+      ],
+      "note": "Official site is current (2026 copyright) with live sign-in, pricing, and support links; no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "backendless",
+      "source_urls": [
+        "https://backendless.com/"
+      ],
+      "note": "Official site is current ('© Copyright 2013-2026 Backendless Corp'), with live sign-up and Backendless Cloud/Pro/Managed offerings; no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "code-capsules",
+      "source_urls": [
+        "https://www.codecapsules.io/"
+      ],
+      "note": "Official site is current (2026 copyright) with live pricing, docs, and sign-up links; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "linode-kubernetes",
+      "source_urls": [
+        "https://www.linode.com/products/kubernetes/",
+        "https://www.akamai.com/products/kubernetes"
+      ],
+      "note": "The canonical URL now 301-redirects to https://www.akamai.com/products/kubernetes, which presents LKE (and LKE Enterprise) as a current, active product under the Akamai Cloud brand (2026-dated assets). Content is consistent with the existing record (already parented to akamai-cloud); no identity change proposed given the existing parent relationship.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "modal",
+      "source_urls": [
+        "https://modal.com/"
+      ],
+      "note": "Official site is current ('© Modal 2026'), promoting Modal Clusters GA and VM Sandboxes; no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudsigma",
+      "source_urls": [
+        "https://www.cloudsigma.com/"
+      ],
+      "note": "Official site is current (2026 copyright) with live status page link and present-tense marketing; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "beam",
+      "source_urls": [
+        "https://www.beam.cloud/"
+      ],
+      "note": "Official site shows 'All Systems Operational', 2026 copyright, and current GPU/sandbox/queue offerings; legal entity is listed as 'Smartshare, Inc.' with no explanation given, but no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "exoscale",
+      "source_urls": [
+        "https://www.exoscale.com/"
+      ],
+      "note": "Official site is current (2026 copyright) with live product, docs, and changelog links; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "dreamhost",
+      "source_urls": [
+        "https://www.dreamhost.com/"
+      ],
+      "note": "Official site is current (2026 copyright), states DreamHost remains employee-owned with no private equity or corporate parent, and shows live pricing/reviews; no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fission",
+      "source_urls": [
+        "https://fission.io/"
+      ],
+      "note": "Official project site is current (2026 copyright), highlights a recent 'Fission v1.27.0' release and active community links; no archival notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudflare-sandbox",
+      "source_urls": [
+        "https://developers.cloudflare.com/sandbox/"
+      ],
+      "note": "Official Cloudflare docs page is current, explicitly 'Last updated Sep 30, 2026', describing the current @cloudflare/sandbox package; Durable Object scheduling policy used by sandboxes is in public beta, available on the Workers Paid plan.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "anyscale",
+      "source_urls": [
+        "https://www.anyscale.com/"
+      ],
+      "note": "Official site is current ('© Anyscale, Inc 2026') with a live webinar announcement for November 2026 and active sign-up; no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "gitlab",
+      "source_urls": [
+        "https://gitlab.com/",
+        "https://about.gitlab.com/"
+      ],
+      "note": "gitlab.com 301-redirects to https://about.gitlab.com/, which is current and promotes GitLab 19.4 as the latest release; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "openfaas",
+      "source_urls": [
+        "https://www.openfaas.com/"
+      ],
+      "note": "Official site shows an active OSS project (31.1k GitHub stars) plus OpenFaaS Pro/Standard commercial tiers and production adopters; no shutdown notice found, though the page has no explicit 'last updated' date.",
+      "confidence": "low"
+    }
+  ]
+}
