@@ -1,0 +1,490 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-10-19",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "appwrite",
+    "phoenixnap",
+    "hetzner-volumes",
+    "zeet",
+    "civo",
+    "temporal-cloud",
+    "fleek",
+    "github",
+    "cloudflare",
+    "cloudcannon",
+    "aws-gamelift",
+    "baseten",
+    "huawei-cloud",
+    "azure-container-apps",
+    "amazon-eks",
+    "pagely",
+    "koyeb",
+    "apache-openwhisk",
+    "digitalocean-functions",
+    "gitlab-pages",
+    "nexcess",
+    "civo-kubernetes",
+    "fireworks-ai",
+    "codesandbox",
+    "nullstone",
+    "pocketbase",
+    "namecheap-hosting",
+    "kamatera",
+    "kuberns",
+    "azure-app-service",
+    "packetframe",
+    "anyscale",
+    "zaneops",
+    "digitalocean",
+    "lambda-cloud",
+    "vercel-sandbox",
+    "granite-cloud",
+    "deno-deploy",
+    "planetscale",
+    "encore-cloud",
+    "genesis-cloud",
+    "rackspace",
+    "cloudflare-sandbox",
+    "azure-playfab",
+    "oracle-cloud"
+  ],
+  "summary": "WebFetch worked for the large majority of this week's 45-record verification batch and for two discovery leads, contrary to the usual pattern of heavy egress blocking; a handful of domains still failed (zeet.co DNS, nexcess.net 403, namecheap.com 403, oracle.com 403, genesis cloud 503) and are omitted from checked_active entirely rather than guessed at. Four first-party-confirmed status changes surfaced: Cloudflare has acquired Deno (announced 2026-10-09 on deno.com's own blog), with Deno Deploy slated to shut down roughly six months later; Mistral AI is acquiring Koyeb per Koyeb's own changelog and site banner, with no immediate change for existing customers; CodeSandbox's own site now states it 'is now part of Together AI'; and Fleek's own domain now redirects to a bare 'something new, coming soon' teaser with its app subdomain returning 503, suggesting the live product is not currently operating normally. One identity change surfaced outside the rotation batch: a2hosting.com now 301-redirects to hosting.com, consistent with third-party reporting of a 2025 World Host Group rebrand; staged as an update only, since name/URL changes are never auto-applied. Two new candidates were verified by reading their own official pages: OpenSandbox, an Apache-2.0 AI-agent sandbox project, and General Compute, a GPU/ASIC inference cloud. Two other leads (AGBCLOUD, OpenRelay) were dropped because no official canonical URL could be confirmed (agb.cloud failed to resolve; openrelay.ai is a parked domain-for-sale page). 36 of the 45 rotation entries are reported as checked_active after reading each one's own current page; discovery searches covering serverless containers, AI sandboxes, GPU clouds, PaaS launches, self-hosted PaaS, edge compute, and hosting shutdowns/rebrands turned up nothing else meeting the bar for a sourced new candidate or status alert this week.",
+  "new_candidates": [
+    {
+      "slug": "opensandbox",
+      "name": "OpenSandbox",
+      "url": "https://open-sandbox.ai/",
+      "entity_type": "project",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "code-execution",
+        "containers",
+        "self-hosted"
+      ],
+      "operating_models": [
+        "self-hosted"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": true,
+      "launch_year": null,
+      "summary": "An Apache-2.0 open-source sandbox runtime that gives AI agents isolated environments for code execution, file and browser/desktop operations, deployable via Docker or Kubernetes with multi-language SDKs and an MCP server.",
+      "best_for": "Teams self-hosting isolated execution environments for coding agents, browser automation, or AI code execution rather than using a managed sandbox provider.",
+      "source_urls": [
+        "https://open-sandbox.ai/",
+        "https://github.com/alibaba/OpenSandbox"
+      ],
+      "confidence": "low",
+      "change_note": "New open-source AI-agent sandbox project found via discovery search; confirmed via its own project site and GitHub repo, but confidence is kept low because the project site links to a GitHub org (opensandbox-group) distinct from the alibaba/OpenSandbox repo surfaced in search, and the exact relationship/governance isn't confirmed from either page alone."
+    },
+    {
+      "slug": "general-compute",
+      "name": "General Compute",
+      "url": "https://www.generalcompute.com/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "gpu",
+        "model-inference",
+        "distributed-compute"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "A deployment service for heterogeneous AI inference hardware, pairing NVIDIA B300 GPUs for prefill with vendor inference chips (SambaNova, Cerebras, Positron, d-Matrix) for decode, deployed as dedicated racks in existing US colocation facilities under a single contract.",
+      "best_for": "Teams wanting an OpenAI-compatible API or dedicated-capacity contract for high-throughput LLM inference without negotiating GPU and ASIC hosting separately.",
+      "source_urls": [
+        "https://www.generalcompute.com/"
+      ],
+      "confidence": "low",
+      "change_note": "New GPU/ASIC inference cloud identified via discovery search and confirmed by reading its own homepage directly; confidence kept low because the page itself does not label a formal GA/preview release stage for each hardware line, and only one first-party page was read this run."
+    }
+  ],
+  "updates": [
+    {
+      "slug": "a2-hosting",
+      "patch": {
+        "name": "Hosting.com",
+        "url": "https://hosting.com/",
+        "entity_type": null,
+        "parent_slug_action": "keep",
+        "parent_slug": null,
+        "primary_category": null,
+        "categories": null,
+        "capabilities": null,
+        "operating_models": null,
+        "era": null,
+        "open_source": null,
+        "launch_year_action": "keep",
+        "launch_year": null,
+        "summary": null,
+        "best_for": null
+      },
+      "source_urls": [
+        "https://www.a2hosting.com/",
+        "https://hosting.com/"
+      ],
+      "rationale": "www.a2hosting.com now 301-redirects to hosting.com, a live independent hosting storefront with no reference to A2 Hosting. Matches third-party reports of a 2025 World Host Group rebrand of A2 Hosting to Hosting.com. Identity change (name/URL); staged for manual review only, never auto-applied.",
+      "confidence": "medium"
+    }
+  ],
+  "status_alerts": [
+    {
+      "slug": "deno-deploy",
+      "proposed_status": "transitioning",
+      "proposed_availability": "general",
+      "effective_date": "2027-04-09",
+      "rationale": "Deno's own blog post 'Deno is joining Cloudflare' (deno.com/blog/cloudflare, dated 2026-10-09) states Cloudflare has acquired Deno and that 'Deno Deploy will continue operating for six months before shutting down,' with migration support offered to paying customers moving to Cloudflare Workers. The deno.com/deploy page itself also now carries a 'Deno is joining Cloudflare!' banner. The service remains generally available today; effective_date above is an inference (announcement date + 6 months) since no exact shutdown date was given on the page - treat it as approximate pending manual confirmation.",
+      "source_urls": [
+        "https://deno.com/blog/cloudflare",
+        "https://deno.com/deploy"
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "koyeb",
+      "proposed_status": "active",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "Koyeb's own site banner states 'Koyeb is joining Mistral AI to Build The Future of AI Infrastructure,' and its official changelog carries a 2026-02-20 entry titled 'Koyeb Enters Into A Definitive Agreement With Mistral.' Neither page uses the word 'acquired' or gives deal terms, and the page states existing customers see no immediate change, so status/availability are proposed unchanged; this alert exists to surface the ownership change for review, not a service disruption.",
+      "source_urls": [
+        "https://www.koyeb.com/",
+        "https://www.koyeb.com/changelog"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "codesandbox",
+      "proposed_status": "active",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "CodeSandbox's own homepage now states 'CodeSandbox is now part of Together AI!' and its footer reads 'a Together AI company.' Third-party coverage dates the underlying acquisition to December 2024, so this is a pre-existing ownership change not yet reflected in the catalog rather than new news; the product itself is operating normally, so status/availability are proposed unchanged pending a manual ownership/ entity review.",
+      "source_urls": [
+        "https://codesandbox.io/"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "fleek",
+      "proposed_status": "transitioning",
+      "proposed_availability": "limited",
+      "effective_date": null,
+      "rationale": "fleek.xyz now 301-redirects to fleek.sh, which shows only a teaser page reading 'We've been building something new. We're excited to share more soon' with no working product UI, pricing, or docs - just Discord/X links. app.fleek.xyz, the expected application dashboard, returned HTTP 503, and docs.fleek.xyz failed to resolve at all. This is firsthand evidence that the live product is not currently operating normally, but the page does not explicitly announce a shutdown or wind-down, so confidence is kept low/medium and status is proposed as 'transitioning' rather than sunset pending manual review.",
+      "source_urls": [
+        "https://fleek.xyz/",
+        "https://fleek.sh/"
+      ],
+      "confidence": "low"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "appwrite",
+      "source_urls": [
+        "https://appwrite.io/"
+      ],
+      "note": "Live product site with current pricing, docs, and an 'Appwrite 2.0' banner; no shutdown or status notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "phoenixnap",
+      "source_urls": [
+        "https://phoenixnap.com/"
+      ],
+      "note": "Live marketing site describing current Bare Metal Cloud and data center offerings with a 2026 copyright; no status change mentioned.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "hetzner-volumes",
+      "source_urls": [
+        "https://docs.hetzner.com/cloud/volumes/overview"
+      ],
+      "note": "Official docs page loads normally with a 2026 footer and no deprecation notice; last documented change is from 2023.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "civo",
+      "source_urls": [
+        "https://www.civo.com/"
+      ],
+      "note": "Live site with 2026 copyright and current product lines (Public Cloud, Private Cloud, Civo AI); no ownership or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "temporal-cloud",
+      "source_urls": [
+        "https://temporal.io/cloud"
+      ],
+      "note": "Official page shows an 'ALL SYSTEMS OPERATIONAL' status badge and active sign-up/pricing flow.",
+      "confidence": "high"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "Official homepage loads with current branding and 2026 footer; sign-in/sign-up flows present.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudflare",
+      "source_urls": [
+        "https://www.cloudflare.com/"
+      ],
+      "note": "Official homepage loads normally describing current products and network scale; no outage or status notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudcannon",
+      "source_urls": [
+        "https://cloudcannon.com/"
+      ],
+      "note": "Official site live with 2026 copyright and a current product announcement; no shutdown or acquisition notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-gamelift",
+      "source_urls": [
+        "https://aws.amazon.com/gamelift/servers/"
+      ],
+      "note": "Official AWS page describes current GameLift Servers infrastructure across 26 regions with an active sign-up path.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "baseten",
+      "source_urls": [
+        "https://www.baseten.co/"
+      ],
+      "note": "Official site shows a 2026 footer and an 'all systems normal' status indicator alongside current product listings.",
+      "confidence": "high"
+    },
+    {
+      "slug": "huawei-cloud",
+      "source_urls": [
+        "https://www.huaweicloud.com/intl/en-us/"
+      ],
+      "note": "Official homepage live with a September 2026-dated footer and current product banners; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-container-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/container-apps"
+      ],
+      "note": "Official Microsoft product page describes Container Apps as a current serverless offering with an SLA and pricing.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-eks",
+      "source_urls": [
+        "https://aws.amazon.com/eks/"
+      ],
+      "note": "Official AWS product page presents EKS as currently available with an active 'Get started' flow.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "pagely",
+      "source_urls": [
+        "https://pagely.com/"
+      ],
+      "note": "Official site live with working purchase links, support, and a blog post dated June 2026; no shutdown notice, though copyright footer is stale.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "apache-openwhisk",
+      "source_urls": [
+        "https://openwhisk.apache.org/"
+      ],
+      "note": "Official Apache project site live, describing OpenWhisk as a current open-source serverless platform with no archival notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-functions",
+      "source_urls": [
+        "https://www.digitalocean.com/products/functions"
+      ],
+      "note": "Official DigitalOcean product page describes Functions as a current serverless offering with no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "gitlab-pages",
+      "source_urls": [
+        "https://docs.gitlab.com/user/project/pages/"
+      ],
+      "note": "Official GitLab docs describe Pages as a current feature with recent version-tagged changes (GitLab 17.4-17.11).",
+      "confidence": "high"
+    },
+    {
+      "slug": "civo-kubernetes",
+      "source_urls": [
+        "https://www.civo.com/kubernetes"
+      ],
+      "note": "Official Civo product page is live with current pricing and an active sign-up flow.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fireworks-ai",
+      "source_urls": [
+        "https://fireworks.ai/"
+      ],
+      "note": "Official site shows a 2026 copyright, posts dated September 2026, and current model listings; no status change noted.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "nullstone",
+      "source_urls": [
+        "https://nullstone.io/"
+      ],
+      "note": "Official site live with working sign-up/login links and a SOC 2 badge; no shutdown notice, though no date is shown.",
+      "confidence": "low"
+    },
+    {
+      "slug": "pocketbase",
+      "source_urls": [
+        "https://pocketbase.io/"
+      ],
+      "note": "Official project site shows current version v0.40.5 with a 2023-2026 copyright and no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kamatera",
+      "source_urls": [
+        "https://www.kamatera.com/"
+      ],
+      "note": "Official site live with a 2026 copyright and a recent blog post about a new Bucharest data center; no status change noted.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kuberns",
+      "source_urls": [
+        "https://kuberns.com/"
+      ],
+      "note": "Official site live with working dashboard, docs, and pricing links; no outage or status notice present.",
+      "confidence": "low"
+    },
+    {
+      "slug": "azure-app-service",
+      "source_urls": [
+        "https://azure.microsoft.com/products/app-service"
+      ],
+      "note": "Official Microsoft product page describes App Service as currently available across most Azure regions with an uptime guarantee.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "packetframe",
+      "source_urls": [
+        "https://packetframe.com/"
+      ],
+      "note": "Official site live, describing Packetframe in the present tense with active contact channels; copyright footer is stale (2024).",
+      "confidence": "low"
+    },
+    {
+      "slug": "anyscale",
+      "source_urls": [
+        "https://www.anyscale.com/"
+      ],
+      "note": "Official site live with a 2026 copyright and an upcoming November 2026 webinar; no acquisition or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zaneops",
+      "source_urls": [
+        "https://zaneops.dev/"
+      ],
+      "note": "Official site live with a banner for a new v114 changelog release and working GitHub/Discord links; no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "lambda-cloud",
+      "source_urls": [
+        "https://lambda.ai/service/gpu-cloud"
+      ],
+      "note": "Official Lambda page describes current self-serve GPU instance launches and pricing; no status change noted.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "vercel-sandbox",
+      "source_urls": [
+        "https://vercel.com/docs/vercel-sandbox"
+      ],
+      "note": "Official Vercel docs describe Sandbox as a current, generally available product with an active feature set.",
+      "confidence": "high"
+    },
+    {
+      "slug": "granite-cloud",
+      "source_urls": [
+        "https://granite.so/",
+        "https://granite-so.instatus.com"
+      ],
+      "note": "Official site live with 2026 posts; linked status page reports all seven monitored components operational.",
+      "confidence": "high"
+    },
+    {
+      "slug": "encore-cloud",
+      "source_urls": [
+        "https://encore.dev/cloud"
+      ],
+      "note": "Official Encore page shows a 'Systems Operational' badge; some newer features are marked coming soon but the core platform is current.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "rackspace",
+      "source_urls": [
+        "https://www.rackspace.com/cloud"
+      ],
+      "note": "Official Rackspace Technology site is live with 2026 content and a working cloud control-panel login, but the page doesn't explicitly confirm the 'Rackspace Cloud' product line's status on its own.",
+      "confidence": "low"
+    },
+    {
+      "slug": "cloudflare-sandbox",
+      "source_urls": [
+        "https://developers.cloudflare.com/sandbox/"
+      ],
+      "note": "Official Cloudflare docs, last updated September 2026, describe Sandbox as live on the Workers Paid plan with container scheduling in public beta.",
+      "confidence": "high"
+    },
+    {
+      "slug": "azure-playfab",
+      "source_urls": [
+        "https://playfab.com/",
+        "https://developer.microsoft.com/en-us/games/products/playfab/"
+      ],
+      "note": "playfab.com redirects cleanly to Microsoft's current PlayFab product page, which promotes a 2026 GDC announcement; no status change noted.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean",
+      "source_urls": [
+        "https://www.digitalocean.com/"
+      ],
+      "note": "Official homepage live with 2026 copyright and several new public/private preview product announcements; no outage or status notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "planetscale",
+      "source_urls": [
+        "https://planetscale.com/"
+      ],
+      "note": "Official homepage live with a current product lineup (Vitess, Neki, PlanetScale Postgres, Metal) and a new product banner; no shutdown or pivot notice.",
+      "confidence": "high"
+    }
+  ]
+}

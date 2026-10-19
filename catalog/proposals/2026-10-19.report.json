@@ -1,0 +1,83 @@
+{
+  "added": [],
+  "updated": {
+    "a2-hosting": [
+      "source_urls"
+    ]
+  },
+  "verified": [
+    "appwrite",
+    "phoenixnap",
+    "hetzner-volumes",
+    "civo",
+    "temporal-cloud",
+    "github",
+    "cloudflare",
+    "cloudcannon",
+    "aws-gamelift",
+    "baseten",
+    "huawei-cloud",
+    "azure-container-apps",
+    "amazon-eks",
+    "pagely",
+    "apache-openwhisk",
+    "digitalocean-functions",
+    "gitlab-pages",
+    "civo-kubernetes",
+    "fireworks-ai",
+    "pocketbase",
+    "kamatera",
+    "azure-app-service",
+    "anyscale",
+    "zaneops",
+    "lambda-cloud",
+    "vercel-sandbox",
+    "granite-cloud",
+    "encore-cloud",
+    "cloudflare-sandbox",
+    "azure-playfab",
+    "digitalocean",
+    "planetscale"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "opensandbox"
+    },
+    {
+      "kind": "new_candidate",
+      "slug": "general-compute"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "nullstone"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "kuberns"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "packetframe"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "rackspace"
+    }
+  ],
+  "identity_changes_not_applied": [
+    {
+      "slug": "a2-hosting",
+      "fields": [
+        "name",
+        "url"
+      ]
+    }
+  ],
+  "status_alerts_not_applied": [
+    "deno-deploy",
+    "koyeb",
+    "codesandbox",
+    "fleek"
+  ]
+}
