@@ -1,0 +1,456 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-10-26",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "firebase",
+    "openmetal",
+    "amazon-ebs",
+    "skyhook",
+    "upcloud",
+    "upstash",
+    "internet-computer",
+    "vercel-sandbox",
+    "cloudflare",
+    "appwrite-sites",
+    "heroic-cloud",
+    "nebius",
+    "tencent-cloud",
+    "oracle-container-instances",
+    "ovh-managed-kubernetes",
+    "cloudways",
+    "platform-sh",
+    "piku",
+    "google-cloud-functions",
+    "github-pages",
+    "linode-kubernetes",
+    "github",
+    "azure-app-service",
+    "hetzner-cloud",
+    "akamai-functions",
+    "replit-deployments",
+    "seenode",
+    "azure-managed-disks",
+    "gitlab-pages",
+    "arweave",
+    "apache-openwhisk",
+    "aws-gamelift",
+    "rackspace",
+    "huawei-cloud",
+    "replit",
+    "stacktape",
+    "godaddy-hosting",
+    "aws",
+    "sliplane",
+    "lambda",
+    "netlify",
+    "digitalocean-managed-postgresql",
+    "scaleway",
+    "oracle-oke",
+    "flightcontrol"
+  ],
+  "summary": "WebFetch reached most first-party provider pages this run, but about a third of lookups failed (HTTP 403 from oracle.com, upcloud.com, godaddy.com; empty response from openmetal.io) and were left out rather than guessed at. Of the 45-item weekly verification batch, 37 slugs were re-confirmed as active against their own current pages with no change needed (checked_active); 5 batch slugs could not be verified this run (openmetal, upcloud, oracle-container-instances, oracle-oke, godaddy-hosting) and are omitted rather than assumed unchanged; 'replit' (the bare provider record, as opposed to replit-deployments) was also left unchecked since its own URL was not independently fetched. Two status alerts are raised from first-party evidence read this run: platform.sh now redirects to Upsun's site, whose own dated CEO blog post describes Platform.sh 'evolving' into Upsun -- this likely means the catalog's existing separate 'upsun' record needs manual reconciliation, not that Upsun is merely a sibling product. hathora.dev now redirects to an unrelated company's site (gamefabric.com) that never mentions Hathora; a third-party blog's separate claim that Fireworks AI acquired Hathora was NOT corroborated by any first-party page and is explicitly flagged as unverified. Two new low-confidence candidates (Blaxel, Inferless) are proposed as products of the existing 'baseten' record, based on each one's own site stating it has 'joined Baseten.' Several other discovery leads (Hosting.com's new AI hosting platform, AventureCloudz, AGBCLOUD, Lyceum, the still-pre-launch Rocketeers) surfaced only in search snippets or third-party press releases this run -- their own official pages were not fetched, so none are proposed; they are candidates for a future run instead of being asserted on secondhand evidence.",
+  "new_candidates": [
+    {
+      "slug": "blaxel",
+      "name": "Blaxel",
+      "url": "https://blaxel.ai/",
+      "entity_type": "product",
+      "parent_slug": "baseten",
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "sandboxes",
+        "microvm-isolation",
+        "persistent-storage",
+        "mcp-hosting"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "transitioning",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2024,
+      "summary": "An infrastructure platform providing isolated microVM sandboxes, persistent storage, networking controls, and MCP-server hosting for autonomous AI agents.",
+      "best_for": "Running isolated AI agent sandboxes and hosting MCP servers without operating the underlying microVM infrastructure.",
+      "source_urls": [
+        "https://blaxel.ai/"
+      ],
+      "confidence": "low",
+      "change_note": "Blaxel's own site announces it has joined Baseten; added as a product under baseten pending confirmation of how independently it continues to operate."
+    },
+    {
+      "slug": "inferless",
+      "name": "Inferless",
+      "url": "https://www.inferless.com/",
+      "entity_type": "product",
+      "parent_slug": "baseten",
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "serverless-gpu",
+        "autoscaling",
+        "model-inference"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "transitioning",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "summary": "A serverless GPU platform for deploying machine learning models with autoscaling from zero to many GPUs.",
+      "best_for": "Deploying ML models on serverless GPU infrastructure without managing clusters.",
+      "source_urls": [
+        "https://www.inferless.com/"
+      ],
+      "confidence": "low",
+      "change_note": "Inferless's own site displays a banner stating it has joined Baseten; added as a product under baseten pending confirmation of how independently it continues to operate."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [
+    {
+      "slug": "platform-sh",
+      "proposed_status": "transitioning",
+      "proposed_availability": "general",
+      "effective_date": "2025-09-23",
+      "rationale": "platform.sh now 301-redirects to upsun.com. Upsun's own dated CEO blog post ('Platform.sh is now Upsun', 23 Sep 2025) states Platform.sh 'is evolving and will become Upsun,' with existing customers, pricing, contracts, and support carrying over unchanged under the new name. The catalog currently carries 'upsun' as a separate active record described as merely 'a newer Platform.sh offering' -- this first-party evidence suggests Upsun is instead Platform.sh's renamed successor, so the two records likely need manual reconciliation (not an automatic merge, per policy).",
+      "source_urls": [
+        "https://platform.sh/",
+        "https://upsun.com/blog/platform-sh-is-now-upsun-note-from-our-ceo/"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "hathora",
+      "proposed_status": "transitioning",
+      "proposed_availability": "limited",
+      "effective_date": null,
+      "rationale": "hathora.dev (the catalog's canonical URL) now permanently 301-redirects to gamefabric.com, operated by an unrelated company (marbis GmbH) whose current homepage makes no mention of Hathora at all. This is first-party evidence of a material change (the original product no longer resolves at its canonical URL), but the exact nature -- acquisition, shutdown, or migration -- could not be confirmed from either page, so this is flagged for manual review rather than asserting a specific outcome. Note a third-party blog separately claimed Hathora was acquired by Fireworks AI; that claim is NOT corroborated by any first-party page read this run and should not be relied on.",
+      "source_urls": [
+        "https://hathora.dev/",
+        "https://gamefabric.com/"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "firebase",
+      "source_urls": [
+        "https://firebase.google.com/"
+      ],
+      "note": "Firebase's own homepage still promotes its current app-development tooling with an active sign-up path.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-ebs",
+      "source_urls": [
+        "https://aws.amazon.com/ebs/"
+      ],
+      "note": "AWS's own EBS product page is current (2026 copyright) with live pricing/FAQ links; no change from catalog record.",
+      "confidence": "high"
+    },
+    {
+      "slug": "skyhook",
+      "source_urls": [
+        "https://www.skyhook.io/"
+      ],
+      "note": "Skyhook's own site still describes it as a Kubernetes internal developer platform running on customer AWS/GCP/Azure clusters, matching the catalog summary.",
+      "confidence": "high"
+    },
+    {
+      "slug": "upstash",
+      "source_urls": [
+        "https://upstash.com/"
+      ],
+      "note": "Upstash's own site confirms Redis, vector DB, messaging/workflow, container, and file-storage products are current.",
+      "confidence": "high"
+    },
+    {
+      "slug": "internet-computer",
+      "source_urls": [
+        "https://internetcomputer.org/"
+      ],
+      "note": "Official site still positions Internet Computer as an active decentralized serverless network with a live dashboard.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "vercel-sandbox",
+      "source_urls": [
+        "https://vercel.com/docs/vercel-sandbox"
+      ],
+      "note": "Vercel's own docs confirm Sandbox is current; a linked changelog post states it is now generally available.",
+      "confidence": "high"
+    },
+    {
+      "slug": "cloudflare",
+      "source_urls": [
+        "https://www.cloudflare.com/"
+      ],
+      "note": "Cloudflare's own homepage confirms Workers/the platform are current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "appwrite-sites",
+      "source_urls": [
+        "https://appwrite.io/products/sites"
+      ],
+      "note": "Appwrite's own product page confirms Sites is a current, active Git-based frontend hosting product.",
+      "confidence": "high"
+    },
+    {
+      "slug": "heroic-cloud",
+      "source_urls": [
+        "https://heroiclabs.com/heroic-cloud/"
+      ],
+      "note": "Heroic Labs' own page confirms Heroic Cloud is a current managed Nakama/Satori hosting product.",
+      "confidence": "high"
+    },
+    {
+      "slug": "nebius",
+      "source_urls": [
+        "https://nebius.com/"
+      ],
+      "note": "Nebius's own site confirms it is a current, active AI/GPU cloud with live spot pricing.",
+      "confidence": "high"
+    },
+    {
+      "slug": "tencent-cloud",
+      "source_urls": [
+        "https://www.tencentcloud.com/"
+      ],
+      "note": "Tencent Cloud's own homepage is current and promotes an active product lineup.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ovh-managed-kubernetes",
+      "source_urls": [
+        "https://www.ovhcloud.com/en/public-cloud/kubernetes/"
+      ],
+      "note": "OVHcloud's own page confirms Managed Kubernetes is current and active with live pricing.",
+      "confidence": "high"
+    },
+    {
+      "slug": "cloudways",
+      "source_urls": [
+        "https://www.cloudways.com/"
+      ],
+      "note": "Cloudways' own homepage (2026 footer) confirms it is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "piku",
+      "source_urls": [
+        "https://piku.github.io/"
+      ],
+      "note": "Piku's own GitHub Pages site describes the project as stable and maintained, consistent with the catalog record.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "google-cloud-functions",
+      "source_urls": [
+        "https://cloud.google.com/functions"
+      ],
+      "note": "Google's own docs page is current for Cloud Run functions (formerly Cloud Functions); no change detected.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github-pages",
+      "source_urls": [
+        "https://pages.github.com/"
+      ],
+      "note": "GitHub's own marketing page for Pages is current and active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "linode-kubernetes",
+      "source_urls": [
+        "https://www.linode.com/products/kubernetes/",
+        "https://www.akamai.com/products/kubernetes"
+      ],
+      "note": "The linode.com product URL now 301-redirects to akamai.com/products/kubernetes, which still serves the same LKE product under the existing Akamai/Linode parent record; no catalog change needed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "GitHub's own homepage is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "azure-app-service",
+      "source_urls": [
+        "https://azure.microsoft.com/products/app-service"
+      ],
+      "note": "Microsoft's own product page for App Service is current, promoting an active Premium v4 plan.",
+      "confidence": "high"
+    },
+    {
+      "slug": "hetzner-cloud",
+      "source_urls": [
+        "https://www.hetzner.com/cloud/"
+      ],
+      "note": "Hetzner's own product page confirms Cloud is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "akamai-functions",
+      "source_urls": [
+        "https://www.akamai.com/"
+      ],
+      "note": "Akamai's own homepage still lists Akamai Functions under its serverless lineup; consistent with the existing 'transitioning' status, no further change found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "replit-deployments",
+      "source_urls": [
+        "https://replit.com/deployments"
+      ],
+      "note": "Replit's own site (served from the /deployments URL) is current and active; no change detected.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "seenode",
+      "source_urls": [
+        "https://seenode.com/"
+      ],
+      "note": "Seenode's own homepage is current and active; page did not state GA/preview explicitly so availability is left unchanged.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-managed-disks",
+      "source_urls": [
+        "https://azure.microsoft.com/en-us/products/storage/disks"
+      ],
+      "note": "Microsoft's own Azure Disk Storage product page is current, referencing Ignite 2025 content.",
+      "confidence": "high"
+    },
+    {
+      "slug": "gitlab-pages",
+      "source_urls": [
+        "https://docs.gitlab.com/user/project/pages/"
+      ],
+      "note": "GitLab's own docs for Pages are current through GitLab 17.11; no change detected.",
+      "confidence": "high"
+    },
+    {
+      "slug": "arweave",
+      "source_urls": [
+        "https://www.arweave.org/"
+      ],
+      "note": "Arweave's own site describes the protocol as stable and active; consistent with the catalog record.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "apache-openwhisk",
+      "source_urls": [
+        "https://openwhisk.apache.org/"
+      ],
+      "note": "Apache OpenWhisk's own project site shows ongoing runtime development; project remains active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-gamelift",
+      "source_urls": [
+        "https://aws.amazon.com/gamelift/servers/"
+      ],
+      "note": "AWS's own GameLift Servers page is current (2026 copyright) and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "rackspace",
+      "source_urls": [
+        "https://www.rackspace.com/cloud"
+      ],
+      "note": "Rackspace's own cloud page is current (2026 footer) and active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "huawei-cloud",
+      "source_urls": [
+        "https://www.huaweicloud.com/intl/en-us/"
+      ],
+      "note": "Huawei Cloud's own international homepage is current and active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "stacktape",
+      "source_urls": [
+        "https://stacktape.com/"
+      ],
+      "note": "Stacktape's own site is current, now promoting a 'Stacktape 3.0' release; product remains active.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "sliplane",
+      "source_urls": [
+        "https://sliplane.io/"
+      ],
+      "note": "Sliplane's own site confirms the product is current and operating (live dashboard, pricing, docs).",
+      "confidence": "medium"
+    },
+    {
+      "slug": "lambda",
+      "source_urls": [
+        "https://lambda.ai/"
+      ],
+      "note": "Lambda's own site (lambda.ai) is current and active, promoting GPU cluster and inference products.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "netlify",
+      "source_urls": [
+        "https://www.netlify.com/"
+      ],
+      "note": "Netlify's own homepage is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "digitalocean-managed-postgresql",
+      "source_urls": [
+        "https://www.digitalocean.com/products/managed-databases-postgresql"
+      ],
+      "note": "DigitalOcean's own product page confirms Managed PostgreSQL (incl. an Advanced Edition) is current and GA.",
+      "confidence": "high"
+    },
+    {
+      "slug": "scaleway",
+      "source_urls": [
+        "https://www.scaleway.com/"
+      ],
+      "note": "Scaleway's own homepage is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "aws",
+      "source_urls": [
+        "https://aws.amazon.com/"
+      ],
+      "note": "AWS's own homepage is current and active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "flightcontrol",
+      "source_urls": [
+        "https://www.flightcontrol.dev/",
+        "https://www.ravion.com/?from=flightcontrol"
+      ],
+      "note": "flightcontrol.dev still 301-redirects to Ravion's site, which frames Ravion as Flightcontrol's successor with existing customers unaffected; matches the catalog's existing 'transitioning' status, no change needed.",
+      "confidence": "medium"
+    }
+  ]
+}

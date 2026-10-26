@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_name": "DeployIndex",
-  "generated_on": "2026-08-23",
+  "generated_on": "2026-10-26",
   "methodology": "Seed inventory. Entries become verified through reviewed weekly research proposals.",
   "category_labels": {
     "hyperscale-cloud": "Hyperscale cloud",
@@ -425,9 +425,9 @@
       "source_urls": [
         "https://aws.amazon.com/ebs/"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-26",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "AWS's own EBS product page is current (2026 copyright) with live pricing/FAQ links; no change from catalog record."
     },
     {
       "slug": "aws-ecs-express",
@@ -562,9 +562,9 @@
       "source_urls": [
         "https://aws.amazon.com/gamelift/servers/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Linked to its parent provider AWS, which already exists in the catalog."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "AWS's own GameLift Servers page is current (2026 copyright) and active."
     },
     {
       "slug": "amazon-rds",
@@ -643,9 +643,9 @@
       "source_urls": [
         "https://aws.amazon.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "AWS's own homepage is current and active."
     },
     {
       "slug": "anyscale",
@@ -712,9 +712,9 @@
       "source_urls": [
         "https://openwhisk.apache.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Apache OpenWhisk's own project site shows ongoing runtime development; project remains active."
     },
     {
       "slug": "apply-build",
@@ -817,9 +817,9 @@
       "source_urls": [
         "https://appwrite.io/products/sites"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Appwrite's own product page confirms Sites is a current, active Git-based frontend hosting product."
     },
     {
       "slug": "aptible",
@@ -915,9 +915,9 @@
       "source_urls": [
         "https://www.arweave.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Arweave's own site describes the protocol as stable and active; consistent with the catalog record."
     },
     {
       "slug": "atlantic-net",
@@ -1157,9 +1157,9 @@
       "source_urls": [
         "https://azure.microsoft.com/products/app-service"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Microsoft's own product page for App Service is current, promoting an active Premium v4 plan."
     },
     {
       "slug": "azure-container-apps",
@@ -1294,9 +1294,9 @@
       "source_urls": [
         "https://azure.microsoft.com/en-us/products/storage/disks"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-26",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "Microsoft's own Azure Disk Storage product page is current, referencing Ignite 2025 content."
     },
     {
       "slug": "azure-playfab",
@@ -2209,9 +2209,9 @@
       "source_urls": [
         "https://www.cloudflare.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Cloudflare's own homepage confirms Workers/the platform are current and active."
     },
     {
       "slug": "cloudflare-containers",
@@ -2529,9 +2529,9 @@
       "source_urls": [
         "https://www.cloudways.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Cloudways' own homepage (2026 footer) confirms it is current and active."
     },
     {
       "slug": "cockroachdb-cloud",
@@ -3229,7 +3229,7 @@
       "open_source": false,
       "launch_year": null,
       "featured": false,
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-10-26",
       "confidence": "high",
       "slug": "digitalocean-managed-postgresql",
       "name": "DigitalOcean Managed Databases for PostgreSQL",
@@ -3239,7 +3239,7 @@
       "source_urls": [
         "https://www.digitalocean.com/products/managed-databases-postgresql"
       ],
-      "change_note": "Added from the official product page; the company was already cataloged but this separately selectable database product was not."
+      "change_note": "DigitalOcean's own product page confirms Managed PostgreSQL (incl. an Advanced Edition) is current and GA."
     },
     {
       "slug": "digitalocean-volumes",
@@ -3880,9 +3880,9 @@
       "source_urls": [
         "https://firebase.google.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Added database-platform facet so the entry is discoverable under database hosting."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Firebase's own homepage still promotes its current app-development tooling with an active sign-up path."
     },
     {
       "slug": "firebase-app-hosting",
@@ -4084,11 +4084,12 @@
       "summary": "An AWS deployment platform transitioning toward Ravion while continuing to operate existing application workflows.",
       "best_for": "PaaS ergonomics while keeping workloads and data inside your own cloud account.",
       "source_urls": [
-        "https://www.flightcontrol.dev/"
+        "https://www.flightcontrol.dev/",
+        "https://www.ravion.com/?from=flightcontrol"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "flightcontrol.dev still 301-redirects to Ravion's site, which frames Ravion as Flightcontrol's successor with existing customers unaffected; matches the catalog's existing 'transitioning' status, no change needed."
     },
     {
       "slug": "fluidstack",
@@ -4356,9 +4357,9 @@
       "source_urls": [
         "https://github.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "GitHub's own homepage is current and active."
     },
     {
       "slug": "codespaces",
@@ -4423,9 +4424,9 @@
       "source_urls": [
         "https://pages.github.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "GitHub's own marketing page for Pages is current and active."
     },
     {
       "slug": "gitlab",
@@ -4492,9 +4493,9 @@
       "source_urls": [
         "https://docs.gitlab.com/user/project/pages/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "GitLab's own docs for Pages are current through GitLab 17.11; no change detected."
     },
     {
       "slug": "gitpod",
@@ -4772,9 +4773,9 @@
       "source_urls": [
         "https://cloud.google.com/functions"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Google's own docs page is current for Cloud Run functions (formerly Cloud Functions); no change detected."
     },
     {
       "slug": "google-gke",
@@ -5041,9 +5042,9 @@
       "source_urls": [
         "https://heroiclabs.com/heroic-cloud/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Heroic Labs' own page confirms Heroic Cloud is a current managed Nakama/Satori hosting product."
     },
     {
       "slug": "heroku",
@@ -5142,9 +5143,9 @@
       "source_urls": [
         "https://www.hetzner.com/cloud/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Hetzner's own product page confirms Cloud is current and active."
     },
     {
       "slug": "hetzner-volumes",
@@ -5280,9 +5281,9 @@
       "source_urls": [
         "https://www.huaweicloud.com/intl/en-us/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Huawei Cloud's own international homepage is current and active."
     },
     {
       "slug": "hugging-face",
@@ -5599,9 +5600,9 @@
       "source_urls": [
         "https://internetcomputer.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Official site still positions Internet Computer as an active decentralized serverless network with a live dashboard."
     },
     {
       "slug": "ionos-cloud",
@@ -5882,9 +5883,9 @@
       "source_urls": [
         "https://lambda.ai/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Lambda's own site (lambda.ai) is current and active, promoting GPU cluster and inference products."
     },
     {
       "slug": "lambda-cloud",
@@ -6131,11 +6132,12 @@
       "summary": "Linode Kubernetes Engine is the managed Kubernetes offering associated with Akamai Cloud.",
       "best_for": "Teams standardizing on Kubernetes without running the control plane themselves.",
       "source_urls": [
-        "https://www.linode.com/products/kubernetes/"
+        "https://www.linode.com/products/kubernetes/",
+        "https://www.akamai.com/products/kubernetes"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "The linode.com product URL now 301-redirects to akamai.com/products/kubernetes, which still serves the same LKE product under the existing Akamai/Linode parent record; no catalog change needed."
     },
     {
       "slug": "liquid-web",
@@ -6389,9 +6391,9 @@
       "source_urls": [
         "https://nebius.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Nebius's own site confirms it is a current, active AI/GPU cloud with live spot pricing."
     },
     {
       "slug": "neocities",
@@ -6495,9 +6497,9 @@
       "source_urls": [
         "https://www.netlify.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Netlify's own homepage is current and active."
     },
     {
       "slug": "netlify-functions",
@@ -7031,9 +7033,9 @@
       "source_urls": [
         "https://www.ovhcloud.com/en/public-cloud/kubernetes/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "OVHcloud's own page confirms Managed Kubernetes is current and active with live pricing."
     },
     {
       "slug": "packetframe",
@@ -7269,9 +7271,9 @@
       "source_urls": [
         "https://piku.github.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Piku's own GitHub Pages site describes the project as stable and maintained, consistent with the catalog record."
     },
     {
       "slug": "planetscale",
@@ -7582,9 +7584,9 @@
       "source_urls": [
         "https://www.rackspace.com/cloud"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Rackspace's own cloud page is current (2026 footer) and active."
     },
     {
       "slug": "railway",
@@ -7871,9 +7873,9 @@
       "source_urls": [
         "https://replit.com/deployments"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Replit's own site (served from the /deployments URL) is current and active; no change detected."
     },
     {
       "slug": "restate-cloud",
@@ -8071,9 +8073,9 @@
       "source_urls": [
         "https://www.scaleway.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Scaleway's own homepage is current and active."
     },
     {
       "slug": "scaleway-kapsule",
@@ -8242,9 +8244,9 @@
       "source_urls": [
         "https://seenode.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Seenode's own homepage is current and active; page did not state GA/preview explicitly so availability is left unchanged."
     },
     {
       "slug": "servers-com",
@@ -8416,9 +8418,9 @@
       "source_urls": [
         "https://www.skyhook.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Skyhook's own site still describes it as a Kubernetes internal developer platform running on customer AWS/GCP/Azure clusters, matching the catalog summary."
     },
     {
       "slug": "sliplane",
@@ -8452,9 +8454,9 @@
       "source_urls": [
         "https://sliplane.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Sliplane's own site confirms the product is current and operating (live dashboard, pricing, docs)."
     },
     {
       "slug": "spheron",
@@ -8520,9 +8522,9 @@
       "source_urls": [
         "https://stacktape.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Stacktape's own site is current, now promoting a 'Stacktape 3.0' release; product remains active."
     },
     {
       "slug": "supabase",
@@ -8762,9 +8764,9 @@
       "source_urls": [
         "https://www.tencentcloud.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "medium",
+      "change_note": "Tencent Cloud's own homepage is current and promotes an active product lineup."
     },
     {
       "slug": "tensordock",
@@ -9028,9 +9030,9 @@
       "source_urls": [
         "https://upstash.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Upstash's own site confirms Redis, vector DB, messaging/workflow, container, and file-storage products are current."
     },
     {
       "slug": "upsun",
@@ -9240,9 +9242,9 @@
       "source_urls": [
         "https://vercel.com/docs/vercel-sandbox"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-10-26",
+      "confidence": "high",
+      "change_note": "Vercel's own docs confirm Sandbox is current; a linked changelog post states it is now generally available."
     },
     {
       "slug": "vultr",

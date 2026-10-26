@@ -1,0 +1,62 @@
+{
+  "added": [],
+  "updated": {},
+  "verified": [
+    "firebase",
+    "amazon-ebs",
+    "skyhook",
+    "upstash",
+    "internet-computer",
+    "vercel-sandbox",
+    "cloudflare",
+    "appwrite-sites",
+    "heroic-cloud",
+    "nebius",
+    "tencent-cloud",
+    "ovh-managed-kubernetes",
+    "cloudways",
+    "piku",
+    "google-cloud-functions",
+    "github-pages",
+    "linode-kubernetes",
+    "github",
+    "azure-app-service",
+    "hetzner-cloud",
+    "replit-deployments",
+    "seenode",
+    "azure-managed-disks",
+    "gitlab-pages",
+    "arweave",
+    "apache-openwhisk",
+    "aws-gamelift",
+    "rackspace",
+    "huawei-cloud",
+    "stacktape",
+    "sliplane",
+    "lambda",
+    "netlify",
+    "digitalocean-managed-postgresql",
+    "scaleway",
+    "aws",
+    "flightcontrol"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "blaxel"
+    },
+    {
+      "kind": "new_candidate",
+      "slug": "inferless"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "akamai-functions"
+    }
+  ],
+  "identity_changes_not_applied": [],
+  "status_alerts_not_applied": [
+    "platform-sh",
+    "hathora"
+  ]
+}
