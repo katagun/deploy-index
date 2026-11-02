@@ -1,0 +1,63 @@
+{
+  "added": [],
+  "updated": {},
+  "verified": [
+    "backendless",
+    "cherry-servers",
+    "ravion",
+    "kamatera",
+    "rivet-cloud",
+    "internet-computer",
+    "gitlab",
+    "wasmer-edge",
+    "cloudflare-pages",
+    "agones",
+    "paperspace",
+    "alibaba-cloud",
+    "cloudflare-containers",
+    "civo-kubernetes",
+    "granite-cloud",
+    "aws-lambda",
+    "surge",
+    "neocities",
+    "turso",
+    "piku",
+    "defang",
+    "northflank-byoc",
+    "flux",
+    "upstash",
+    "zerops",
+    "mongodb-atlas",
+    "github",
+    "amazon-eks",
+    "ibm-code-engine",
+    "northflank",
+    "phoenixnap",
+    "fireworks-ai",
+    "cudo-compute",
+    "hugging-face-inference-endpoints",
+    "azure-aks",
+    "fastly-compute",
+    "gcp-persistent-disk"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "openrelay"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "tsuru"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "baidu-ai-cloud"
+    },
+    {
+      "kind": "checked_active",
+      "slug": "arweave"
+    }
+  ],
+  "identity_changes_not_applied": [],
+  "status_alerts_not_applied": []
+}
