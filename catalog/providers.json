@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_name": "DeployIndex",
-  "generated_on": "2026-08-23",
+  "generated_on": "2026-11-02",
   "methodology": "Seed inventory. Entries become verified through reviewed weekly research proposals.",
   "category_labels": {
     "hyperscale-cloud": "Hyperscale cloud",
@@ -155,9 +155,9 @@
       "source_urls": [
         "https://agones.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official project site shows current release 1.61.0 and active contribution workflow. No archival or status-change language."
     },
     {
       "slug": "aiven",
@@ -360,9 +360,9 @@
       "source_urls": [
         "https://www.alibabacloud.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official regional site live with pricing calculator, sales contact, and health dashboard links. No shutdown or status-change language found."
     },
     {
       "slug": "alibaba-ack",
@@ -528,9 +528,9 @@
       "source_urls": [
         "https://aws.amazon.com/eks/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live and customer-facing with pricing and getting-started links. No preview, beta, deprecation, or end-of-life language found."
     },
     {
       "slug": "aws-gamelift",
@@ -1121,9 +1121,9 @@
       "source_urls": [
         "https://aws.amazon.com/lambda/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live and customer-facing, citing a new 90-minute timeout for Managed Instances. No shutdown or status-change language found."
     },
     {
       "slug": "azure-app-service",
@@ -1263,9 +1263,9 @@
       "source_urls": [
         "https://azure.microsoft.com/products/kubernetes-service"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live with current pricing tiers and getting-started CTA. No deprecation, retirement, or end-of-life language found."
     },
     {
       "slug": "azure-managed-disks",
@@ -1469,9 +1469,9 @@
       "source_urls": [
         "https://backendless.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live; visual app/backend platform with cloud, Pro, and managed hosting tiers. No shutdown or acquisition language found."
     },
     {
       "slug": "baidu-ai-cloud",
@@ -1929,9 +1929,9 @@
       "source_urls": [
         "https://www.cherryservers.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with current pricing and signup; no shutdown or acquisition language. Notes a partnership with Cycle, not an acquisition."
     },
     {
       "slug": "civo",
@@ -1996,9 +1996,9 @@
       "source_urls": [
         "https://www.civo.com/kubernetes"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live with current pricing and multi-region availability. No shutdown or status-change language found."
     },
     {
       "slug": "clever-cloud",
@@ -2245,9 +2245,9 @@
       "source_urls": [
         "https://developers.cloudflare.com/containers/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official docs page live with deployment guides and limits; no explicit GA/beta label but no deprecation language either."
     },
     {
       "slug": "cloudflare-pages",
@@ -2282,11 +2282,12 @@
       "best_for": "Existing Cloudflare Pages projects and Git-connected static sites; Cloudflare now recommends Workers Static Assets for most new projects.",
       "source_urls": [
         "https://developers.cloudflare.com/pages/",
-        "https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/"
+        "https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/",
+        "https://www.cloudflare.com/products/pages/"
       ],
-      "last_verified": "2026-08-23",
+      "last_verified": "2026-11-02",
       "confidence": "high",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "change_note": "Official docs confirm Pages remains available on all plans with active features (Functions, Rollbacks, Redirects). Cloudflare steers new projects to Workers but Pages is not deprecated or merged away."
     },
     {
       "slug": "cloudflare-sandbox",
@@ -2899,9 +2900,9 @@
       "source_urls": [
         "https://www.cudocompute.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with current products, sales contact, and an operational-status footer. No shutdown or status-change language found."
     },
     {
       "slug": "cyclic",
@@ -3029,9 +3030,9 @@
       "source_urls": [
         "https://defang.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with status indicator reading all systems operational, pricing, and portal. No shutdown or status-change language found."
     },
     {
       "slug": "deno-deploy",
@@ -3844,9 +3845,9 @@
       "source_urls": [
         "https://www.fastly.com/products/edge-compute"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live describing current production use and self-serve signup. No beta, preview, deprecation, or sunset language found."
     },
     {
       "slug": "firebase",
@@ -3984,9 +3985,9 @@
       "source_urls": [
         "https://fireworks.ai/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with current pricing, self-serve signup, and an upcoming (Nov 3) virtual keynote referenced, implying ongoing operations. No shutdown or status-change language."
     },
     {
       "slug": "fission",
@@ -4151,9 +4152,9 @@
       "source_urls": [
         "https://runonflux.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with current network stats (6,623 nodes as of the page snapshot) and active docs/roadmap links. No shutdown or status-change language."
     },
     {
       "slug": "fly-io",
@@ -4356,9 +4357,9 @@
       "source_urls": [
         "https://github.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with a dated live activity feed and working signup/download flows. No shutdown or status-change language found."
     },
     {
       "slug": "codespaces",
@@ -4457,11 +4458,12 @@
       "summary": "A DevSecOps platform combining Git repositories, CI/CD, security workflows, environments, packages, and Pages hosting.",
       "best_for": "Secure disposable environments for development, generated code, and AI agents.",
       "source_urls": [
-        "https://gitlab.com/"
+        "https://gitlab.com/",
+        "https://about.gitlab.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "gitlab.com redirects to about.gitlab.com; official marketing site live with current release notes (19.5) and no shutdown or acquisition language."
     },
     {
       "slug": "gitlab-pages",
@@ -4835,11 +4837,12 @@
       "summary": "Google Cloud's network-attached block storage for Compute Engine and GKE, offered in standard, balanced, and SSD variants.",
       "best_for": "Durable volumes for Google Cloud workloads that must outlive the instance they attach to.",
       "source_urls": [
-        "https://cloud.google.com/persistent-disk"
+        "https://cloud.google.com/persistent-disk",
+        "https://docs.cloud.google.com/compute/docs/disks"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-11-02",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "Official docs confirm Persistent Disk remains an active, current block-storage offering alongside the newer Hyperdisk family; it is unavailable only on the latest machine series, which favor Hyperdisk. No deprecation of the product itself."
     },
     {
       "slug": "granite-cloud",
@@ -4871,9 +4874,9 @@
       "source_urls": [
         "https://granite.so/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live; confirms prior rebrand from novps.io to Granite (already reflected correctly in this catalog's current name/URL). No further status change."
     },
     {
       "slug": "greengeeks",
@@ -5349,11 +5352,12 @@
       "summary": "Managed, autoscaling, and optionally private endpoints for deploying models from the Hugging Face ecosystem.",
       "best_for": "Model inference, training, batch compute, and bursty GPU workloads.",
       "source_urls": [
-        "https://huggingface.co/inference-endpoints"
+        "https://huggingface.co/inference-endpoints",
+        "https://endpoints.huggingface.co/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "huggingface.co/inference-endpoints redirects to endpoints.huggingface.co, which is live with self-serve pricing and signup. No shutdown or status-change language found."
     },
     {
       "slug": "hugging-face-spaces",
@@ -5468,9 +5472,9 @@
       "source_urls": [
         "https://www.ibm.com/products/code-engine"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live, calling itself a fully managed serverless platform with current pricing tiers. No status-change language found."
     },
     {
       "slug": "ibm-kubernetes",
@@ -5599,9 +5603,9 @@
       "source_urls": [
         "https://internetcomputer.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with network dashboard and ecosystem app list. No shutdown or deprecation language; several ecosystem apps are tagged early access/pilot, not the network itself."
     },
     {
       "slug": "ionos-cloud",
@@ -5665,9 +5669,9 @@
       "source_urls": [
         "https://www.kamatera.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with trial signup, console login, and support lines. No shutdown or status-change language found."
     },
     {
       "slug": "kinsta",
@@ -6285,9 +6289,9 @@
       "source_urls": [
         "https://www.mongodb.com/atlas"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live and actively promoted (Atlas Infinite, MongoDB 9.0 announced as recent). Atlas Agent Engine is explicitly public preview, but core Atlas remains a current operating service."
     },
     {
       "slug": "motherduck",
@@ -6421,9 +6425,9 @@
       "source_urls": [
         "https://neocities.org/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with public signup and ~1.8M sites claimed. No shutdown or status-change language found."
     },
     {
       "slug": "neon",
@@ -6641,9 +6645,9 @@
       "source_urls": [
         "https://northflank.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official homepage live with signup and pricing. Site-wide banner discloses a recent security incident asking users to rotate credentials; this is a security advisory, not a change to product availability or status."
     },
     {
       "slug": "northflank-byoc",
@@ -6680,9 +6684,9 @@
       "source_urls": [
         "https://northflank.com/product/bring-your-own-cloud"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live and offered for trial/demo. Site-wide banner discloses a recent security incident asking users to rotate credentials; this is a security advisory, not a change to product availability."
     },
     {
       "slug": "nuclio",
@@ -7166,9 +7170,9 @@
       "source_urls": [
         "https://www.paperspace.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "high",
+      "change_note": "Official site confirms Paperspace operates as part of DigitalOcean, consistent with this catalog's existing parent_slug=digitalocean. Only the Portal product is in limited preview."
     },
     {
       "slug": "parse-platform",
@@ -7235,9 +7239,9 @@
       "source_urls": [
         "https://phoenixnap.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with current product offerings, 15+ data centers, and support/sales contact options. No shutdown or status-change language found."
     },
     {
       "slug": "piku",
@@ -7269,9 +7273,9 @@
       "source_urls": [
         "https://piku.github.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official project site live, self-describes as STABLE and actively maintained. No archival or end-of-life language."
     },
     {
       "slug": "planetscale",
@@ -7654,9 +7658,9 @@
       "source_urls": [
         "https://www.ravion.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live; describes itself as successor to Flightcontrol, consistent with Flightcontrol's existing transitioning status in this catalog. Kubernetes/sandboxes/GCP/Azure support marked coming soon."
     },
     {
       "slug": "red-hat-openshift",
@@ -7935,9 +7939,9 @@
       "source_urls": [
         "https://www.rivet.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live; Rivet Cloud/BYOC/self-host options active. Rivet 3.0 and Dynamic Apps are labeled Preview as new features, not a change to overall product availability."
     },
     {
       "slug": "runloop",
@@ -8623,9 +8627,9 @@
       "source_urls": [
         "https://surge.sh/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with usage counters and ten serving regions; operating since 2014 per the page. No shutdown or status-change language."
     },
     {
       "slug": "tembo",
@@ -8927,9 +8931,9 @@
       "source_urls": [
         "https://turso.tech/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live describing Turso Cloud as the hosted platform for running Turso at scale, with docs and pricing links. No shutdown, acquisition, or status-change language."
     },
     {
       "slug": "uncloud",
@@ -9028,9 +9032,9 @@
       "source_urls": [
         "https://upstash.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with self-serve signup, console access, current pricing, and a 99.99% uptime claim. No shutdown or status-change language."
     },
     {
       "slug": "upsun",
@@ -9343,9 +9347,9 @@
       "source_urls": [
         "https://wasmer.io/products/edge"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official product page live with deploy CLI example and current pricing. No shutdown or status-change language found."
     },
     {
       "slug": "wordpress-com",
@@ -9588,9 +9592,9 @@
       "source_urls": [
         "https://zerops.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-02",
+      "confidence": "medium",
+      "change_note": "Official site live with signup, credits offer, status page link, and active datacenters. No shutdown or status-change language; some newer sub-products (Mate, Box) are marked coming soon."
     }
   ]
 }

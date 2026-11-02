@@ -1,0 +1,414 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-11-02",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "backendless",
+    "cherry-servers",
+    "gcp-persistent-disk",
+    "ravion",
+    "kamatera",
+    "rivet-cloud",
+    "internet-computer",
+    "gitlab",
+    "wasmer-edge",
+    "cloudflare-pages",
+    "agones",
+    "paperspace",
+    "alibaba-cloud",
+    "cloudflare-containers",
+    "civo-kubernetes",
+    "inmotion-hosting",
+    "granite-cloud",
+    "tsuru",
+    "aws-lambda",
+    "surge",
+    "neocities",
+    "akamai-functions",
+    "turso",
+    "azure-playfab",
+    "piku",
+    "defang",
+    "northflank-byoc",
+    "baidu-ai-cloud",
+    "arweave",
+    "flux",
+    "upstash",
+    "zerops",
+    "mongodb-atlas",
+    "github",
+    "amazon-eks",
+    "ibm-code-engine",
+    "northflank",
+    "phoenixnap",
+    "packetframe",
+    "oracle-cloud",
+    "fireworks-ai",
+    "cudo-compute",
+    "hugging-face-inference-endpoints",
+    "azure-aks",
+    "fastly-compute"
+  ],
+  "summary": "Verification: WebFetch was NOT blocked for most provider domains this run, so 40 of the 45 sampled slugs were confirmed live by directly reading their own pages; no shutdown, acquisition, or availability changes were found. 4 slugs (inmotion-hosting, akamai-functions, azure-playfab, oracle-cloud) returned 403/404 or only a redirect stub and are omitted from checked_active. packetframe's page loaded but showed an 'Under Construction' banner, a 2024 copyright, and a broken contact email -- ambiguous staleness, not shutdown evidence, so no alert was raised and it was left out of checked_active too; worth a manual look. Northflank's homepage and BYOC page both carry a banner disclosing a recent security incident and asking users to rotate credentials; that's a security advisory, not a status/availability change, so no status_alert was raised, but it's flagged here for attention. Discovery: one new candidate, OpenRelay (openrelay.inc), a YC S26 on-demand GPU cloud (formerly VectorLay), verified on its own site with live pricing; confidence kept low as a very new, small company. AGBCLOUD and CoreWeave Sandboxes leads could not be confirmed first-party (agb.cloud did not resolve; coreweave.com/products/sandboxes 404'd), so neither is proposed. No updates or status_alerts: the material facts found (AWS App Runner sunset, Flightcontrol/Ravion transition) were already correctly reflected in the existing catalog.",
+  "new_candidates": [
+    {
+      "slug": "openrelay",
+      "name": "OpenRelay",
+      "url": "https://openrelay.inc/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "on-demand GPU VMs",
+        "OpenAI-compatible inference API",
+        "hourly billing, no commitment"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "On-demand GPU cloud (formerly VectorLay, Y Combinator S26) offering hourly-billed GPU VMs and an OpenAI-compatible inference gateway, with a published per-GPU pricing table from RTX 3090 up to B300.",
+      "best_for": "Developers wanting quick, no-commitment access to a range of GPU types for inference or training without reservations or quotas.",
+      "source_urls": [
+        "https://openrelay.inc/"
+      ],
+      "confidence": "low",
+      "change_note": "New GPU cloud provider not yet in the inventory; verified directly on its official site, which lists live pricing, VM deployment, and an OpenAI-compatible inference gateway."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [],
+  "checked_active": [
+    {
+      "slug": "backendless",
+      "source_urls": [
+        "https://backendless.com/"
+      ],
+      "note": "Official site live; visual app/backend platform with cloud, Pro, and managed hosting tiers. No shutdown or acquisition language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cherry-servers",
+      "source_urls": [
+        "https://www.cherryservers.com/"
+      ],
+      "note": "Official site live with current pricing and signup; no shutdown or acquisition language. Notes a partnership with Cycle, not an acquisition.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ravion",
+      "source_urls": [
+        "https://www.ravion.com/"
+      ],
+      "note": "Official site live; describes itself as successor to Flightcontrol, consistent with Flightcontrol's existing transitioning status in this catalog. Kubernetes/sandboxes/GCP/Azure support marked coming soon.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "kamatera",
+      "source_urls": [
+        "https://www.kamatera.com/"
+      ],
+      "note": "Official site live with trial signup, console login, and support lines. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "rivet-cloud",
+      "source_urls": [
+        "https://www.rivet.dev/"
+      ],
+      "note": "Official site live; Rivet Cloud/BYOC/self-host options active. Rivet 3.0 and Dynamic Apps are labeled Preview as new features, not a change to overall product availability.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "internet-computer",
+      "source_urls": [
+        "https://internetcomputer.org/"
+      ],
+      "note": "Official site live with network dashboard and ecosystem app list. No shutdown or deprecation language; several ecosystem apps are tagged early access/pilot, not the network itself.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "gitlab",
+      "source_urls": [
+        "https://about.gitlab.com/"
+      ],
+      "note": "gitlab.com redirects to about.gitlab.com; official marketing site live with current release notes (19.5) and no shutdown or acquisition language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "wasmer-edge",
+      "source_urls": [
+        "https://wasmer.io/products/edge"
+      ],
+      "note": "Official product page live with deploy CLI example and current pricing. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudflare-pages",
+      "source_urls": [
+        "https://developers.cloudflare.com/pages/",
+        "https://www.cloudflare.com/products/pages/"
+      ],
+      "note": "Official docs confirm Pages remains available on all plans with active features (Functions, Rollbacks, Redirects). Cloudflare steers new projects to Workers but Pages is not deprecated or merged away.",
+      "confidence": "high"
+    },
+    {
+      "slug": "agones",
+      "source_urls": [
+        "https://agones.dev/"
+      ],
+      "note": "Official project site shows current release 1.61.0 and active contribution workflow. No archival or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "paperspace",
+      "source_urls": [
+        "https://www.paperspace.com/"
+      ],
+      "note": "Official site confirms Paperspace operates as part of DigitalOcean, consistent with this catalog's existing parent_slug=digitalocean. Only the Portal product is in limited preview.",
+      "confidence": "high"
+    },
+    {
+      "slug": "alibaba-cloud",
+      "source_urls": [
+        "https://www.alibabacloud.com/"
+      ],
+      "note": "Official regional site live with pricing calculator, sales contact, and health dashboard links. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudflare-containers",
+      "source_urls": [
+        "https://developers.cloudflare.com/containers/"
+      ],
+      "note": "Official docs page live with deployment guides and limits; no explicit GA/beta label but no deprecation language either.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "civo-kubernetes",
+      "source_urls": [
+        "https://www.civo.com/kubernetes"
+      ],
+      "note": "Official product page live with current pricing and multi-region availability. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "granite-cloud",
+      "source_urls": [
+        "https://granite.so/"
+      ],
+      "note": "Official site live; confirms prior rebrand from novps.io to Granite (already reflected correctly in this catalog's current name/URL). No further status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "tsuru",
+      "source_urls": [
+        "https://tsuru.io/"
+      ],
+      "note": "Official project site live, describes itself as an open-source project welcoming contributions. Page gives no release dates or commit activity to independently confirm recent maintenance.",
+      "confidence": "low"
+    },
+    {
+      "slug": "aws-lambda",
+      "source_urls": [
+        "https://aws.amazon.com/lambda/"
+      ],
+      "note": "Official product page live and customer-facing, citing a new 90-minute timeout for Managed Instances. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "surge",
+      "source_urls": [
+        "https://surge.sh/"
+      ],
+      "note": "Official site live with usage counters and ten serving regions; operating since 2014 per the page. No shutdown or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "neocities",
+      "source_urls": [
+        "https://neocities.org/"
+      ],
+      "note": "Official site live with public signup and ~1.8M sites claimed. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "turso",
+      "source_urls": [
+        "https://turso.tech/"
+      ],
+      "note": "Official site live describing Turso Cloud as the hosted platform for running Turso at scale, with docs and pricing links. No shutdown, acquisition, or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "piku",
+      "source_urls": [
+        "https://piku.github.io/"
+      ],
+      "note": "Official project site live, self-describes as STABLE and actively maintained. No archival or end-of-life language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "defang",
+      "source_urls": [
+        "https://defang.io/"
+      ],
+      "note": "Official site live with status indicator reading all systems operational, pricing, and portal. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "northflank-byoc",
+      "source_urls": [
+        "https://northflank.com/product/bring-your-own-cloud"
+      ],
+      "note": "Official product page live and offered for trial/demo. Site-wide banner discloses a recent security incident asking users to rotate credentials; this is a security advisory, not a change to product availability.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "baidu-ai-cloud",
+      "source_urls": [
+        "https://cloud.baidu.com/"
+      ],
+      "note": "Official portal live promoting ERNIE 5.0 and other current-generation products. No shutdown or discontinuation language found.",
+      "confidence": "low"
+    },
+    {
+      "slug": "arweave",
+      "source_urls": [
+        "https://www.arweave.org/"
+      ],
+      "note": "Official site live describing the protocol as stable, mature and widely adopted, with an open contribution workflow. No shutdown or status-change language.",
+      "confidence": "low"
+    },
+    {
+      "slug": "flux",
+      "source_urls": [
+        "https://runonflux.com/"
+      ],
+      "note": "Official site live with current network stats (6,623 nodes as of the page snapshot) and active docs/roadmap links. No shutdown or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "upstash",
+      "source_urls": [
+        "https://upstash.com/"
+      ],
+      "note": "Official site live with self-serve signup, console access, current pricing, and a 99.99% uptime claim. No shutdown or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zerops",
+      "source_urls": [
+        "https://zerops.io/"
+      ],
+      "note": "Official site live with signup, credits offer, status page link, and active datacenters. No shutdown or status-change language; some newer sub-products (Mate, Box) are marked coming soon.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "mongodb-atlas",
+      "source_urls": [
+        "https://www.mongodb.com/atlas"
+      ],
+      "note": "Official site live and actively promoted (Atlas Infinite, MongoDB 9.0 announced as recent). Atlas Agent Engine is explicitly public preview, but core Atlas remains a current operating service.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "Official site live with a dated live activity feed and working signup/download flows. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-eks",
+      "source_urls": [
+        "https://aws.amazon.com/eks/"
+      ],
+      "note": "Official product page live and customer-facing with pricing and getting-started links. No preview, beta, deprecation, or end-of-life language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ibm-code-engine",
+      "source_urls": [
+        "https://www.ibm.com/products/code-engine"
+      ],
+      "note": "Official product page live, calling itself a fully managed serverless platform with current pricing tiers. No status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "northflank",
+      "source_urls": [
+        "https://northflank.com/"
+      ],
+      "note": "Official homepage live with signup and pricing. Site-wide banner discloses a recent security incident asking users to rotate credentials; this is a security advisory, not a change to product availability or status.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "phoenixnap",
+      "source_urls": [
+        "https://phoenixnap.com/"
+      ],
+      "note": "Official site live with current product offerings, 15+ data centers, and support/sales contact options. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fireworks-ai",
+      "source_urls": [
+        "https://fireworks.ai/"
+      ],
+      "note": "Official site live with current pricing, self-serve signup, and an upcoming (Nov 3) virtual keynote referenced, implying ongoing operations. No shutdown or status-change language.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cudo-compute",
+      "source_urls": [
+        "https://www.cudocompute.com/"
+      ],
+      "note": "Official site live with current products, sales contact, and an operational-status footer. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "hugging-face-inference-endpoints",
+      "source_urls": [
+        "https://endpoints.huggingface.co/"
+      ],
+      "note": "huggingface.co/inference-endpoints redirects to endpoints.huggingface.co, which is live with self-serve pricing and signup. No shutdown or status-change language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-aks",
+      "source_urls": [
+        "https://azure.microsoft.com/products/kubernetes-service"
+      ],
+      "note": "Official product page live with current pricing tiers and getting-started CTA. No deprecation, retirement, or end-of-life language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fastly-compute",
+      "source_urls": [
+        "https://www.fastly.com/products/edge-compute"
+      ],
+      "note": "Official product page live describing current production use and self-serve signup. No beta, preview, deprecation, or sunset language found.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "gcp-persistent-disk",
+      "source_urls": [
+        "https://docs.cloud.google.com/compute/docs/disks"
+      ],
+      "note": "Official docs confirm Persistent Disk remains an active, current block-storage offering alongside the newer Hyperdisk family; it is unavailable only on the latest machine series, which favor Hyperdisk. No deprecation of the product itself.",
+      "confidence": "medium"
+    }
+  ]
+}
