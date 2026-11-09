@@ -1,0 +1,67 @@
+{
+  "added": [
+    "docker-agentic-platform"
+  ],
+  "updated": {
+    "a2-hosting": [
+      "source_urls"
+    ],
+    "neon": [
+      "summary",
+      "source_urls"
+    ]
+  },
+  "verified": [
+    "nhost",
+    "hetzner-volumes",
+    "skyhook",
+    "cloudscale-ch",
+    "aiven",
+    "vercel-sandbox",
+    "bunny-net",
+    "firebase-app-hosting",
+    "azure-playfab",
+    "tensordock",
+    "ibm-cloud",
+    "amazon-eks",
+    "cloudtype",
+    "zaneops",
+    "val-town",
+    "neocities",
+    "dokploy",
+    "nebius",
+    "greengeeks",
+    "digitalocean-app-platform",
+    "cockroachdb-cloud",
+    "salad",
+    "azure-static-web-apps",
+    "leapcell",
+    "acquia",
+    "azure-managed-disks",
+    "coreweave",
+    "servers-com",
+    "fireworks-ai",
+    "neon",
+    "aws",
+    "amazon-rds",
+    "github",
+    "openfaas",
+    "fission",
+    "digitalocean-functions",
+    "ravion"
+  ],
+  "skipped_low_confidence": [],
+  "identity_changes_not_applied": [
+    {
+      "slug": "a2-hosting",
+      "fields": [
+        "name",
+        "url"
+      ]
+    }
+  ],
+  "status_alerts_not_applied": [
+    "zeabur",
+    "fleek"
+  ]
+}
