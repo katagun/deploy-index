@@ -1,0 +1,468 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-11-09",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "nhost",
+    "openmetal",
+    "hetzner-volumes",
+    "skyhook",
+    "cloudscale-ch",
+    "aiven",
+    "fleek",
+    "vercel-sandbox",
+    "bunny-net",
+    "firebase-app-hosting",
+    "azure-playfab",
+    "tensordock",
+    "ibm-cloud",
+    "oracle-container-instances",
+    "amazon-eks",
+    "a2-hosting",
+    "cloudtype",
+    "zaneops",
+    "val-town",
+    "neocities",
+    "dokploy",
+    "nebius",
+    "greengeeks",
+    "google-gke",
+    "digitalocean-app-platform",
+    "cockroachdb-cloud",
+    "salad",
+    "azure-static-web-apps",
+    "leapcell",
+    "acquia",
+    "azure-managed-disks",
+    "coreweave",
+    "servers-com",
+    "fireworks-ai",
+    "neon",
+    "aws",
+    "scaleway-kapsule",
+    "amazon-rds",
+    "openfaas",
+    "github",
+    "infomaniak-cloud",
+    "restate-cloud",
+    "fission",
+    "digitalocean-functions",
+    "ravion"
+  ],
+  "summary": "WebFetch worked for most providers this run (it was not the usual EGRESS_BLOCKED proxy refusal), so verification coverage is broader than typical: 36 of the 45 rotation slugs were confirmed active by directly reading their own current page. Nine could not be confirmed: oracle-container-instances and scaleway-kapsule returned HTTP 403 from their own servers; openmetal, infomaniak-cloud, google-gke, and restate-cloud returned pages the fetch tool truncated before any usable content came through; none of these nine are included in checked_active, in_candidates, or alerts. Three material findings surfaced and are proposed below, each backed by a page I fetched directly from the entity's own domain plus independent reporting: (1) Zeabur's founder posted on zeabur.com on 2026-10-17 that the whole platform is shutting down by 2026-12-31 (not merely 'transitioning' as currently catalogued) -- status_alert, high confidence. (2) fleek.xyz now 301-redirects to fleek.sh, a bare teaser page; the IPFS project's own migration writeup (corroborated by a secondary source) says Fleek's IPFS hosting product was discontinued 2026-01-31 as the company pivots toward AI -- status_alert, medium confidence, scoped to the cataloged decentralized-hosting capability since no company-wide shutdown was found. (3) www.a2hosting.com now 301-redirects to hosting.com, and multiple reputable trade-press reports describe A2 Hosting's 2025 rebrand to Hosting.com following its acquisition by World Host Group; proposed as an identity update (name/url) for manual review, medium confidence, since the redirect is first-party but no official A2/Hosting.com press statement page could be fetched directly. Also proposed: an ordinary metadata update for neon, whose own current page states it is now a Databricks product built on 'Lakebase Postgres' (brand and ownership unchanged otherwise) -- high confidence, first-party. One new candidate: Docker's 'Agentic Platform' cloud sandboxes for AI coding agents (docs.docker.com/agentic-platform/), explicitly labeled experimental/not GA by Docker's own docs -- low-medium confidence, no existing Docker provider record in the catalog to parent it to. A handful of other 2026 sandbox/serverless launches turned up in discovery search (Baseten, Render, Cloudflare, CoreWeave, Novita, AGBCLOUD) but all except Docker and AGBCLOUD belong to providers already in the catalog and were not pursued further this run to keep scope modest; AGBCLOUD's own site was not fetched and so is not proposed. Two pages included a stray line of text with no connection to surrounding content (a 'GPT-6 LunaHigh' fragment on val.town, a repeated garbled heading on fireworks.ai) that looked like rendering noise rather than an instruction, and was not acted on.",
+  "new_candidates": [
+    {
+      "slug": "docker-agentic-platform",
+      "name": "Docker Agentic Platform",
+      "url": "https://docs.docker.com/agentic-platform/",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "sandboxed-execution",
+        "containers",
+        "secrets-management"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "beta",
+      "availability": "preview",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "Docker-operated cloud sandboxes that run AI coding agents (Claude Code, Codex, OpenCode, Copilot, Gemini CLI) in isolated, persistent environments that keep working after the local client disconnects.",
+      "best_for": "Running AI coding agents in isolated cloud sandboxes with managed secrets, network policies, and a terminal, outside the developer's own machine.",
+      "source_urls": [
+        "https://docs.docker.com/agentic-platform/",
+        "https://docs.docker.com/agentic-platform/release-notes/"
+      ],
+      "confidence": "medium",
+      "change_note": "New candidate: Docker's own docs label the Agentic Platform / Cloud Sandboxes product experimental as of the 2026-09-24 release notes; no existing Docker provider record exists in the catalog, so this is unparented."
+    }
+  ],
+  "updates": [
+    {
+      "slug": "a2-hosting",
+      "patch": {
+        "name": "Hosting.com (formerly A2 Hosting)",
+        "url": "https://hosting.com/",
+        "entity_type": null,
+        "parent_slug_action": "keep",
+        "parent_slug": null,
+        "primary_category": null,
+        "categories": null,
+        "capabilities": null,
+        "operating_models": null,
+        "era": null,
+        "open_source": null,
+        "launch_year_action": "keep",
+        "launch_year": null,
+        "summary": null,
+        "best_for": null
+      },
+      "source_urls": [
+        "https://www.a2hosting.com/",
+        "https://hosting.com/",
+        "https://www.techradar.com/pro/a2-hosting-rebrands-as-hosting-com"
+      ],
+      "rationale": "www.a2hosting.com now 301-redirects to hosting.com (confirmed directly this run). 2025 trade press (TechRadar Pro, HostingAdvice, Website Planet) describes this as A2 Hosting's rebrand to Hosting.com after acquisition by World Host Group. hosting.com's own page doesn't name A2 Hosting, so this rests on the redirect plus secondary reporting, not a fetched first-party press statement -- flagging as an identity change for manual review, not as fully confirmed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "neon",
+      "patch": {
+        "name": null,
+        "url": null,
+        "entity_type": null,
+        "parent_slug_action": "keep",
+        "parent_slug": null,
+        "primary_category": null,
+        "categories": null,
+        "capabilities": null,
+        "operating_models": null,
+        "era": null,
+        "open_source": null,
+        "launch_year_action": "keep",
+        "launch_year": null,
+        "summary": "Serverless PostgreSQL with branching, autoscaling, and scale-to-zero; acquired by Databricks (deal closed mid-2025) and now also offered as 'Lakebase Postgres' within the Databricks platform, alongside its own neon.com product, console, and branding.",
+        "best_for": null
+      },
+      "source_urls": [
+        "https://neon.com/",
+        "https://siliconangle.com/2025/06/11/following-neon-acquisition-databricks-launches-serverless-lakebase-database/"
+      ],
+      "rationale": "neon.com's own current homepage describes Neon as 'a complete backend from Databricks, built on Lakebase Postgres,' confirming the Databricks acquisition and Lakebase branding directly from the first-party page fetched this run. Neon's own name, domain, and console are unchanged, so this is an ordinary summary correction, not an identity change.",
+      "confidence": "high"
+    }
+  ],
+  "status_alerts": [
+    {
+      "slug": "zeabur",
+      "proposed_status": "sunset",
+      "proposed_availability": "discontinued",
+      "effective_date": "2026-12-31",
+      "rationale": "Zeabur's founder posted directly on zeabur.com on 2026-10-17 that the platform is shutting down entirely, citing growth limits, architectural complexity, and two 2026 security incidents. New dedicated-server and domain purchases stopped immediately; renewals end 2026-12-01; all dedicated servers and shared clusters stop operating by 2026-12-31. This is a full shutdown, materially beyond the catalog's current 'transitioning' status.",
+      "source_urls": [
+        "https://zeabur.com/en-US/blogs/zeabur-is-shutting-down"
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "fleek",
+      "proposed_status": "transitioning",
+      "proposed_availability": "discontinued",
+      "effective_date": "2026-01-31",
+      "rationale": "fleek.xyz now 301-redirects to fleek.sh, which shows only a 'we've been building something new' teaser with no hosting product (confirmed directly this run). The IPFS project's own migration writeup says Fleek's IPFS hosting service (the capability catalogued here as decentralized-hosting) was discontinued on 2026-01-31 as Fleek pivots toward AI inference work; a secondary source corroborates with the same date and says no company-wide shutdown has been announced and Fleek describes itself as between products. Scoped to the hosting capability, not a claim that the company itself has closed.",
+      "source_urls": [
+        "https://fleek.xyz/",
+        "https://blog.ipfs.tech/2026-fleek-migration/"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "nhost",
+      "source_urls": [
+        "https://nhost.io/"
+      ],
+      "note": "Own page fetched directly; live sign-in/sign-up links, status-page link, no shutdown or rebrand notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "hetzner-volumes",
+      "source_urls": [
+        "https://docs.hetzner.com/cloud/volumes/overview"
+      ],
+      "note": "Own docs page fetched directly; describes current block-storage product with no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "skyhook",
+      "source_urls": [
+        "https://www.skyhook.io/"
+      ],
+      "note": "Own page fetched directly; current product description, status/changelog links, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudscale-ch",
+      "source_urls": [
+        "https://www.cloudscale.ch/"
+      ],
+      "note": "Own page fetched directly; 'all systems operational' footer, current plans listed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aiven",
+      "source_urls": [
+        "https://aiven.io/"
+      ],
+      "note": "Own page fetched directly; current products and pricing tiers, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "vercel-sandbox",
+      "source_urls": [
+        "https://vercel.com/docs/vercel-sandbox"
+      ],
+      "note": "Own docs page fetched directly, dated last_updated 2026-09-22; describes current GA sandbox product.",
+      "confidence": "high"
+    },
+    {
+      "slug": "bunny-net",
+      "source_urls": [
+        "https://bunny.net/"
+      ],
+      "note": "Own page fetched directly; current product lineup, status-page link, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "firebase-app-hosting",
+      "source_urls": [
+        "https://firebase.google.com/docs/app-hosting"
+      ],
+      "note": "Own docs page fetched directly; describes current product and workflow, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-playfab",
+      "source_urls": [
+        "https://playfab.com/"
+      ],
+      "note": "Own domain fetched directly; playfab.com now itself redirects into learn.microsoft.com/en-us/xbox/playfab/ docs, which are live and dated 2026-09-01 with no retirement notice -- PlayFab is active, just reorganized under Microsoft Learn/Xbox.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "tensordock",
+      "source_urls": [
+        "https://www.tensordock.com/"
+      ],
+      "note": "Own page fetched directly; current GPU pricing and marketplace model described.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ibm-cloud",
+      "source_urls": [
+        "https://www.ibm.com/cloud"
+      ],
+      "note": "Own page fetched directly; current product overview, no outage or deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-eks",
+      "source_urls": [
+        "https://aws.amazon.com/eks/"
+      ],
+      "note": "Own page fetched directly; current feature set described, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudtype",
+      "source_urls": [
+        "https://cloudtype.io/"
+      ],
+      "note": "Own page fetched directly; current product description and status-page link.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zaneops",
+      "source_urls": [
+        "https://zaneops.dev/"
+      ],
+      "note": "Own page fetched directly; recent changelog entry referenced, active GitHub/Discord links.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "val-town",
+      "source_urls": [
+        "https://www.val.town/"
+      ],
+      "note": "Own page fetched directly; current product description and working sign-up link.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "neocities",
+      "source_urls": [
+        "https://neocities.org/"
+      ],
+      "note": "Own page fetched directly; live usage counters and current feature description.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "dokploy",
+      "source_urls": [
+        "https://dokploy.com/"
+      ],
+      "note": "Own page fetched directly; current feature list, active GitHub/Discord links, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "nebius",
+      "source_urls": [
+        "https://nebius.com/"
+      ],
+      "note": "Own page fetched directly; current product lineup and recent announcements, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "greengeeks",
+      "source_urls": [
+        "https://www.greengeeks.com/"
+      ],
+      "note": "Own page fetched directly; current plans and live checkout links.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-app-platform",
+      "source_urls": [
+        "https://www.digitalocean.com/products/app-platform"
+      ],
+      "note": "Own page fetched directly; recent feature updates listed (Outbound VPC GA, MCP integration), no deprecation notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "cockroachdb-cloud",
+      "source_urls": [
+        "https://www.cockroachlabs.com/product/cloud/"
+      ],
+      "note": "Own page fetched directly; current plan tiers and feature description, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "salad",
+      "source_urls": [
+        "https://salad.com/"
+      ],
+      "note": "Own page fetched directly; current products listed, dated blog references through August 2026.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-static-web-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/app-service/static"
+      ],
+      "note": "Own page fetched directly; current feature set, hybrid Next.js labeled Preview, no retirement notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "leapcell",
+      "source_urls": [
+        "https://leapcell.io/"
+      ],
+      "note": "Own page fetched directly; current product and pricing description.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "acquia",
+      "source_urls": [
+        "https://www.acquia.com/products/drupal-cloud/cloud-platform"
+      ],
+      "note": "Own page fetched directly; current plans, SLA, and compliance claims described, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-managed-disks",
+      "source_urls": [
+        "https://azure.microsoft.com/en-us/products/storage/disks"
+      ],
+      "note": "Own page fetched directly; current disk types and recent (Ignite 2025-era) feature updates, no retirement notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "coreweave",
+      "source_urls": [
+        "https://www.coreweave.com/"
+      ],
+      "note": "Own page fetched directly; current product lineup and a newly announced Forge product, status-page link present.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "servers-com",
+      "source_urls": [
+        "https://www.servers.com/"
+      ],
+      "note": "Own page fetched directly; current product lineup under Servers.com by Nexcess branding, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fireworks-ai",
+      "source_urls": [
+        "https://fireworks.ai/"
+      ],
+      "note": "Own page fetched directly; current model lineup and a 2026 Forge keynote reference, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "neon",
+      "source_urls": [
+        "https://neon.com/"
+      ],
+      "note": "Own page fetched directly; confirmed active, now presented as a Databricks product built on Lakebase Postgres (see paired update).",
+      "confidence": "high"
+    },
+    {
+      "slug": "aws",
+      "source_urls": [
+        "https://aws.amazon.com/"
+      ],
+      "note": "Own page fetched directly; normal operation, upcoming re:Invent promotion, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-rds",
+      "source_urls": [
+        "https://aws.amazon.com/rds/"
+      ],
+      "note": "Own page fetched directly; current engines and features described, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "github",
+      "source_urls": [
+        "https://github.com/"
+      ],
+      "note": "Own page fetched directly; current product lineup described; page loaded with only a minor UI error message, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "openfaas",
+      "source_urls": [
+        "https://www.openfaas.com/"
+      ],
+      "note": "Own page fetched directly; current feature set and CNCF landscape listing, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fission",
+      "source_urls": [
+        "https://fission.io/"
+      ],
+      "note": "Own page fetched directly; recent v1.27.0 release notes referenced, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-functions",
+      "source_urls": [
+        "https://www.digitalocean.com/products/functions"
+      ],
+      "note": "Own page fetched directly; current pricing and runtime support described, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ravion",
+      "source_urls": [
+        "https://www.ravion.com/"
+      ],
+      "note": "Own page fetched directly; current product description; page itself states it is the successor to Flightcontrol with existing customers unaffected.",
+      "confidence": "medium"
+    }
+  ]
+}
