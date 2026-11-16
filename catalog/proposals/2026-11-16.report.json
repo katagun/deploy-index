@@ -1,0 +1,64 @@
+{
+  "added": [
+    "cirrascale"
+  ],
+  "updated": {},
+  "verified": [
+    "back4app",
+    "digitalocean-volumes",
+    "nullstone",
+    "civo",
+    "motherduck",
+    "akash-network",
+    "replit",
+    "bunny-net",
+    "vercel",
+    "agones",
+    "salad",
+    "huawei-cloud",
+    "azure-container-apps",
+    "dreamhost",
+    "upsun",
+    "uncloud",
+    "digitalocean-functions",
+    "firebase-hosting",
+    "bluehost",
+    "openfaas",
+    "azure-aks",
+    "golem-cloud",
+    "clever-cloud",
+    "codespaces",
+    "porter",
+    "tensordock",
+    "ibm-code-engine",
+    "crunchy-bridge",
+    "amazon-rds",
+    "code-capsules",
+    "prisma-postgres",
+    "cloudscale-ch",
+    "cloud-66",
+    "zaneops",
+    "replit-deployments",
+    "rivet-cloud",
+    "temps",
+    "digitalocean-app-platform",
+    "dbos-cloud",
+    "hetzner-cloud"
+  ],
+  "skipped_low_confidence": [
+    {
+      "kind": "new_candidate",
+      "slug": "docker-agentic-platform"
+    },
+    {
+      "kind": "new_candidate",
+      "slug": "velda"
+    }
+  ],
+  "identity_changes_not_applied": [],
+  "status_alerts_not_applied": [
+    "flightcontrol",
+    "val-town",
+    "hathora"
+  ]
+}

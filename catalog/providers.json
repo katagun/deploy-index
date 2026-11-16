@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_name": "DeployIndex",
-  "generated_on": "2026-08-23",
+  "generated_on": "2026-11-16",
   "methodology": "Seed inventory. Entries become verified through reviewed weekly research proposals.",
   "category_labels": {
     "hyperscale-cloud": "Hyperscale cloud",
@@ -155,9 +155,9 @@
       "source_urls": [
         "https://agones.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; latest release 1.62.0 listed, active CNCF sandbox project."
     },
     {
       "slug": "aiven",
@@ -319,9 +319,9 @@
       "source_urls": [
         "https://akash.network/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; console and marketplace described as currently usable."
     },
     {
       "slug": "alibaba-cloud",
@@ -597,9 +597,9 @@
         "https://aws.amazon.com/rds/",
         "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Added to provide a hyperscaler baseline for database comparison; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; recent feature additions described, no deprecation notice."
     },
     {
       "slug": "aws",
@@ -1195,9 +1195,9 @@
       "source_urls": [
         "https://azure.microsoft.com/products/container-apps"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current SKUs and new Sandboxes feature described, no deprecation."
     },
     {
       "slug": "azure-functions",
@@ -1263,9 +1263,9 @@
       "source_urls": [
         "https://azure.microsoft.com/products/kubernetes-service"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current tiers and version-support policy described, no deprecation."
     },
     {
       "slug": "azure-managed-disks",
@@ -1400,9 +1400,9 @@
       "source_urls": [
         "https://www.back4app.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; live sign-up flows and current feature set, no change indicated."
     },
     {
       "slug": "back4app-containers",
@@ -1681,9 +1681,9 @@
       "source_urls": [
         "https://www.bluehost.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current promotions and plans listed, no closure notice."
     },
     {
       "slug": "bunny-edge-scripting",
@@ -1789,9 +1789,9 @@
       "source_urls": [
         "https://bunny.net/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; full product list and trial offer currently active."
     },
     {
       "slug": "canine",
@@ -1934,6 +1934,41 @@
       "change_note": "Initial catalog seed; awaiting source-by-source verification."
     },
     {
+      "slug": "cirrascale",
+      "name": "Cirrascale",
+      "url": "https://www.cirrascale.com/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "multi-accelerator-inference",
+        "model-routing",
+        "fine-tuning",
+        "spend-controls",
+        "multi-region-load-balancing"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "featured": false,
+      "summary": "A GPU and AI cloud provider offering the Cirrascale Inference Platform, which routes enterprise AI inference workloads across NVIDIA, AMD, Qualcomm, and Tenstorrent accelerators with governance and spend-control tooling.",
+      "best_for": "Enterprises needing multi-vendor accelerator routing and governance controls for production AI inference.",
+      "source_urls": [
+        "https://cirrascale.com/inference"
+      ],
+      "last_verified": "2026-11-16",
+      "confidence": "medium",
+      "change_note": "New candidate: Cirrascale's own Inference Platform page was fetched directly on 2026-11-16, confirming current product scope and supported accelerators."
+    },
+    {
       "slug": "civo",
       "name": "Civo",
       "url": "https://www.civo.com/",
@@ -1962,9 +1997,9 @@
       "source_urls": [
         "https://www.civo.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; active product lines and ongoing data-centre rollout described."
     },
     {
       "slug": "civo-kubernetes",
@@ -2032,9 +2067,9 @@
         "https://clever.cloud/",
         "https://www.clever-cloud.com/"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-11-16",
       "confidence": "high",
-      "change_note": "Canonical URL updated to clever.cloud after confirming clever-cloud.com returns a 301 to it."
+      "change_note": "Homepage fetched directly; current product catalog and SLA described, no status change."
     },
     {
       "entity_type": "product",
@@ -2098,9 +2133,9 @@
       "source_urls": [
         "https://www.cloud66.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; active sign-up flow and current product description, no closure notice."
     },
     {
       "slug": "cloud-foundry",
@@ -2429,9 +2464,9 @@
       "source_urls": [
         "https://www.cloudscale.ch/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; status footer shows all systems operational, current plans listed."
     },
     {
       "slug": "cloudsigma",
@@ -2595,9 +2630,9 @@
       "source_urls": [
         "https://www.codecapsules.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current capsule types and pricing, no closure notice."
     },
     {
       "slug": "codesandbox",
@@ -2831,9 +2866,9 @@
       "source_urls": [
         "https://www.crunchydata.com/products/crunchy-bridge"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current Postgres versions and HA features described, no status change."
     },
     {
       "slug": "crusoe-cloud",
@@ -2995,9 +3030,9 @@
       "source_urls": [
         "https://www.dbos.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current OSS library and Conductor commercial tier described."
     },
     {
       "slug": "defang",
@@ -3136,9 +3171,9 @@
       "source_urls": [
         "https://www.digitalocean.com/products/app-platform"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current tiers and recent feature updates listed, no deprecation."
     },
     {
       "slug": "digitalocean-functions",
@@ -3170,9 +3205,9 @@
       "source_urls": [
         "https://www.digitalocean.com/products/functions"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current free tier and pricing, no deprecation notice."
     },
     {
       "slug": "digitalocean-kubernetes",
@@ -3268,9 +3303,9 @@
       "source_urls": [
         "https://www.digitalocean.com/products/block-storage"
       ],
-      "last_verified": "2026-08-30",
+      "last_verified": "2026-11-16",
       "confidence": "high",
-      "change_note": "Added while extending the pricing dataset to block storage; the catalog listed the parent clouds but none of their volume products."
+      "change_note": "Product page fetched directly; block storage offered with current pricing, no deprecation notice."
     },
     {
       "slug": "diploi",
@@ -3438,9 +3473,9 @@
       "source_urls": [
         "https://www.dreamhost.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current hosting products and promotions, no closure notice."
     },
     {
       "slug": "e2b",
@@ -3951,9 +3986,9 @@
       "source_urls": [
         "https://firebase.google.com/products/hosting"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; currently available with free tier, no status change."
     },
     {
       "slug": "fireworks-ai",
@@ -4390,9 +4425,9 @@
       "source_urls": [
         "https://github.com/features/codespaces"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; currently generally offered with current pricing and limits."
     },
     {
       "slug": "github-pages",
@@ -4621,9 +4656,9 @@
       "source_urls": [
         "https://golem.cloud/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; Golem 1.6 release currently announced, no closure notice."
     },
     {
       "slug": "google-app-engine",
@@ -5142,9 +5177,9 @@
       "source_urls": [
         "https://www.hetzner.com/cloud/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "medium",
+      "change_note": "Product page fetched directly; dedicated plans and locations currently listed; page itself flagged as auto-translated with an internally inconsistent note on one Shared-Resources plan, not treated as a status finding."
     },
     {
       "slug": "hetzner-volumes",
@@ -5280,9 +5315,9 @@
       "source_urls": [
         "https://www.huaweicloud.com/intl/en-us/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly, dated 2026-11-05; current regions and products listed, no change indicated."
     },
     {
       "slug": "hugging-face",
@@ -5468,9 +5503,9 @@
       "source_urls": [
         "https://www.ibm.com/products/code-engine"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; currently offered with an active promotion, no deprecation notice."
     },
     {
       "slug": "ibm-kubernetes",
@@ -6319,9 +6354,9 @@
       "source_urls": [
         "https://motherduck.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current pricing tiers and live features described, no status change."
     },
     {
       "slug": "namecheap-hosting",
@@ -6750,9 +6785,9 @@
       "source_urls": [
         "https://nullstone.io/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; active sign-up CTAs, no outage or closure notice."
     },
     {
       "slug": "oracle-container-instances",
@@ -6851,9 +6886,9 @@
       "source_urls": [
         "https://www.openfaas.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; described as stable/production-ready with current OSS and Pro/Standard tiers."
     },
     {
       "slug": "openmetal",
@@ -7407,9 +7442,9 @@
       "source_urls": [
         "https://www.porter.run/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; active product with a recent funding announcement, no closure notice."
     },
     {
       "slug": "pressable",
@@ -7474,9 +7509,9 @@
       "source_urls": [
         "https://www.prisma.io/postgres"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; currently generally available with current limits and plans."
     },
     {
       "slug": "qoddi",
@@ -7833,9 +7868,9 @@
       "source_urls": [
         "https://replit.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current product lineup and pricing, no change indicated."
     },
     {
       "slug": "replit-deployments",
@@ -7871,9 +7906,9 @@
       "source_urls": [
         "https://replit.com/deployments"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Product page fetched directly; current deployment types described as available now."
     },
     {
       "slug": "restate-cloud",
@@ -7935,9 +7970,9 @@
       "source_urls": [
         "https://www.rivet.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; Rivet Cloud still offered as one of three current deployment options."
     },
     {
       "slug": "runloop",
@@ -8037,9 +8072,9 @@
       "source_urls": [
         "https://salad.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; Community Cloud live now, Dedicated/Private Cloud described as upcoming/new, no discontinuation."
     },
     {
       "slug": "scaleway",
@@ -8721,9 +8756,9 @@
       "source_urls": [
         "https://temps.sh/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; self-hosted edition currently offered as free/open source, no closure notice."
     },
     {
       "slug": "tencent-cloud",
@@ -8795,9 +8830,9 @@
       "source_urls": [
         "https://www.tensordock.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current GPU inventory and pricing described, no status change."
     },
     {
       "slug": "timescale-cloud",
@@ -8961,9 +8996,9 @@
       "source_urls": [
         "https://uncloud.run/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; open-source core confirmed fully functional now, Hub add-on still coming soon."
     },
     {
       "slug": "upcloud",
@@ -9063,9 +9098,9 @@
       "source_urls": [
         "https://upsun.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; Upsun Cloud and new Upsun Dispatch both described as currently offered."
     },
     {
       "slug": "val-town",
@@ -9173,9 +9208,9 @@
       "source_urls": [
         "https://vercel.com/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Tagged free-tier capability: the platform documents a free plan or always-free allowance, not merely a one-time trial credit."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; current recently-shipped products listed, no closure notice."
     },
     {
       "slug": "vercel-functions",
@@ -9479,9 +9514,9 @@
       "source_urls": [
         "https://zaneops.dev/"
       ],
-      "last_verified": null,
-      "confidence": "seed",
-      "change_note": "Initial catalog seed; awaiting source-by-source verification."
+      "last_verified": "2026-11-16",
+      "confidence": "high",
+      "change_note": "Homepage fetched directly; active open-source project with a recent v114 changelog banner."
     },
     {
       "slug": "zeabur",
