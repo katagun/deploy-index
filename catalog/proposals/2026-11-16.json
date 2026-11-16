@@ -1,0 +1,515 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-11-16",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "back4app",
+    "leaseweb",
+    "digitalocean-volumes",
+    "nullstone",
+    "civo",
+    "motherduck",
+    "akash-network",
+    "replit",
+    "bunny-net",
+    "vercel",
+    "agones",
+    "salad",
+    "huawei-cloud",
+    "azure-container-apps",
+    "vultr-kubernetes",
+    "dreamhost",
+    "upsun",
+    "uncloud",
+    "digitalocean-functions",
+    "firebase-hosting",
+    "bluehost",
+    "openfaas",
+    "azure-aks",
+    "flightcontrol",
+    "golem-cloud",
+    "clever-cloud",
+    "codespaces",
+    "porter",
+    "tensordock",
+    "ibm-code-engine",
+    "crunchy-bridge",
+    "amazon-rds",
+    "code-capsules",
+    "prisma-postgres",
+    "val-town",
+    "cloudscale-ch",
+    "cloud-66",
+    "zaneops",
+    "replit-deployments",
+    "rivet-cloud",
+    "temps",
+    "digitalocean-app-platform",
+    "dbos-cloud",
+    "hetzner-cloud",
+    "nexcess"
+  ],
+  "summary": "WebFetch worked for the great majority of this run's targets, so this is a fuller-than-usual result. All 45 supplied verification-batch slugs were attempted; 40 returned real first-party content and are listed in checked_active, while leaseweb.com (near-empty render), vultr.com (403), and nexcess.net (403) could not be read and were left out. Two material status findings came directly from first-party pages read this run: flightcontrol.dev now 301-redirects to ravion.com, whose own page calls Ravion the successor to Flightcontrol built by the same team; and val.town's own homepage displays a 'Sorry, we're closed' banner stating Val Town is shutting down on January 10, 2027. A third, found incidentally during discovery (not part of the supplied batch), is that hathora.dev now 301-redirects entirely to gamefabric.com, a Nitrado-linked game-server platform that does not mention Hathora by name; third-party coverage of an acquisition/handoff was not independently verified and is reported only as unverified context. Discovery searches (WebSearch only, cross-checked against the 276-record inventory to avoid duplicates) surfaced three genuinely new, un-catalogued items, two of which were confirmed by directly fetching their own official pages: Cirrascale (GPU/AI cloud, inference-platform page fetched directly, medium confidence) and Velda (open-source GPU/batch platform, confirmed via its own GitHub repo but the velda.io marketing page itself was not fetched, low confidence). Docker Agentic Platform was found on Docker's own docs site, explicitly labeled experimental, low confidence. All three status alerts are reported for manual review only, per policy, and have not been applied. No pricing was touched; pricing/ is out of scope.",
+  "new_candidates": [
+    {
+      "slug": "docker-agentic-platform",
+      "name": "Docker Agentic Platform",
+      "url": "https://docs.docker.com/agentic-platform/",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "ai-agent-sandboxes",
+        "isolated-cloud-environments",
+        "persistent-sandbox-state"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "beta",
+      "availability": "preview",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "A cloud service from Docker that runs AI agents and tools inside isolated, persistent cloud sandboxes, controlled through a web console and a sandbox terminal.",
+      "best_for": "Running AI coding agents in disposable but persistent cloud sandboxes without managing local infrastructure.",
+      "source_urls": [
+        "https://docs.docker.com/agentic-platform/"
+      ],
+      "confidence": "low",
+      "change_note": "New candidate: Docker's own documentation, fetched directly on 2026-11-16, describes this as an experimental cloud sandbox service for AI agents; mapped to status=beta/availability=preview since the schema has no 'experimental' value."
+    },
+    {
+      "slug": "velda",
+      "name": "Velda",
+      "url": "https://velda.io",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "serverless-gpu",
+        "batch-jobs",
+        "per-second-billing",
+        "dev-environment-gpu-access"
+      ],
+      "operating_models": [
+        "managed-cloud",
+        "self-hosted"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": true,
+      "launch_year": 2026,
+      "summary": "An open-source, cloud-native GPU and batch-job orchestration platform with a managed hosted service plus a self-hosted enterprise option.",
+      "best_for": "Running GPU or batch jobs directly from a developer environment with per-second billing and no idle charges.",
+      "source_urls": [
+        "https://github.com/velda-io/velda"
+      ],
+      "confidence": "low",
+      "change_note": "New candidate found via its open-source GitHub repository (Apache-2.0), which names velda.io as the hosted offering; the velda.io marketing page itself was not fetched this run, so confidence is low."
+    },
+    {
+      "slug": "cirrascale",
+      "name": "Cirrascale",
+      "url": "https://www.cirrascale.com/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "multi-accelerator-inference",
+        "model-routing",
+        "fine-tuning",
+        "spend-controls",
+        "multi-region-load-balancing"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": null,
+      "summary": "A GPU and AI cloud provider offering the Cirrascale Inference Platform, which routes enterprise AI inference workloads across NVIDIA, AMD, Qualcomm, and Tenstorrent accelerators with governance and spend-control tooling.",
+      "best_for": "Enterprises needing multi-vendor accelerator routing and governance controls for production AI inference.",
+      "source_urls": [
+        "https://cirrascale.com/inference"
+      ],
+      "confidence": "medium",
+      "change_note": "New candidate: Cirrascale's own Inference Platform page was fetched directly on 2026-11-16, confirming current product scope and supported accelerators."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [
+    {
+      "slug": "flightcontrol",
+      "proposed_status": "transitioning",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "Fetching https://www.flightcontrol.dev/ directly on 2026-11-16 returned an HTTP 301 redirect to https://www.ravion.com/?from=flightcontrol. Reading that destination page, it calls Ravion 'the successor to Flightcontrol,' built by the same team, says 'nothing changes for existing customers,' and describes a guided, service-by-service migration with both products able to run side by side under one organization. This corroborates the catalog's existing (unverified, confidence=seed) 'transitioning' status with direct first-party evidence; it does not by itself establish a new canonical name/URL, which should go through manual identity review rather than automation.",
+      "source_urls": [
+        "https://www.flightcontrol.dev/",
+        "https://www.ravion.com/?from=flightcontrol"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "val-town",
+      "proposed_status": "transitioning",
+      "proposed_availability": "existing-customers-only",
+      "effective_date": "2027-01-10",
+      "rationale": "Fetching https://www.val.town/ directly on 2026-11-16 showed a 'Sorry, we're closed' banner at the top of the page and text stating 'Val Town is shutting down on January 10, 2027,' with a link to a wind-down announcement. This is first-party evidence read directly from the provider's own homepage, not a search snippet.",
+      "source_urls": [
+        "https://www.val.town/"
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "hathora",
+      "proposed_status": "sunset",
+      "proposed_availability": "discontinued",
+      "effective_date": null,
+      "rationale": "Found incidentally during discovery, not part of the supplied verification batch. Fetching https://hathora.dev/ directly on 2026-11-16 returned an HTTP 301 redirect to https://gamefabric.com/, a game-server orchestration platform whose page links to Nitrado (via marbis GmbH) but does not mention Hathora by name. The domain-level redirect from hathora.dev is solid first-party evidence that the original site no longer operates independently; the specific narrative (an acquisition by Fireworks AI and a customer handoff to Nitrado) comes only from third-party coverage that was not independently confirmed on any first-party page, so treat that detail as unverified context pending manual review.",
+      "source_urls": [
+        "https://hathora.dev/",
+        "https://gamefabric.com/"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "back4app",
+      "source_urls": [
+        "https://www.back4app.com/"
+      ],
+      "note": "Homepage fetched directly; live sign-up flows and current feature set, no change indicated.",
+      "confidence": "high"
+    },
+    {
+      "slug": "digitalocean-volumes",
+      "source_urls": [
+        "https://www.digitalocean.com/products/block-storage"
+      ],
+      "note": "Product page fetched directly; block storage offered with current pricing, no deprecation notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "nullstone",
+      "source_urls": [
+        "https://nullstone.io/"
+      ],
+      "note": "Homepage fetched directly; active sign-up CTAs, no outage or closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "civo",
+      "source_urls": [
+        "https://www.civo.com/"
+      ],
+      "note": "Homepage fetched directly; active product lines and ongoing data-centre rollout described.",
+      "confidence": "high"
+    },
+    {
+      "slug": "motherduck",
+      "source_urls": [
+        "https://motherduck.com/"
+      ],
+      "note": "Homepage fetched directly; current pricing tiers and live features described, no status change.",
+      "confidence": "high"
+    },
+    {
+      "slug": "akash-network",
+      "source_urls": [
+        "https://akash.network/"
+      ],
+      "note": "Homepage fetched directly; console and marketplace described as currently usable.",
+      "confidence": "high"
+    },
+    {
+      "slug": "replit",
+      "source_urls": [
+        "https://replit.com/"
+      ],
+      "note": "Homepage fetched directly; current product lineup and pricing, no change indicated.",
+      "confidence": "high"
+    },
+    {
+      "slug": "bunny-net",
+      "source_urls": [
+        "https://bunny.net/"
+      ],
+      "note": "Homepage fetched directly; full product list and trial offer currently active.",
+      "confidence": "high"
+    },
+    {
+      "slug": "vercel",
+      "source_urls": [
+        "https://vercel.com/"
+      ],
+      "note": "Homepage fetched directly; current recently-shipped products listed, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "agones",
+      "source_urls": [
+        "https://agones.dev/"
+      ],
+      "note": "Homepage fetched directly; latest release 1.62.0 listed, active CNCF sandbox project.",
+      "confidence": "high"
+    },
+    {
+      "slug": "salad",
+      "source_urls": [
+        "https://salad.com/"
+      ],
+      "note": "Homepage fetched directly; Community Cloud live now, Dedicated/Private Cloud described as upcoming/new, no discontinuation.",
+      "confidence": "high"
+    },
+    {
+      "slug": "huawei-cloud",
+      "source_urls": [
+        "https://www.huaweicloud.com/intl/en-us/"
+      ],
+      "note": "Homepage fetched directly, dated 2026-11-05; current regions and products listed, no change indicated.",
+      "confidence": "high"
+    },
+    {
+      "slug": "azure-container-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/container-apps"
+      ],
+      "note": "Product page fetched directly; current SKUs and new Sandboxes feature described, no deprecation.",
+      "confidence": "high"
+    },
+    {
+      "slug": "dreamhost",
+      "source_urls": [
+        "https://www.dreamhost.com/"
+      ],
+      "note": "Homepage fetched directly; current hosting products and promotions, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "upsun",
+      "source_urls": [
+        "https://upsun.com/"
+      ],
+      "note": "Homepage fetched directly; Upsun Cloud and new Upsun Dispatch both described as currently offered.",
+      "confidence": "high"
+    },
+    {
+      "slug": "uncloud",
+      "source_urls": [
+        "https://uncloud.run/"
+      ],
+      "note": "Homepage fetched directly; open-source core confirmed fully functional now, Hub add-on still coming soon.",
+      "confidence": "high"
+    },
+    {
+      "slug": "digitalocean-functions",
+      "source_urls": [
+        "https://www.digitalocean.com/products/functions"
+      ],
+      "note": "Product page fetched directly; current free tier and pricing, no deprecation notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "firebase-hosting",
+      "source_urls": [
+        "https://firebase.google.com/products/hosting"
+      ],
+      "note": "Product page fetched directly; currently available with free tier, no status change.",
+      "confidence": "high"
+    },
+    {
+      "slug": "bluehost",
+      "source_urls": [
+        "https://www.bluehost.com/"
+      ],
+      "note": "Homepage fetched directly; current promotions and plans listed, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "openfaas",
+      "source_urls": [
+        "https://www.openfaas.com/"
+      ],
+      "note": "Homepage fetched directly; described as stable/production-ready with current OSS and Pro/Standard tiers.",
+      "confidence": "high"
+    },
+    {
+      "slug": "azure-aks",
+      "source_urls": [
+        "https://azure.microsoft.com/products/kubernetes-service"
+      ],
+      "note": "Product page fetched directly; current tiers and version-support policy described, no deprecation.",
+      "confidence": "high"
+    },
+    {
+      "slug": "golem-cloud",
+      "source_urls": [
+        "https://golem.cloud/"
+      ],
+      "note": "Homepage fetched directly; Golem 1.6 release currently announced, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "clever-cloud",
+      "source_urls": [
+        "https://clever.cloud/"
+      ],
+      "note": "Homepage fetched directly; current product catalog and SLA described, no status change.",
+      "confidence": "high"
+    },
+    {
+      "slug": "codespaces",
+      "source_urls": [
+        "https://github.com/features/codespaces"
+      ],
+      "note": "Product page fetched directly; currently generally offered with current pricing and limits.",
+      "confidence": "high"
+    },
+    {
+      "slug": "porter",
+      "source_urls": [
+        "https://www.porter.run/"
+      ],
+      "note": "Homepage fetched directly; active product with a recent funding announcement, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "tensordock",
+      "source_urls": [
+        "https://www.tensordock.com/"
+      ],
+      "note": "Homepage fetched directly; current GPU inventory and pricing described, no status change.",
+      "confidence": "high"
+    },
+    {
+      "slug": "ibm-code-engine",
+      "source_urls": [
+        "https://www.ibm.com/products/code-engine"
+      ],
+      "note": "Product page fetched directly; currently offered with an active promotion, no deprecation notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "crunchy-bridge",
+      "source_urls": [
+        "https://www.crunchydata.com/products/crunchy-bridge"
+      ],
+      "note": "Product page fetched directly; current Postgres versions and HA features described, no status change.",
+      "confidence": "high"
+    },
+    {
+      "slug": "amazon-rds",
+      "source_urls": [
+        "https://aws.amazon.com/rds/"
+      ],
+      "note": "Product page fetched directly; recent feature additions described, no deprecation notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "code-capsules",
+      "source_urls": [
+        "https://www.codecapsules.io/"
+      ],
+      "note": "Homepage fetched directly; current capsule types and pricing, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "prisma-postgres",
+      "source_urls": [
+        "https://www.prisma.io/postgres"
+      ],
+      "note": "Product page fetched directly; currently generally available with current limits and plans.",
+      "confidence": "high"
+    },
+    {
+      "slug": "cloudscale-ch",
+      "source_urls": [
+        "https://www.cloudscale.ch/"
+      ],
+      "note": "Homepage fetched directly; status footer shows all systems operational, current plans listed.",
+      "confidence": "high"
+    },
+    {
+      "slug": "cloud-66",
+      "source_urls": [
+        "https://www.cloud66.com/"
+      ],
+      "note": "Homepage fetched directly; active sign-up flow and current product description, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "zaneops",
+      "source_urls": [
+        "https://zaneops.dev/"
+      ],
+      "note": "Homepage fetched directly; active open-source project with a recent v114 changelog banner.",
+      "confidence": "high"
+    },
+    {
+      "slug": "replit-deployments",
+      "source_urls": [
+        "https://replit.com/deployments"
+      ],
+      "note": "Product page fetched directly; current deployment types described as available now.",
+      "confidence": "high"
+    },
+    {
+      "slug": "rivet-cloud",
+      "source_urls": [
+        "https://www.rivet.dev/"
+      ],
+      "note": "Homepage fetched directly; Rivet Cloud still offered as one of three current deployment options.",
+      "confidence": "high"
+    },
+    {
+      "slug": "temps",
+      "source_urls": [
+        "https://temps.sh/"
+      ],
+      "note": "Homepage fetched directly; self-hosted edition currently offered as free/open source, no closure notice.",
+      "confidence": "high"
+    },
+    {
+      "slug": "digitalocean-app-platform",
+      "source_urls": [
+        "https://www.digitalocean.com/products/app-platform"
+      ],
+      "note": "Product page fetched directly; current tiers and recent feature updates listed, no deprecation.",
+      "confidence": "high"
+    },
+    {
+      "slug": "dbos-cloud",
+      "source_urls": [
+        "https://www.dbos.dev/"
+      ],
+      "note": "Homepage fetched directly; current OSS library and Conductor commercial tier described.",
+      "confidence": "high"
+    },
+    {
+      "slug": "hetzner-cloud",
+      "source_urls": [
+        "https://www.hetzner.com/cloud/"
+      ],
+      "note": "Product page fetched directly; dedicated plans and locations currently listed; page itself flagged as auto-translated with an internally inconsistent note on one Shared-Resources plan, not treated as a status finding.",
+      "confidence": "medium"
+    }
+  ]
+}
