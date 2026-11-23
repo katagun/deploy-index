@@ -1,0 +1,489 @@
+{
+  "proposal_version": 1,
+  "research_date": "2026-11-23",
+  "catalog_generated_on": "2026-08-23",
+  "research_model": "fixture",
+  "response_id": "fixture",
+  "usage": null,
+  "rotation_slugs": [
+    "convex",
+    "servers-com",
+    "azure-managed-disks",
+    "stacktape",
+    "contabo",
+    "redis-cloud",
+    "flux",
+    "replit",
+    "deno-deploy",
+    "azure-static-web-apps",
+    "azure-playfab",
+    "salad",
+    "ibm-cloud",
+    "back4app-containers",
+    "ovh-managed-kubernetes",
+    "wordpress-com",
+    "zeabur",
+    "dokku",
+    "aws-lambda",
+    "neocities",
+    "aptible",
+    "digitalocean-managed-postgresql",
+    "firebase",
+    "amazon-ebs",
+    "aiven",
+    "aws-ecs-fargate",
+    "caprover",
+    "fluidstack",
+    "cloudscale-ch",
+    "platform-sh",
+    "arweave",
+    "ovhcloud",
+    "fastly-compute",
+    "nuclio",
+    "civo",
+    "vercel-functions",
+    "pressable",
+    "cloudways",
+    "civo-kubernetes",
+    "nhost",
+    "skyhook",
+    "apply-build",
+    "azure-container-apps",
+    "vultr",
+    "gcore-cloud"
+  ],
+  "summary": "WebFetch was largely NOT blocked this run, unlike the usual expectation, so this scan is fuller than typical. Verified 38 of 45 weekly-rotation slugs directly on their own official pages: no status changes found. 7 could not be checked (contabo.com/vultr.com returned 403, fluidstack.io returned 429 repeatedly, ovhcloud.com's root redirected without the target page being fetched; deno-deploy and platform-sh are excluded here since they're reported as status_alerts instead). Two material first-party findings: (1) Deno's own blog/docs confirm Deno Deploy is being sunset (~April 2027) after Deno joined Cloudflare; (2) platform.sh now permanently redirects to upsun.com, suggesting it's being folded into the Upsun brand. Both reported as status_alerts for manual review only, not applied. Proposing 3 new candidates (Velda, Cirrascale Inference Platform, Docker Agentic Platform), each confirmed on the vendor's own page. Other leads (AGBCLOUD, Better-PaaS, Partiri Cloud, Out Plane, AppRafter, DeployKit) were NOT proposed: AGBCLOUD's domain failed to resolve, Partiri Cloud showed an inconsistent domain spelling, and the rest lacked a readable first-party page or were too new/unproven. A first-party Heroku post (Feb 2026) shows Salesforce stopped new Enterprise Account contracts while self-serve sign-up continues; doesn't map to one availability value, so it's flagged in prose only, not as a status_alert. No pricing touched; no identity/status fields applied directly.",
+  "new_candidates": [
+    {
+      "slug": "velda",
+      "name": "Velda",
+      "url": "https://velda.io/",
+      "entity_type": "provider",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "serverless GPU jobs via CLI prefix",
+        "per-second GPU billing",
+        "browser-based VS Code templates",
+        "B300/H200/H100 GPU access"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "general",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "Serverless GPU cloud for AI training, batch jobs, and inference. Developers prefix a local command with `vrun` to execute it on hosted B300/H200/H100 GPUs, with per-second billing and no idle-time charges or container image builds required.",
+      "best_for": "Teams running bursty ML training or batch GPU jobs who want to avoid idle GPU costs and skip image/manifest setup by launching jobs directly from their existing development environment.",
+      "source_urls": [
+        "https://velda.io/"
+      ],
+      "confidence": "medium",
+      "change_note": "New serverless GPU provider; confirmed directly via its own site (velda.io), not previously in the catalog."
+    },
+    {
+      "slug": "cirrascale-inference-platform",
+      "name": "Cirrascale Inference Platform",
+      "url": "https://cirrascale.com/inference",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "gpu-ai-cloud",
+      "categories": [
+        "gpu-ai-cloud"
+      ],
+      "capabilities": [
+        "multi-vendor accelerator routing (NVIDIA/AMD/Qualcomm/Tenstorrent)",
+        "model fine-tuning on private data",
+        "private RAG chatbot",
+        "agentic AI policy guardrails",
+        "usage spend controls"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "active",
+      "availability": "limited",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "Enterprise AI inference platform that routes workloads across NVIDIA, AMD, Qualcomm, and Tenstorrent accelerators, with governance features such as spend controls, agent guardrails, and private model fine-tuning.",
+      "best_for": "Enterprises that need multi-vendor hardware flexibility, usage governance, and private fine-tuning for production AI inference, arranged directly with Cirrascale rather than self-serve sign-up.",
+      "source_urls": [
+        "https://cirrascale.com/inference"
+      ],
+      "confidence": "medium",
+      "change_note": "Cirrascale's Inference Platform reached production release in September 2026 per its own site; parent company Cirrascale is not previously represented in the catalog."
+    },
+    {
+      "slug": "docker-agentic-platform",
+      "name": "Docker Agentic Platform",
+      "url": "https://docs.docker.com/agentic-platform/",
+      "entity_type": "product",
+      "parent_slug": null,
+      "primary_category": "developer-sandbox",
+      "categories": [
+        "developer-sandbox"
+      ],
+      "capabilities": [
+        "isolated cloud sandboxes for coding agents",
+        "predefined sandbox kits (Claude Code, Codex, OpenCode, Copilot, Gemini CLI)",
+        "per-second compute billing",
+        "sandboxes persist across disconnects"
+      ],
+      "operating_models": [
+        "managed-cloud"
+      ],
+      "era": "recent",
+      "status": "beta",
+      "availability": "preview",
+      "open_source": false,
+      "launch_year": 2026,
+      "summary": "Experimental Docker service that runs AI coding agents (Claude Code, Codex, OpenCode, Copilot, Gemini CLI) in isolated cloud sandboxes that keep running after you disconnect, billed by the second of compute used.",
+      "best_for": "Developers who want to run AI coding agents in disposable, isolated cloud sandboxes without managing their own sandbox infrastructure, while the product is still in experimental release.",
+      "source_urls": [
+        "https://docs.docker.com/agentic-platform/",
+        "https://docs.docker.com/agentic-platform/release-notes/"
+      ],
+      "confidence": "medium",
+      "change_note": "New experimental product from Docker, publicly released September 24, 2026 per Docker's own docs; not previously represented in the catalog."
+    }
+  ],
+  "updates": [],
+  "status_alerts": [
+    {
+      "slug": "deno-deploy",
+      "proposed_status": "sunset",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "Deno's official announcement (deno.com/blog/cloudflare, Oct 9 2026) says Deno is joining Cloudflare and that Deno Deploy will keep running for about six months before shutting down, with paying customers offered migration support to Cloudflare Workers. Deno's own docs page (docs.deno.com/deploy/, last updated Nov 12 2026) states directly: 'Deno Deploy will be sunset in April 2027. Your existing applications keep running until then.' No exact shutdown date has been published, so effective_date is left null; April 2027 is the best current estimate. Availability is left as general because the sources do not state that new sign-ups are blocked before the sunset date.",
+      "source_urls": [
+        "https://docs.deno.com/deploy/",
+        "https://deno.com/blog/cloudflare"
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "platform-sh",
+      "proposed_status": "transitioning",
+      "proposed_availability": "general",
+      "effective_date": null,
+      "rationale": "platform.sh now sends a 301 Moved Permanently redirect to upsun.com (observed directly this run). Upsun's own homepage is live and describes itself as 'the software factory for AI-human workflows,' with no mention of Platform.sh in the portion read, but the permanent redirect from the Platform.sh root domain to Upsun is itself first-party evidence that Platform.sh is being consolidated into the Upsun brand. Both 'platform-sh' and 'upsun' are currently separate active catalog entries; this needs manual review to decide whether platform-sh should be marked as merged/rebranded into upsun rather than left as an independently active provider.",
+      "source_urls": [
+        "https://platform.sh/",
+        "https://upsun.com/"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "checked_active": [
+    {
+      "slug": "convex",
+      "source_urls": [
+        "https://www.convex.dev/"
+      ],
+      "note": "Official homepage reviewed; no outage, deprecation, or status change; one VPC feature still marked coming soon.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "servers-com",
+      "source_urls": [
+        "https://www.servers.com/"
+      ],
+      "note": "Official homepage reviewed; site presents as 'Servers.com by Nexcess', consistent with existing Nexcess/Liquid Web ownership; no new status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-managed-disks",
+      "source_urls": [
+        "https://azure.microsoft.com/en-us/products/storage/disks"
+      ],
+      "note": "Official Microsoft Azure Disk Storage page reviewed; no retirement notice; references Ignite 2025 content, page looks current.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "stacktape",
+      "source_urls": [
+        "https://stacktape.com/"
+      ],
+      "note": "Official homepage reviewed; shows a 'Stacktape 3.0' banner but no outage or deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "redis-cloud",
+      "source_urls": [
+        "https://redis.io/cloud/"
+      ],
+      "note": "Official Redis Cloud page reviewed; still branded Redis Cloud, no rebrand to Valkey or elsewhere; references re:Invent 2026.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "flux",
+      "source_urls": [
+        "https://runonflux.com/"
+      ],
+      "note": "Official homepage reviewed; network stats dated May 2026, no outage or shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "replit",
+      "source_urls": [
+        "https://replit.com/"
+      ],
+      "note": "Official homepage reviewed; current pricing tiers and 'Agent 4' references, no outage or status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-static-web-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/app-service/static"
+      ],
+      "note": "Official Microsoft Azure product page reviewed; active, Next.js hosting marked preview, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-playfab",
+      "source_urls": [
+        "https://playfab.com/"
+      ],
+      "note": "playfab.com is a redirect stub pointing to developer.microsoft.com/en-us/games/products/playfab/; no outage/shutdown notice, just note the stub for a possible canonical-URL cleanup.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "salad",
+      "source_urls": [
+        "https://salad.com/"
+      ],
+      "note": "Official homepage reviewed; announces upcoming 'Salad Dedicated' product, blog posts dated through August 2026, no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ibm-cloud",
+      "source_urls": [
+        "https://www.ibm.com/cloud"
+      ],
+      "note": "Official IBM Cloud products page reviewed; no outage/deprecation notice, banner promotes a VPC migration hub.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "back4app-containers",
+      "source_urls": [
+        "https://www.back4app.com/container-as-a-service-caas"
+      ],
+      "note": "Official Back4App Containers page reviewed; no deprecation or outage notice, though the page shows template rendering artifacts.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "ovh-managed-kubernetes",
+      "source_urls": [
+        "https://www.ovhcloud.com/en/public-cloud/kubernetes/"
+      ],
+      "note": "Official OVHcloud Managed Kubernetes page reviewed; active, free tier and docs links present, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "wordpress-com",
+      "source_urls": [
+        "https://wordpress.com/hosting/"
+      ],
+      "note": "Official WordPress.com hosting page reviewed (Automattic Inc, 2026 copyright); no shutdown or status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "zeabur",
+      "source_urls": [
+        "https://zeabur.com/"
+      ],
+      "note": "Official homepage reviewed; shows a banner that Zeabur shut down its separate 'AI Hub' product and refunded customers, but the core platform is still operating; supports the existing 'transitioning' label, no further change proposed.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "dokku",
+      "source_urls": [
+        "https://dokku.com/"
+      ],
+      "note": "Official homepage reviewed; lists latest release v0.38.34 with GitHub link, actively maintained, no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-lambda",
+      "source_urls": [
+        "https://aws.amazon.com/lambda/"
+      ],
+      "note": "Official AWS Lambda page reviewed; describes current features (Lambda Web Functions, MicroVMs, Managed Instances) as active, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "neocities",
+      "source_urls": [
+        "https://neocities.org/"
+      ],
+      "note": "Official homepage reviewed; live-looking site counters and changelog links, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aptible",
+      "source_urls": [
+        "https://www.aptible.com/"
+      ],
+      "note": "Official homepage reviewed, dated Nov 18 2026 snapshot; no outage or deprecation notice, 'LLM Gateway' marked new.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "digitalocean-managed-postgresql",
+      "source_urls": [
+        "https://www.digitalocean.com/products/managed-databases-postgresql"
+      ],
+      "note": "Official DigitalOcean page reviewed; supports PostgreSQL v17, Advanced Edition now GA, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "firebase",
+      "source_urls": [
+        "https://firebase.google.com/"
+      ],
+      "note": "Official Firebase homepage reviewed; lists current products (Agent Skills, Firebase AI Logic, Genkit), no outage or deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-ebs",
+      "source_urls": [
+        "https://aws.amazon.com/ebs/"
+      ],
+      "note": "Official AWS EBS page reviewed; no deprecation, outage, or end-of-life notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aiven",
+      "source_urls": [
+        "https://aiven.io/"
+      ],
+      "note": "Official homepage reviewed (copyright 2016-2026); lists Runtime and DataHub as new services, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "aws-ecs-fargate",
+      "source_urls": [
+        "https://aws.amazon.com/fargate/"
+      ],
+      "note": "Official AWS Fargate page reviewed; describes Fargate as current ECS/EKS compute option, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "caprover",
+      "source_urls": [
+        "https://caprover.com/"
+      ],
+      "note": "Official homepage reviewed; copyright 2026, references current 'Service Update Override' and v4 one-click app catalog, actively maintained.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudscale-ch",
+      "source_urls": [
+        "https://www.cloudscale.ch/"
+      ],
+      "note": "Official homepage reviewed; 2026 copyright, footer links to an 'all systems operational' status page, no outage notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "arweave",
+      "source_urls": [
+        "https://www.arweave.org/"
+      ],
+      "note": "Official homepage reviewed (MIT License, 2026 footer); describes the protocol as stable and mature, no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "fastly-compute",
+      "source_urls": [
+        "https://www.fastly.com/products/edge-compute"
+      ],
+      "note": "Official Fastly Edge Compute page reviewed; copyright 2026, active calls to action, no deprecation or sunset notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "nuclio",
+      "source_urls": [
+        "https://nuclio.io/"
+      ],
+      "note": "Official homepage reviewed (copyright 2026, iguazio); links to active GitHub repo and docs, though most content on the page itself is stale (2017-2023); no shutdown notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "vercel-functions",
+      "source_urls": [
+        "https://vercel.com/docs/functions"
+      ],
+      "note": "Official Vercel docs page reviewed (last_updated 2026-09-03); describes current fluid-compute based Functions product, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "pressable",
+      "source_urls": [
+        "https://pressable.com/"
+      ],
+      "note": "Official homepage reviewed (copyright 2026); confirms Pressable operates as 'an Automattic hosting lab' on Automattic's WP Cloud, consistent with existing ownership; no new status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "cloudways",
+      "source_urls": [
+        "https://www.cloudways.com/"
+      ],
+      "note": "Official homepage reviewed (copyright 2026); runs a Black Friday promotion, footer/community links point to DigitalOcean, consistent with existing ownership; no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "civo-kubernetes",
+      "source_urls": [
+        "https://www.civo.com/kubernetes"
+      ],
+      "note": "Official Civo Kubernetes product page reviewed; active, promotes an upcoming NVIDIA-based data centre, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "nhost",
+      "source_urls": [
+        "https://nhost.io/"
+      ],
+      "note": "Official homepage reviewed; describes current backend-platform offering, no outage or status notice (page itself undated).",
+      "confidence": "medium"
+    },
+    {
+      "slug": "skyhook",
+      "source_urls": [
+        "https://www.skyhook.io/"
+      ],
+      "note": "Official homepage reviewed (copyright 2026); describes a BYOC internal developer platform deployable on AWS/GCP/Azure/OCI/on-prem/any Kubernetes cluster, no status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "apply-build",
+      "source_urls": [
+        "https://apply.build/"
+      ],
+      "note": "Official homepage reviewed (operated by Codebite Oy, 'checked October 2026' notice, 2026 copyright); no shutdown or status change.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "azure-container-apps",
+      "source_urls": [
+        "https://azure.microsoft.com/products/container-apps"
+      ],
+      "note": "Official Microsoft Azure Container Apps page reviewed; promotes new Sandboxes/serverless GPU features, no deprecation notice.",
+      "confidence": "medium"
+    },
+    {
+      "slug": "gcore-cloud",
+      "source_urls": [
+        "https://gcore.com/cloud"
+      ],
+      "note": "Official Gcore Cloud page reviewed; copyright 2026, blog posts through July 2026, no outage or deprecation notice.",
+      "confidence": "medium"
+    }
+  ]
+}
